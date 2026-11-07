@@ -16,7 +16,7 @@ No build step, packages, backend, tracking, or external network requests are req
 - One-sided: prespecified directional alternative `B > A`, `p = 1 − Φ(z)`.
 - Confidence level: 95%; p < 0.05 is considered significant.
 - Displayed confidence interval uses an unpooled normal approximation (one-sided lower bound or two-sided bounds).
-- Distribution curves visualize approximate sampling distributions and are not the hypothesis test itself.
+- Distribution curves visualize approximate sampling distributions and are not the hypothesis test itself. Each 95% chart marker is the lower bound of the individual sampling distribution (5th percentile in one-sided mode; 2.5th percentile in two-sided mode).
 - Requires at least five conversions and five non-conversions in each arm. Normal approximations can still be inaccurate in edge cases.
 - Repeated peeking, sample ratio mismatch, and unplanned hypothesis selection can compromise conclusions. Do not use significance alone as a launch decision.
 
