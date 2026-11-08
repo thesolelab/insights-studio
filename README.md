@@ -70,11 +70,18 @@ and calculates the sample results automatically. Replace these demo values with
 your experiment counts to run your own analysis. Sample data is not saved.
 
 ## Deploy on GitHub Pages
-1. Upload `index.html`, `styles.css`, `colors.js`, `app.js`, `tabs.js`, `chart-data.js`, `chart-modes.js`, and `charts.js` to the root of your `insights-studio` repository.
+1. Upload `index.html`, `styles.css`, `colors.js`, `app.js`, `tabs.js`, `chart-data.js`, `chart-modes.js`, and `charts.js` to the root of your `stat-console` repository.
 2. Open **Settings → Pages**.
 3. Under **Build and deployment**, select **Deploy from a branch**.
 4. Choose **main** and **/(root)**, then save.
 5. Wait for the Pages deployment to complete and open the published URL.
+
+Repository: [thesolelab/stat-console](https://github.com/thesolelab/stat-console).
+Project site after deployment: [thesolelab.github.io/stat-console/](https://thesolelab.github.io/stat-console/).
+GitHub redirects the old repository URL after a rename, but the old GitHub Pages
+project-site URL does not redirect. Update any bookmarks or shared site links.
+For an existing local clone, update its remote with
+`git remote set-url origin https://github.com/thesolelab/stat-console.git`.
 
 No build step, packages, backend, or tracking are required. Inter and Outfit are loaded from
 Google Fonts with a system-font fallback; the application still works if the font
