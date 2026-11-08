@@ -116,6 +116,26 @@
     return [['Quarter', 'Product A', 'Product B', 'Product C'], ['Q1', '120', '85', '60'], ['Q2', '145', '95', '75'], ['Q3', '130', '120', '85'], ['Q4', '180', '135', '110']];
   }
 
+  function randomStartup(random = Math.random) {
+    const mode = MODES[Math.floor(random() * MODES.length)];
+    const rows = example(mode.id);
+    let x = 0;
+    for (const row of rows.slice(1)) {
+      for (let column = 0; column < row.length; column++) {
+        if (mode.xy && column === 0) {
+          x += 5 + Math.floor(random() * 21);
+          row[column] = String(x);
+        } else if (column > 0) {
+          const value = D.numberCell(row[column]);
+          if (row[column].endsWith('%')) row[column] = (1 + random() * 7).toFixed(2) + '%';
+          else if (mode.native === 'radar') row[column] = String(1 + Math.floor(random() * 10));
+          else row[column] = String(Math.max(1, Math.round(value * (0.55 + random() * 0.9))));
+        }
+      }
+    }
+    return { id: mode.id, title: mode.name + ' sample', rows };
+  }
+
   function render(c, svg, token) {
     const NS = 'http://www.w3.org/2000/svg', chart = document.createDocumentFragment();
     const node = (tag, attrs = {}, text) => {
@@ -259,7 +279,7 @@
     svg.replaceChildren(chart);
   }
 
-  const api = { MODES, definition, stack, prepare, nativeSpec, example, render };
+  const api = { MODES, definition, stack, prepare, nativeSpec, example, randomStartup, render };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.ChartModes = api;
 })(typeof window !== 'undefined' ? window : globalThis);

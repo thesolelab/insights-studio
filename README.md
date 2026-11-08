@@ -41,7 +41,9 @@ of the interface accent.
    **Edit Data**. You can also copy the chart into an existing presentation.
    SVG and PNG exports are available when you prefer an image.
 
-The starting table is example data. Charts support up to 200 categories, 6 numeric
+Every page load selects a random chart style and generates fresh, compatible
+sample data. Editing data or switching tabs/styles never rerandomizes it.
+Charts support up to 200 categories, 6 numeric
 series, and 5 MB uploads. Use decimal points for numbers. Percentages such as
 `3.8%` are stored as `0.038`; choose Percentage format for fractional values.
 Blank numeric cells are flagged rather than silently treated as zero.

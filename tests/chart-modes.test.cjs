@@ -3,8 +3,8 @@ const test = require('node:test');
 const M = require('../chart-modes.js');
 const D = require('../chart-data.js');
 
-function config(id) {
-  const table = D.normalizeTable(M.example(id));
+function config(id, rows = M.example(id)) {
+  const table = D.normalizeTable(rows);
   const mode = M.definition(id);
   const columns = table.numeric.filter(i => i !== 0 && !(id === 'bubble' && i === 2));
   const colors = ['FFDC19', 'C9C9C9', 'F2F2F2', 'FFE64D', '858585', 'C9C9C9'];
@@ -13,6 +13,34 @@ function config(id) {
     axes: { left: { ...D.axisScale(series.flatMap(s => s.values)), format: 'number' } } }, id,
   { colors, xValues: table.rows.map(row => row[0]), sizes: table.rows.map(row => row[2]) });
 }
+
+test('random startup supports every chart style with valid matching data', () => {
+  for (let i = 0; i < M.MODES.length; i++) {
+    const sample = M.randomStartup(() => (i + 0.5) / M.MODES.length);
+    assert.equal(sample.id, M.MODES[i].id);
+    const chart = config(sample.id, sample.rows);
+    assert.ok(chart.series.every(series => series.values.every(Number.isFinite)));
+    if (chart.definition.xy) assert.ok(chart.xValues.every((v, index, list) => !index || v > list[index - 1]));
+  }
+  assert.equal(M.randomStartup(() => 0).id, M.MODES[0].id);
+  assert.equal(M.randomStartup(() => 1 - Number.EPSILON).id, M.MODES.at(-1).id);
+});
+
+test('random startup varies types and data across a deterministic sequence', () => {
+  let seed = 42;
+  const random = () => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return seed / 4294967296;
+  };
+  const modes = new Set(), tables = new Set();
+  for (let i = 0; i < 1000; i++) {
+    const sample = M.randomStartup(random);
+    config(sample.id, sample.rows);
+    modes.add(sample.id); tables.add(JSON.stringify(sample.rows));
+  }
+  assert.equal(modes.size, M.MODES.length);
+  assert.equal(tables.size, 1000);
+});
 
 test('all 21 chart choices have valid examples and native export specifications', () => {
   assert.equal(M.MODES.length, 21);

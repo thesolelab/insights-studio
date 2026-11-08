@@ -82,6 +82,8 @@ embedded data. Chart-family validation and stacking/export specifications belong
 in chart-modes.js and must remain testable without the DOM. Preserve numeric X
 values for scatter/bubble charts. Validate incompatible data explicitly. Do not
 replace user data on style changes; examples require an explicit action.
+On each fresh page load, choose a random chart style and generate valid matching
+sample data. Do not rerandomize when users edit, switch tabs, or change styles.
 
 Keep chart-data.js independent of the DOM. Test parsing, scaling, color
 normalization/conversion, and chart families using Node's built-in tests.
