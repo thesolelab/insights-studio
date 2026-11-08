@@ -1,6 +1,19 @@
 # Changelog
 
+## Unreleased — Chart studio
+- Paste tables or import CSV, TSV, XLSX, and XLS files, with Excel worksheet selection.
+- Configure column, line, and combination charts with independent left/right axes,
+  axis titles, and number or percentage formatting.
+- Export self-contained SVG/PNG images or a PowerPoint slide containing a native
+  editable chart and its embedded source-data worksheet.
+- Add validation for blank values, malformed tables, file size, row count, and
+  series count; keep imported data in the browser.
+- Load integrity-checked Excel/PowerPoint libraries only on demand.
+- Preserve the existing A/B analyzer.
+
 ## Unreleased — Minimal Gaming HUD
+- Remove the analyzer/version subtitle from the header and show the version
+  number in the footer.
 - Remove the Marketing Analytics header label and generate valid random sample
   counts on each page load before calculating initial results.
 - Add more noticeable button hover lift, highlight, and glow, with reduced-motion

@@ -1,13 +1,32 @@
 # Insights Studio
 
-Personal, browser-based A/B test analysis and presentation-ready chart exports.
+Personal, browser-based chart creation, editable PowerPoint exports, and A/B test analysis.
+
+## Create a chart for PowerPoint
+1. In **Chart studio**, paste a table from a spreadsheet or upload CSV, TSV,
+   XLSX, or XLS data. Include column headers in the first row. For Excel files,
+   select the worksheet to use. Save workbooks with formulas in Excel first so
+   their calculated values are available.
+2. Select **Create chart** after editing pasted data. Choose the category column
+   and the numeric series to include, then choose Column or Line for each series.
+3. For different units or scales, enable the second axis and assign the desired
+   series to **Right**. Set titles and number/percentage formats for each axis.
+4. Select **Export PowerPoint** to download a 16:9 slide with a native, editable
+   chart and embedded data worksheet. In PowerPoint, select the chart and choose
+   **Edit Data**. You can also copy the chart into an existing presentation.
+   SVG and PNG exports are available when you prefer an image.
+
+The starting table is example data. Charts support up to 200 categories, 6 numeric
+series, and 5 MB uploads. Use decimal points for numbers. Percentages such as
+`3.8%` are stored as `0.038`; choose Percentage format for fractional values.
+Blank numeric cells are flagged rather than silently treated as zero.
 
 Each page load starts with newly randomized sample visitor and conversion counts
 and calculates the sample results automatically. Replace these demo values with
 your experiment counts to run your own analysis. Sample data is not saved.
 
 ## Deploy on GitHub Pages
-1. Upload `index.html`, `styles.css`, and `app.js` to the root of your `insights-studio` repository.
+1. Upload `index.html`, `styles.css`, `app.js`, `chart-data.js`, and `charts.js` to the root of your `insights-studio` repository.
 2. Open **Settings → Pages**.
 3. Under **Build and deployment**, select **Deploy from a branch**.
 4. Choose **main** and **/(root)**, then save.
@@ -16,6 +35,13 @@ your experiment counts to run your own analysis. Sample data is not saved.
 No build step, packages, backend, or tracking are required. Outfit is loaded from
 Google Fonts with a system-font fallback; the application still works if the font
 service is unavailable. Inputs are never included in font requests.
+
+Excel import loads SheetJS 0.20.3 from its official CDN on demand. PowerPoint
+export loads PptxGenJS 4.0.1 from jsDelivr on demand. Both script versions are
+pinned and checked with SHA-384 integrity hashes. These two features require a
+connection for their initial library download; pasted/CSV input, chart previews,
+and image exports work without these libraries. Data stays in your browser and
+is never sent to the library providers.
 
 ## Statistical methodology
 - Two-sided: uncorrected pooled two-proportion Z-test, `p = 2(1 − Φ(|z|))`.
@@ -27,8 +53,9 @@ service is unavailable. Inputs are never included in font requests.
 - Repeated peeking, sample ratio mismatch, and unplanned hypothesis selection can compromise conclusions. Do not use significance alone as a launch decision.
 
 ## Developer checks
-With Node.js installed, run `node --test tests/sample-data.test.cjs` to check
-random sample validity and variation. No packages need to be installed.
+With Node.js installed, run `node --test tests/*.test.cjs` to check random sample
+validity, CSV/table parsing, numeric formats, and independent axis scales. No
+packages need to be installed. Use `node --check charts.js` for syntax validation.
 
 ## Privacy
 All calculations run in the browser. Inputs are not transmitted or persisted by the application. **GitHub Pages is publicly accessible**; use only sample or approved data while prototyping. Review your organization's policy before entering confidential data.
