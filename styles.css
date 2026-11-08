@@ -8,7 +8,7 @@
   --accent: #FFDC19;
   --accent-hover: #FFE64D;
   --accent-tint: rgba(255, 220, 25, 0.07);
-  --accent-glow: rgba(255, 220, 25, 0.05);
+  --accent-glow: rgba(255, 220, 25, 0.10);
   --on-accent: #0a0a0a;
   --text: #f2f2f2;
   --text-muted: rgba(242, 242, 242, 0.55);
@@ -24,7 +24,10 @@
 
 body {
   margin: 0;
-  background: radial-gradient(ellipse at top right, var(--accent-glow), transparent 55%), var(--bg);
+  background:
+    radial-gradient(ellipse at 85% 0%, var(--accent-glow), transparent 65%),
+    radial-gradient(ellipse at 0% 70%, var(--accent-glow), transparent 60%),
+    var(--bg);
   color: var(--text);
   font-family: var(--font-body);
   line-height: 1.5;

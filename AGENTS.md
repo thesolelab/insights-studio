@@ -53,7 +53,7 @@ in components). Replace any existing equivalent values.
   --accent: #FFDC19;
   --accent-hover: #FFE64D;
   --accent-tint: rgba(255, 220, 25, 0.07);
-  --accent-glow: rgba(255, 220, 25, 0.05);
+  --accent-glow: rgba(255, 220, 25, 0.10);
   --on-accent: #0a0a0a;
 
   --text: #f2f2f2;
@@ -69,8 +69,9 @@ in components). Replace any existing equivalent values.
 
 ## Step 2: Global look
 - Page background: var(--bg) with a very subtle repeating "+" grid
-  pattern (~3-5% opacity). Optionally one faint radial glow
-  (--accent-glow) in a corner. It should be barely noticeable.
+  pattern (~3-5% opacity). Use broad, soft yellow radial glows
+  (--accent-glow) near the upper-right and lower-left areas to gently
+  brighten the background without competing with the content.
 - Font: load Outfit from Google Fonts, used site-wide. Bold,
   geometric headings.
 - Small labels ("MARKETING ANALYTICS", field labels, tile labels,

@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased — Minimal Gaming HUD
+- Brighten the page background with broader, soft yellow glows while keeping
+  inset fields and the chart black.
 - Apply the monochrome and yellow design system, Outfit typography, square panels,
   HUD stat tiles, accessible focus styles, and responsive layouts.
 - Centralize chart colors in CSS tokens and resolve them into SVG attributes so
