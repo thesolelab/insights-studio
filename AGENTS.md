@@ -45,6 +45,11 @@ Keep chart-data.js independent of the DOM and cover parsing/scaling with Node's
 built-in tests. Load pinned Excel/PowerPoint libraries only when needed and keep
 their integrity hashes up to date with any intentional dependency upgrade.
 
+Chart Studio and the A/B Test Analyzer live in separate accessible tabs. Preserve
+both workspaces when switching tabs. The default chart data input is an editable
+table; retain bulk paste and file imports as alternatives. Keep table edits and
+serialized input synchronized, and prevent exports of unapplied data changes.
+
 ## Palette rule
 Strictly monochrome plus ONE accent. Black, grays, white, and
 yellow (#FFDC19). No other hues anywhere in the UI. Do not add
