@@ -476,7 +476,7 @@
     document.body.appendChild(anchor); anchor.click(); anchor.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
-  function filename(c, extension) { return (c.title.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').slice(0, 70) || 'insights-chart') + '.' + extension; }
+  function filename(c, extension) { return (c.title.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').slice(0, 70) || 'stat-console-chart') + '.' + extension; }
   $('svg').addEventListener('click', () => {
     if (current) save(new Blob([serializedChart()], { type: 'image/svg+xml;charset=utf-8' }), filename(current, 'svg'));
   });
@@ -554,7 +554,7 @@
     try {
       await library('powerpoint');
       const pptx = new window.PptxGenJS();
-      pptx.layout = 'LAYOUT_WIDE'; pptx.author = 'Insights Studio'; pptx.subject = 'Editable chart and source data'; pptx.title = snapshot.title;
+      pptx.layout = 'LAYOUT_WIDE'; pptx.author = 'Stat Console'; pptx.subject = 'Editable chart and source data'; pptx.title = snapshot.title;
       addNativeChart(pptx, pptx.addSlide(), snapshot);
       if (['bubble', 'percent-area'].includes(snapshot.mode)) {
         // PptxGenJS 4.0.1 writes zero-valued bubble cells as blanks. Restore them

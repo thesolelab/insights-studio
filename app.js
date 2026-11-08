@@ -151,13 +151,13 @@ function svgText(){
 }
 $('export-svg').addEventListener('click',()=>download(new Blob([svgText()],{
   type:'image/svg+xml;charset=utf-8'
-}),'insights-studio-ab-distribution.svg'));
+}),'stat-console-ab-distribution.svg'));
 $('export-png').addEventListener('click',()=>{
   const url=URL.createObjectURL(new Blob([svgText()],{
     type:'image/svg+xml;charset=utf-8'
   })),img=new Image();img.onload=()=>{
     const c=document.createElement('canvas');c.width=2200;c.height=1020;const ctx=c.getContext('2d');ctx.drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);c.toBlob(blob=>{
-      if(blob)download(blob,'insights-studio-ab-distribution.png');else alert('Unable to export PNG. Try SVG instead.');
+      if(blob)download(blob,'stat-console-ab-distribution.png');else alert('Unable to export PNG. Try SVG instead.');
     },'image/png');
   };img.onerror=()=>{
     URL.revokeObjectURL(url);alert('Unable to export PNG. Try SVG instead.');

@@ -27,7 +27,10 @@ These instructions apply throughout this repository.
 - In the pull request, describe what changed, why it changed, and how it was checked. Mention any remaining limitations.
 - Share the pull request link and explain the next step for the owner.
 
-# Design System: Insights Studio, Minimal Gaming HUD
+# Design System: Stat Console, Minimal Gaming HUD
+
+Use Stat Console as the product name and SC as its monogram. Keep the current
+repository name and hosting paths unless the owner explicitly requests a move.
 
 Restyle the existing site visually only. Do NOT change statistical
 calculations, chart data logic, form behavior, or Export SVG/PNG
@@ -109,7 +112,7 @@ in components). Replace any existing equivalent values.
 ## Step 3: Components (mapped to this site)
 
 ### Header
-- "Insights" in var(--text), "Studio" in var(--accent), large, bold,
+- "Stat" in var(--text), "Console" in var(--accent), large, bold,
   tight tracking.
 - Keep the yellow rule under the header, 2px, fading out toward
   the right edge.
