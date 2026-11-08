@@ -154,7 +154,7 @@
         tip(node('path', { d, fill: color, stroke: token('--surface-inset'), 'stroke-width': 2 }), `${c.labels[i]}: ${fmt(value)} (${fmt(value / total, 'percent')})`);
         if (span > 0.3) {
           const a = angle + span / 2, r = radius * (inner ? 0.79 : 0.65);
-          label(fmt(value / total, 'percent'), { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) + 5, 'text-anchor': 'middle', fill: color === token('--text-muted') ? text : token('--on-accent') });
+          label(fmt(value / total, 'percent'), { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) + 5, 'text-anchor': 'middle', fill: root.ChartColors ? root.ChartColors.foreground(color) : text });
         }
         angle += span;
       });

@@ -2,6 +2,23 @@
 
 Personal, browser-based chart creation, editable PowerPoint exports, and A/B test analysis.
 
+The interface uses graphite/slate surfaces with electric-cyan accents. Body text
+uses Inter; the Stat Console wordmark uses Outfit. Data colors are independent
+of the interface accent.
+
+## Customize chart colors
+- Choose Signal, Arcade, or Spectrum in **Chart palette**, then customize each
+  series using its swatch and HEX field. Pie and doughnut charts have a color
+  control for each category instead.
+- A swatch opens the color wheel. Hue, saturation, and brightness sliders provide
+  keyboard access; HEX input accepts 3 or 6 digits. Select **Apply color** to
+  commit a wheel selection, or Cancel/Escape to keep the previous color.
+- In **A/B Test Analyzer**, expand **Chart colors** to set Control A and Variant B
+  independently. Changing colors does not change test values or results.
+- Selected colors appear in the preview and SVG/PNG/PowerPoint exports. Invalid
+  HEX input leaves the last valid color applied. Presets reset custom overrides.
+  Color settings are retained while switching tabs and styles, but reset on reload.
+
 ## Create a chart for PowerPoint
 1. Open the **Chart Studio** tab and edit the spreadsheet-style table directly.
    Add or remove rows and series as needed. Paste a full table with headers into
@@ -50,13 +67,13 @@ and calculates the sample results automatically. Replace these demo values with
 your experiment counts to run your own analysis. Sample data is not saved.
 
 ## Deploy on GitHub Pages
-1. Upload `index.html`, `styles.css`, `app.js`, `tabs.js`, `chart-data.js`, `chart-modes.js`, and `charts.js` to the root of your `insights-studio` repository.
+1. Upload `index.html`, `styles.css`, `colors.js`, `app.js`, `tabs.js`, `chart-data.js`, `chart-modes.js`, and `charts.js` to the root of your `insights-studio` repository.
 2. Open **Settings → Pages**.
 3. Under **Build and deployment**, select **Deploy from a branch**.
 4. Choose **main** and **/(root)**, then save.
 5. Wait for the Pages deployment to complete and open the published URL.
 
-No build step, packages, backend, or tracking are required. Outfit is loaded from
+No build step, packages, backend, or tracking are required. Inter and Outfit are loaded from
 Google Fonts with a system-font fallback; the application still works if the font
 service is unavailable. Inputs are never included in font requests.
 
@@ -79,7 +96,7 @@ is never sent to the library providers.
 ## Developer checks
 With Node.js installed, run `node --test tests/*.test.cjs` to check random sample
 validity, CSV/table parsing, numeric formats, independent axis scales, chart
-families, stacking, and export specifications. No
+families, stacking, export specifications, and color conversion/validation. No
 packages need to be installed. Use `node --check charts.js` for syntax validation.
 
 ## Privacy
