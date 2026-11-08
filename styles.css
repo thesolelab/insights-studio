@@ -117,9 +117,9 @@ body::before {
 }
 
 .shell {
-  max-width: 1160px;
+  max-width: 1680px;
   margin: 0 auto;
-  padding: 40px 24px;
+  padding: 40px clamp(24px, 3vw, 48px);
 }
 .top {
   position: relative;
@@ -682,6 +682,10 @@ footer span {
   box-shadow: none;
 }
 .builder-label select:disabled { opacity: 0.5; }
+.chart-style-help { display: flex; justify-content: space-between; align-items: center; gap: 18px; margin: 16px 0; }
+.chart-style-help .note { margin: 0; }
+.builder-series.single-style .builder-series-row { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 700px) { .chart-style-help { align-items: stretch; flex-direction: column; } }
 @media (max-width: 700px) {
   .builder-upload, .builder-fields { grid-template-columns: minmax(0, 1fr); }
   .builder-series-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }

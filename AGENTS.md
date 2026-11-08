@@ -50,6 +50,13 @@ both workspaces when switching tabs. The default chart data input is an editable
 table; retain bulk paste and file imports as alternatives. Keep table edits and
 serialized input synchronized, and prevent exports of unapplied data changes.
 
+Support the expanded chart-style picker and its native PowerPoint exports.
+Keep chart-family validation and stacking/export specifications in chart-modes.js
+testable without the DOM. Preserve numeric X values for scatter/bubble charts,
+validate incompatible data explicitly, and do not replace user data on style
+changes. Examples are loaded only by an explicit action. Keep desktop workspaces
+wide and fluid (up to 1,680px), with responsive gutters and contained mobile scroll.
+
 ## Palette rule
 Strictly monochrome plus ONE accent. Black, grays, white, and
 yellow (#FFDC19). No other hues anywhere in the UI. Do not add

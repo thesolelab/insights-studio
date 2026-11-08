@@ -10,8 +10,13 @@ Personal, browser-based chart creation, editable PowerPoint exports, and A/B tes
    select the worksheet to use. Save workbooks with formulas in Excel first so
    their calculated values are available.
 2. Select **Update chart** after editing data. Choose the category column
-   and the numeric series to include, then choose Column or Line for each series.
-3. For different units or scales, enable the second axis and assign the desired
+   and the numeric series to include, then choose a **Chart style**. The picker
+   includes 21 styles: combination; grouped, stacked, and 100% stacked columns
+   and horizontal bars; line, marked line, smooth line; area, stacked area,
+   100% stacked area; scatter points, scatter lines, bubble; pie, doughnut;
+   radar, marked radar, and filled radar.
+3. In **Combination** mode, choose Column or Line per series. For different units
+   or scales, enable the second axis and assign the desired
    series to **Right**. Set number/percentage formats for each axis. Chart axes
    show tick labels without titles; the centered legend shows series names only.
 4. Select **Export PowerPoint** to download a 16:9 slide with a native, editable
@@ -24,6 +29,18 @@ series, and 5 MB uploads. Use decimal points for numbers. Percentages such as
 `3.8%` are stored as `0.038`; choose Percentage format for fractional values.
 Blank numeric cells are flagged rather than silently treated as zero.
 
+Use **Load example for this style** to try a suitable dataset; changing styles
+alone never replaces your data. Scatter charts require a numeric X column and
+one or more Y series. Bubble charts also require a separate non-negative size
+column. Pie/doughnut use one selected series and at most 12 categories, with
+non-negative values and a positive total. Radar uses 3–12 non-negative categories.
+100% stacks and stacked areas require non-negative values. Other chart families
+use a shared scale; independent dual axes are available in Combination mode.
+Every style exports as a native editable PowerPoint chart, not a screenshot.
+
+Desktop workspaces use a wider, fluid layout up to 1,680px with flexible gutters.
+Tables and chart previews scroll within their own containers on small screens.
+
 Use the **A/B Test Analyzer** tab for experiment inputs and results. Switching
 tabs preserves both workspaces during the current page session. Arrow keys,
 Home, and End navigate the tabs. Data is not persisted across reloads.
@@ -33,7 +50,7 @@ and calculates the sample results automatically. Replace these demo values with
 your experiment counts to run your own analysis. Sample data is not saved.
 
 ## Deploy on GitHub Pages
-1. Upload `index.html`, `styles.css`, `app.js`, `tabs.js`, `chart-data.js`, and `charts.js` to the root of your `insights-studio` repository.
+1. Upload `index.html`, `styles.css`, `app.js`, `tabs.js`, `chart-data.js`, `chart-modes.js`, and `charts.js` to the root of your `insights-studio` repository.
 2. Open **Settings → Pages**.
 3. Under **Build and deployment**, select **Deploy from a branch**.
 4. Choose **main** and **/(root)**, then save.
@@ -61,7 +78,8 @@ is never sent to the library providers.
 
 ## Developer checks
 With Node.js installed, run `node --test tests/*.test.cjs` to check random sample
-validity, CSV/table parsing, numeric formats, and independent axis scales. No
+validity, CSV/table parsing, numeric formats, independent axis scales, chart
+families, stacking, and export specifications. No
 packages need to be installed. Use `node --check charts.js` for syntax validation.
 
 ## Privacy
