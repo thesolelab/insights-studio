@@ -9,7 +9,9 @@ Personal, browser-based A/B test analysis and presentation-ready chart exports.
 4. Choose **main** and **/(root)**, then save.
 5. Wait for the Pages deployment to complete and open the published URL.
 
-No build step, packages, backend, tracking, or external network requests are required.
+No build step, packages, backend, or tracking are required. Outfit is loaded from
+Google Fonts with a system-font fallback; the application still works if the font
+service is unavailable. Inputs are never included in font requests.
 
 ## Statistical methodology
 - Two-sided: uncorrected pooled two-proportion Z-test, `p = 2(1 − Φ(|z|))`.
