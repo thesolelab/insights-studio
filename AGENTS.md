@@ -27,21 +27,21 @@ These instructions apply throughout this repository.
 - In the pull request, describe what changed, why it changed, and how it was checked. Mention any remaining limitations.
 - Share the pull request link and explain the next step for the owner.
 
-# Design System: Stat Console, Graphite + Electric Cyan
+# Design System: Stat Console, Graphite + Electric Mint
 
 Use Stat Console as the product name and SC as its monogram. Keep repository
 names and hosting paths unless the owner explicitly requests a move.
 
 ## Visual direction
 Use a clean analytics command center with a restrained gaming influence.
-Use graphite surfaces and cyan interface accents for the shell. Chart colors
+Use graphite surfaces and mint interface accents for the shell. Chart colors
 are independently customizable.
 
 - Page background: graphite `#11151B`.
 - Panels: slate `#1A2029`; inputs and chart canvases: deep slate `#151A22`.
 - Borders: steel `#323D4B`, stronger control borders `#465365`.
 - Primary text: soft white `#F2F5F9`; secondary text: cool gray `#A3AFBF`.
-- Buttons, active tabs, and focus: electric cyan `#36D6ED`; hover `#74E7F6`.
+- Buttons, active tabs, and focus: electric mint `#04E2B7`; hover `#0EF3C5`.
 - Define interface colors in :root; components use these tokens.
 - Use Inter for body text and chart labels, Outfit for the wordmark, with
   system-font fallbacks. Use tabular numbers and compact, legible labels.
@@ -54,6 +54,7 @@ are independently customizable.
 ## Chart colors
 Interface accent and data colors are independent. colors.js owns Signal, Arcade,
 and Spectrum palette presets and reusable color-wheel/HEX controls.
+Do not couple A/B data-color defaults to the interface accent token.
 
 - Allow per-series colors for all chart families, per-category slice colors for
   pie/doughnut charts, and independent Control A/Variant B colors for A/B charts.

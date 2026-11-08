@@ -2,7 +2,8 @@
 
 Personal, browser-based chart creation, editable PowerPoint exports, and A/B test analysis.
 
-The interface uses graphite/slate surfaces with electric-cyan accents. Body text
+The interface uses graphite/slate surfaces with electric-mint accents
+(`#04E2B7`, with `#0EF3C5` hover highlights). Body text
 uses Inter; the Stat Console wordmark uses Outfit. Data colors are independent
 of the interface accent.
 

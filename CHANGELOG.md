@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — Electric Mint accent
+- Use #04E2B7 for interface accents and #0EF3C5 for hover highlights, with subtle
+  mint selection tints against the existing graphite/slate surfaces.
+- Keep chart palettes and A/B default curve colors independent of the interface.
+
 ## Unreleased — Random Chart Studio startup
 - Randomly select from all 21 chart styles and generate compatible sample data
   on every page load, with a matching sample chart title.
