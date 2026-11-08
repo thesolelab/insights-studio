@@ -157,7 +157,6 @@
     });
     for (const [side, position] of [['left', 0], ['right', 1]]) {
       const index = columns[position];
-      $(side + '-title').value = index === undefined ? '' : table.headers[index];
       $(side + '-format').value = index !== undefined && table.rows.some(row => row[index].endsWith('%')) ? 'percent' : 'number';
     }
   }
@@ -215,7 +214,7 @@
     const axes = {};
     for (const side of ['left', 'right']) {
       const values = series.filter(item => item.axis === side).flatMap(item => item.values);
-      if (values.length) axes[side] = { ...D.axisScale(values), title: $(side + '-title').value.trim(), format: $(side + '-format').value };
+      if (values.length) axes[side] = { ...D.axisScale(values), format: $(side + '-format').value };
     }
     return { title: $('title').value.trim() || 'Untitled chart', category: table.headers[category], labels, series, axes };
   }
@@ -232,7 +231,7 @@
     const left = 110, right = 990, top = 95, bottom = 460;
     const x = i => left + (i + 0.5) * (right - left) / c.labels.length;
     const y = (value, axis) => bottom - (value - axis.min) / (axis.max - axis.min) * (bottom - top);
-    const label = (value, attrs) => chart.appendChild(svgNode('text', {
+    const label = (value, attrs, parent = chart) => parent.appendChild(svgNode('text', {
       fill: muted, 'font-family': font, 'font-size': 14, 'font-weight': 600, ...attrs
     }, value));
     chart.appendChild(svgNode('title', {}, c.title));
@@ -248,14 +247,12 @@
         }));
         label(format(value, axis.format), { x: side === 'left' ? left - 14 : right + 14, y: yy + 5, 'text-anchor': side === 'left' ? 'end' : 'start' });
       }
-      label(axis.title, { x: side === 'left' ? left : right, y: 76, 'text-anchor': side === 'left' ? 'start' : 'end', fill: text });
     }
     const skip = Math.max(1, Math.ceil(c.labels.length / 10));
     c.labels.forEach((value, index) => {
       if (index % skip === 0 || index === c.labels.length - 1) label(value.length > 16 ? value.slice(0, 15) + '…' : value,
         { x: x(index), y: bottom + 26, 'text-anchor': 'middle' });
     });
-    label(c.category, { x: (left + right) / 2, y: 517, 'text-anchor': 'middle' });
     const bars = c.series.filter(s => s.type === 'bar');
     const band = (right - left) / c.labels.length * 0.7;
     // Paint lines above columns regardless of the input column order.
@@ -281,11 +278,33 @@
           chart.appendChild(point);
         });
       }
-      const lx = 65 + (seriesIndex % 3) * 345, ly = 559 + Math.floor(seriesIndex / 3) * 29;
-      chart.appendChild(svgNode('rect', { x: lx, y: ly - 10, width: 10, height: 10, fill: series.color }));
-      const name = series.name.length > 26 ? series.name.slice(0, 25) + '…' : series.name;
-      label(`${name} · ${series.axis}`, { x: lx + 19, y: ly });
     });
+    // Center each legend row using its actual text widths, including short rows.
+    const context = document.createElement('canvas').getContext('2d');
+    context.font = `600 14px ${font}`;
+    const rows = [[]], gap = 28;
+    let rowWidth = 0;
+    c.series.forEach(series => {
+      const name = series.name.length > 26 ? series.name.slice(0, 25) + '…' : series.name;
+      const width = 19 + context.measureText(name).width;
+      if (rowWidth && rowWidth + gap + width > right - left) { rows.push([]); rowWidth = 0; }
+      rows[rows.length - 1].push({ name, width, color: series.color });
+      rowWidth += (rowWidth ? gap : 0) + width;
+    });
+    const legend = svgNode('g', { 'data-chart-legend': '' });
+    rows.forEach((items, row) => {
+      const width = items.reduce((sum, item) => sum + item.width, 0) + gap * (items.length - 1);
+      let lx = (left + right - width) / 2;
+      const ly = 550 + row * 26;
+      const group = svgNode('g', { 'data-legend-row': row });
+      items.forEach(item => {
+        group.appendChild(svgNode('rect', { x: lx, y: ly - 10, width: 10, height: 10, fill: item.color }));
+        label(item.name, { x: lx + 19, y: ly }, group);
+        lx += item.width + gap;
+      });
+      legend.appendChild(group);
+    });
+    chart.appendChild(legend);
     svg.setAttribute('aria-label', c.title + '. ' + c.series.map(s => s.name + ' on the ' + s.axis + ' axis').join(', '));
     svg.replaceChildren(chart);
   }
@@ -433,7 +452,7 @@
             barDir: 'col', grouping: 'clustered', showMarker: type === 'line', markerSize: 4, lineSize: 2 } });
       }
     }
-    const axisOptions = axis => ({ valAxisTitle: axis.title, showValAxisTitle: Boolean(axis.title),
+    const axisOptions = axis => ({ valAxisTitle: '', showValAxisTitle: false,
       valAxisMinVal: axis.min, valAxisMaxVal: axis.max, valAxisMajorUnit: axis.step,
       valAxisLabelFormatCode: axis.format === 'percent' ? '0.##%' : '#,##0.####', valAxisLabelColor: muted, valAxisTitleColor: text });
     const axes = [axisOptions(c.axes.left)];
@@ -445,7 +464,7 @@
       legendColor: text, legendFontSize: 11, fontFace: 'Arial', fontSize: 11,
       chartArea: { fill: { color: background }, border: { color: background, pt: 0 } },
       plotArea: { fill: { color: background }, border: { color: background, pt: 0 } },
-      catAxisLabelColor: muted, catAxisTitleColor: text, catAxisTitle: c.category, showCatAxisTitle: true,
+      catAxisLabelColor: muted, catAxisTitleColor: text, catAxisTitle: '', showCatAxisTitle: false,
       catAxisLabelFontSize: 10, valAxisLabelFontSize: 10, valAxisTitleFontSize: 12,
       catAxisLineColor: muted, valAxisLineColor: muted, catAxisLineShow: true, valAxisLineShow: true,
       catAxisLabelFrequency: Math.max(1, Math.ceil(c.labels.length / 10)).toString(),
@@ -474,4 +493,5 @@
   });
 
   try { useTable(D.parseDelimited($('data').value)); } catch (error) { fail(error); }
+  document.fonts.ready.then(() => { if (current) draw(current); });
 })();

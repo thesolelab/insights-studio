@@ -12,7 +12,8 @@ Personal, browser-based chart creation, editable PowerPoint exports, and A/B tes
 2. Select **Update chart** after editing data. Choose the category column
    and the numeric series to include, then choose Column or Line for each series.
 3. For different units or scales, enable the second axis and assign the desired
-   series to **Right**. Set titles and number/percentage formats for each axis.
+   series to **Right**. Set number/percentage formats for each axis. Chart axes
+   show tick labels without titles; the centered legend shows series names only.
 4. Select **Export PowerPoint** to download a 16:9 slide with a native, editable
    chart and embedded data worksheet. In PowerPoint, select the chart and choose
    **Edit Data**. You can also copy the chart into an existing presentation.
