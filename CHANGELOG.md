@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — Chart presentation cleanup
+- Remove axis titles from Chart Studio previews and exports while keeping tick
+  labels and independent left/right scales.
+- Center the bottom legend, wrapping longer legends into centered rows, and
+  display series names without left/right suffixes.
+- Remove unused axis-title inputs from chart settings.
+
 ## Unreleased — Workspace tabs and table editor
 - Separate Chart Studio and A/B Test Analyzer into keyboard-accessible tabs,
   preserving each workspace's inputs and results when switching.
