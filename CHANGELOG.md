@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Random Chart Studio startup
+- Randomly select from all 21 chart styles and generate compatible sample data
+  on every page load, with a matching sample chart title.
+- Preserve user data when editing or switching tabs/styles; retain the explicit
+  example loader and existing A/B startup behavior.
+
 ## Unreleased — Graphite + Electric Cyan
 - Refresh the interface with graphite/slate surfaces, cyan accents, Inter body
   typography, Outfit branding, softer corners, and a clean background.

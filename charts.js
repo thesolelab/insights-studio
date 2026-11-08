@@ -675,6 +675,12 @@
     finally { exporting = false; buttons(Boolean(current)); }
   });
 
-  try { useTable(D.parseDelimited($('data').value)); } catch (error) { fail(error); }
+  try {
+    const startup = M.randomStartup();
+    $('mode').value = startup.id;
+    $('title').value = startup.title;
+    $('data').value = D.serializeTable(startup.rows);
+    useTable(D.normalizeTable(startup.rows));
+  } catch (error) { fail(error); }
   document.fonts.ready.then(() => { if (current) draw(current); });
 })();
