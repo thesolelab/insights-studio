@@ -1,1 +1,207 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#000000"><title>Insights Studio | A/B Test Analyzer</title><link rel="stylesheet" href="styles.css"></head><body><main class="shell"><header class="top"><div><div class="eyebrow">MARKETING ANALYTICS</div><h1>Insights <span>Studio</span></h1><p>A/B Test Analyzer · v0.1.1</p></div><div class="mark">IS<span>.</span></div></header><section class="panel"><div class="section-head"><div><h2>Test data</h2><p>Enter the number of unique visitors and conversions for each variation.</p></div><span class="pill">95% confidence</span></div><form id="test-form"><div class="fields"><label>Visitors A<input id="visitors-a" type="number" min="1" step="1" required value="80000"></label><label>Conversions A<input id="conversions-a" type="number" min="0" step="1" required value="1600"></label><label>Visitors B<input id="visitors-b" type="number" min="1" step="1" required value="80000"></label><label>Conversions B<input id="conversions-b" type="number" min="0" step="1" required value="1696"></label></div><fieldset><legend>Hypothesis</legend><label class="radio"><input type="radio" name="hypothesis" value="greater" checked> One-sided: B is better than A</label><label class="radio"><input type="radio" name="hypothesis" value="two"> Two-sided: B is different from A</label></fieldset><div class="actions"><button class="primary" type="submit">Calculate results</button><span id="error" role="alert"></span></div></form></section><section id="results" class="panel"><div class="section-head"><div><h2>Experiment results</h2><p id="method-label">95% confidence · One-sided hypothesis</p></div><span id="verdict-pill" class="pill"></span></div><div id="verdict" class="verdict" aria-live="polite"></div><div class="metrics"><div class="metric"><small>CONTROL A</small><strong id="rate-a">—</strong></div><div class="metric"><small>VARIANT B</small><strong id="rate-b">—</strong></div><div class="metric"><small>RELATIVE LIFT</small><strong id="lift">—</strong></div><div class="metric"><small>P-VALUE</small><strong id="p-value">—</strong></div></div><div class="chart-heading"><div><h3>Expected conversion rate distributions</h3><p>Sampling distributions of the observed conversion rates</p></div><div class="export"><button type="button" id="export-svg">Export SVG</button><button type="button" id="export-png">Export PNG</button></div></div><div class="chart-wrap"><svg id="distribution" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 510" role="img" aria-label="Normal approximation sampling distributions for control and variant"></svg></div><div class="legend"><span><i class="dot control"></i>Control A</span><span><i class="dot variant"></i>Variant B</span></div><p class="note">The vertical 95% markers show the lower one-sided 95% bound (one-sided mode) or lower bound of the two-sided 95% interval (two-sided mode) for each individual conversion-rate distribution. Curves use normal approximations. Statistical significance is determined by the selected proportion test, not by the chart alone.</p><details id="stats"><summary>Statistical calculations <span>Expand / collapse</span></summary><div class="stat-grid" id="stat-grid"></div><p class="note">Uncorrected pooled two-proportion Z-test. Confidence intervals use the unpooled normal approximation. Results assume independent, randomized observations and a hypothesis chosen before examining results. Repeated checking can invalidate the nominal 95% threshold.</p></details></section><footer>INSIGHTS STUDIO <span>·</span> Personal reporting workspace <span>·</span> No data uploaded or saved</footer></main><script src="app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="#000000" name="theme-color"/>
+  <title>
+   Insights Studio | A/B Test Analyzer
+  </title>
+  <link href="styles.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <main class="shell">
+   <header class="top">
+    <div>
+     <div class="eyebrow">
+      MARKETING ANALYTICS
+     </div>
+     <h1>
+      Insights
+      <span>
+       Studio
+      </span>
+     </h1>
+     <p>
+      A/B Test Analyzer · v0.1.1
+     </p>
+    </div>
+    <div class="mark">
+     IS
+     <span>
+      .
+     </span>
+    </div>
+   </header>
+   <section class="panel">
+    <div class="section-head">
+     <div>
+      <h2>
+       Test data
+      </h2>
+      <p>
+       Enter the number of unique visitors and conversions for each variation.
+      </p>
+     </div>
+     <span class="pill">
+      95% confidence
+     </span>
+    </div>
+    <form id="test-form">
+     <div class="fields">
+      <label>
+       Visitors A
+       <input id="visitors-a" min="1" required="" step="1" type="number" value="80000"/>
+      </label>
+      <label>
+       Conversions A
+       <input id="conversions-a" min="0" required="" step="1" type="number" value="1600"/>
+      </label>
+      <label>
+       Visitors B
+       <input id="visitors-b" min="1" required="" step="1" type="number" value="80000"/>
+      </label>
+      <label>
+       Conversions B
+       <input id="conversions-b" min="0" required="" step="1" type="number" value="1696"/>
+      </label>
+     </div>
+     <fieldset>
+      <legend>
+       Hypothesis
+      </legend>
+      <label class="radio">
+       <input checked="" name="hypothesis" type="radio" value="greater"/>
+       One-sided: B is better than A
+      </label>
+      <label class="radio">
+       <input name="hypothesis" type="radio" value="two"/>
+       Two-sided: B is different from A
+      </label>
+     </fieldset>
+     <div class="actions">
+      <button class="primary" type="submit">
+       Calculate results
+      </button>
+      <span id="error" role="alert">
+      </span>
+     </div>
+    </form>
+   </section>
+   <section class="panel" id="results">
+    <div class="section-head">
+     <div>
+      <h2>
+       Experiment results
+      </h2>
+      <p id="method-label">
+       95% confidence · One-sided hypothesis
+      </p>
+     </div>
+     <span class="pill" id="verdict-pill">
+     </span>
+    </div>
+    <div aria-live="polite" class="verdict" id="verdict">
+    </div>
+    <div class="metrics">
+     <div class="metric">
+      <small>
+       CONTROL A
+      </small>
+      <strong id="rate-a">
+       —
+      </strong>
+     </div>
+     <div class="metric">
+      <small>
+       VARIANT B
+      </small>
+      <strong id="rate-b">
+       —
+      </strong>
+     </div>
+     <div class="metric">
+      <small>
+       RELATIVE LIFT
+      </small>
+      <strong id="lift">
+       —
+      </strong>
+     </div>
+     <div class="metric">
+      <small>
+       P-VALUE
+      </small>
+      <strong id="p-value">
+       —
+      </strong>
+     </div>
+    </div>
+    <div class="chart-heading">
+     <div>
+      <h3>
+       Expected conversion rate distributions
+      </h3>
+      <p>
+       Sampling distributions of the observed conversion rates
+      </p>
+     </div>
+     <div class="export">
+      <button id="export-svg" type="button">
+       Export SVG
+      </button>
+      <button id="export-png" type="button">
+       Export PNG
+      </button>
+     </div>
+    </div>
+    <div class="chart-wrap">
+     <svg aria-label="Normal approximation sampling distributions for control and variant" id="distribution" role="img" viewbox="0 0 1100 510" xmlns="http://www.w3.org/2000/svg">
+     </svg>
+    </div>
+    <div class="legend">
+     <span>
+      <i class="dot control">
+      </i>
+      Control A
+     </span>
+     <span>
+      <i class="dot variant">
+      </i>
+      Variant B
+     </span>
+    </div>
+    <p class="note">
+     The vertical 95% markers show the lower one-sided 95% bound (one-sided mode) or lower bound of the two-sided 95% interval (two-sided mode) for each individual conversion-rate distribution. Curves use normal approximations. Statistical significance is determined by the selected proportion test, not by the chart alone.
+    </p>
+    <details id="stats">
+     <summary>
+      Statistical calculations
+      <span>
+       Expand / collapse
+      </span>
+     </summary>
+     <div class="stat-grid" id="stat-grid">
+     </div>
+     <p class="note">
+      Uncorrected pooled two-proportion Z-test. Confidence intervals use the unpooled normal approximation. Results assume independent, randomized observations and a hypothesis chosen before examining results. Repeated checking can invalidate the nominal 95% threshold.
+     </p>
+    </details>
+   </section>
+   <footer>
+    INSIGHTS STUDIO
+    <span>
+     ·
+    </span>
+    Personal reporting workspace
+    <span>
+     ·
+    </span>
+    No data uploaded or saved
+   </footer>
+  </main>
+  <script src="app.js">
+  </script>
+ </body>
+</html>
+
