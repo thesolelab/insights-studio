@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — Minimal Gaming HUD
+- Apply the monochrome and yellow design system, Outfit typography, square panels,
+  HUD stat tiles, accessible focus styles, and responsive layouts.
+- Centralize chart colors in CSS tokens and resolve them into SVG attributes so
+  SVG and PNG exports remain self-contained.
+- Preserve statistical calculations, chart coordinates, validation, and exports.
+- Document the visual design system in AGENTS.md and the Google Fonts dependency
+  in README.md.
+
 ## v0.1.1 — Distribution marker correction
 - Position both 95% markers on the lower side of their respective sampling distributions.
 - Use the 5th percentile for one-sided mode and the 2.5th percentile for two-sided mode.

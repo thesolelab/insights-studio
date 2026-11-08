@@ -35,9 +35,14 @@ function calculate(a,ca,b,cb,hyp){
 }
 function drawChart(r){
   const svg=$('distribution');
-  svg.replaceChildren();
-  svg.appendChild(node('rect',{
-    width:1100,height:510,fill:'#000'
+  // Resolve design tokens into literal attributes for standalone SVG/PNG exports.
+  const tokens=getComputedStyle(document.documentElement);
+  const color=name=>tokens.getPropertyValue(name).trim();
+  const text=color('--text');
+  const font=tokens.getPropertyValue('--font-body').trim();
+  const chart=document.createDocumentFragment();
+  chart.appendChild(node('rect',{
+    width:1100,height:510,fill:color('--surface-inset')
   }));
   const left=82,right=1060,top=38,bottom=430;
   const sigmaA=Math.max(r.seA,1e-8),sigmaB=Math.max(r.seB,1e-8);
@@ -52,50 +57,51 @@ function drawChart(r){
   const y=v=>bottom-v/peak*310;
   for(let i=0;i<=4;i++){
     const yy=bottom-i*75;
-    svg.appendChild(node('line',{
-      x1:left,x2:right,y1:yy,y2:yy,stroke:'#676767','stroke-opacity':'.26'
+    chart.appendChild(node('line',{
+      x1:left,x2:right,y1:yy,y2:yy,stroke:text,'stroke-opacity':'.08'
     }));
   }
-  svg.appendChild(node('line',{
-    x1:left,x2:right,y1:bottom,y2:bottom,stroke:'#e5e9df','stroke-opacity':'.7'
+  chart.appendChild(node('line',{
+    x1:left,x2:right,y1:bottom,y2:bottom,stroke:text,'stroke-opacity':'.2'
   }));
   const series=[{
-    mu:r.pa,s:sigmaA,color:'#a7a7a7',label:'CR A: '+fmtPct(r.pa)
+    mu:r.pa,s:sigmaA,color:color('--chart-control'),label:'CR A: '+fmtPct(r.pa)
   },{
-    mu:r.pb,s:sigmaB,color:'#ffdc19',label:'CR B: '+fmtPct(r.pb)
+    mu:r.pb,s:sigmaB,color:color('--chart-variant'),label:'CR B: '+fmtPct(r.pb)
   }
   ];
   series.forEach((ser,index)=>{
-    let d='',area='';for(let i=0;i<=420;i++){
-      const v=min+(max-min)*i/420,xx=x(v),yy=y(pdf(v,ser.mu,ser.s));d+=(i?' L':'M')+xx.toFixed(2)+' '+yy.toFixed(2);area+=(i?' L':'M')+xx.toFixed(2)+' '+yy.toFixed(2);
+    let d='';for(let i=0;i<=420;i++){
+      const v=min+(max-min)*i/420,xx=x(v),yy=y(pdf(v,ser.mu,ser.s));d+=(i?' L':'M')+xx.toFixed(2)+' '+yy.toFixed(2);
     }
-    svg.appendChild(node('path',{
-      d:area+` L ${x(max)} ${bottom} L ${x(min)} ${bottom} Z`,fill:ser.color,'fill-opacity':index===0?'.08':'.15'
-    }));svg.appendChild(node('path',{
+    chart.appendChild(node('path',{
+      d:d+` L ${x(max)} ${bottom} L ${x(min)} ${bottom} Z`,fill:ser.color,'fill-opacity':index===0?'.08':'.15'
+    }));chart.appendChild(node('path',{
       d,fill:'none',stroke:ser.color,'stroke-width':3
-    }));const meanX=x(ser.mu);svg.appendChild(node('line',{
-      x1:meanX,x2:meanX,y1:top,y2:bottom,stroke:'#fff','stroke-opacity':'.35','stroke-dasharray':'5 6'
-    }));svg.appendChild(node('text',{
-      x:meanX+12,y:250,transform:`rotate(-90 ${meanX+12} 250)`,fill:'#fff','font-size':19,'font-family':'Arial'
+    }));const meanX=x(ser.mu);chart.appendChild(node('line',{
+      x1:meanX,x2:meanX,y1:top,y2:bottom,stroke:text,'stroke-opacity':'.35','stroke-dasharray':'5 6'
+    }));chart.appendChild(node('text',{
+      x:meanX+12,y:250,transform:`rotate(-90 ${meanX+12} 250)`,fill:text,'font-size':19,'font-family':font,'font-weight':700,'style':'font-variant-numeric:tabular-nums'
     },ser.label));const boundary=ser.mu+(index===0?-1:1)*r.critical*ser.s;const bx=x(boundary);if(bx>=left&&bx<=right){
-      svg.appendChild(node('line',{
-        x1:bx,x2:bx,y1:top,y2:bottom,stroke:'#fff','stroke-opacity':'.25'
-      }));svg.appendChild(node('text',{
-        x:bx+12,y:245,transform:`rotate(-90 ${bx+12} 245)`,fill:'#fff','font-size':18,'font-family':'Arial'
+      chart.appendChild(node('line',{
+        x1:bx,x2:bx,y1:top,y2:bottom,stroke:text,'stroke-opacity':'.25','stroke-dasharray':'3 6'
+      }));chart.appendChild(node('text',{
+        x:bx+12,y:245,transform:`rotate(-90 ${bx+12} 245)`,fill:text,'font-size':18,'font-family':font,'font-weight':700,'style':'font-variant-numeric:tabular-nums'
       },'95%'));
     }
   });
   for(let i=0;i<=5;i++){
     const v=min+(max-min)*i/5;
-    svg.appendChild(node('text',{
-      x:x(v),y:461,fill:'#fff','font-size':15,'font-family':'Arial','text-anchor':'middle'
+    chart.appendChild(node('text',{
+      x:x(v),y:461,fill:color('--text-muted'),'font-size':15,'font-family':font,'font-weight':700,'style':'font-variant-numeric:tabular-nums','text-anchor':'middle'
     },fmtPct(v,2)));
   }
-  svg.appendChild(node('text',{
-    x:570,y:495,fill:'#fff','font-size':18,'font-family':'Arial','text-anchor':'middle'
+  chart.appendChild(node('text',{
+    x:570,y:495,fill:color('--text-muted'),'font-size':18,'font-family':font,'font-weight':700,'style':'font-variant-numeric:tabular-nums','text-anchor':'middle'
   },'Conversion rate'));
-  svg.appendChild(node('title',{
+  chart.appendChild(node('title',{
   },'Conversion rate distributions for Control A and Variant B'));
+  svg.replaceChildren(chart);
 }
 function stat(label,value){
   const div=document.createElement('div');
