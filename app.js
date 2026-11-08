@@ -175,4 +175,28 @@ $('test-form').addEventListener('submit',e=>{
   }
   $('error').textContent='';render(calculate(a,ca,b,cb,document.querySelector('input[name=hypothesis]:checked').value));
 });
+// Demo counts vary on every load; each group satisfies the approximation limits.
+function generateSampleData(random=Math.random){
+  const integer=(min,max)=>min+Math.floor(random()*(max-min+1));
+  const visitorsA=integer(10000,100000);
+  const visitorsB=integer(10000,100000);
+  const rateA=0.01+random()*0.11;
+  const rateB=rateA*(0.8+random()*0.4);
+  return {
+    visitorsA,
+    visitorsB,
+    conversionsA:Math.round(visitorsA*rateA),
+    conversionsB:Math.round(visitorsB*rateB)
+  };
+}
+
+const sample=generateSampleData();
+for(const [id,value] of Object.entries({
+  'visitors-a':sample.visitorsA,
+  'visitors-b':sample.visitorsB,
+  'conversions-a':sample.conversionsA,
+  'conversions-b':sample.conversionsB
+})){
+  $(id).value=value;
+}
 $('test-form').requestSubmit();

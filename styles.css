@@ -66,7 +66,7 @@ body::before {
   background: linear-gradient(to right, var(--accent), transparent);
 }
 
-.eyebrow, .fields > label, legend, .metric small, .stat small {
+.fields > label, legend, .metric small, .stat small {
   color: var(--text-muted);
   font-size: 11px;
   font-weight: 700;
@@ -221,6 +221,7 @@ button {
   cursor: pointer;
 }
 .primary {
+  transition: transform 180ms ease, background-color 180ms ease;
   background: var(--accent);
   color: var(--on-accent);
   border: 0;
@@ -235,6 +236,7 @@ button {
 }
 .primary:hover {
   background: var(--accent-hover);
+  transform: translateY(-2px) scale(1.025);
 }
 .primary:active {
   transform: translateY(1px);
@@ -319,6 +321,7 @@ button:focus-visible, summary:focus-visible, .radio input:focus-visible, .chart-
   flex-shrink: 0;
 }
 .export button {
+  transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
   background: transparent;
   color: var(--text-muted);
   border: 1px solid var(--border-strong);
@@ -332,6 +335,9 @@ button:focus-visible, summary:focus-visible, .radio input:focus-visible, .chart-
 .export button:hover {
   border-color: var(--accent);
   color: var(--accent);
+  background: var(--accent-tint);
+  box-shadow: 0 0 18px var(--accent-glow);
+  transform: translateY(-2px);
 }
 .chart-wrap {
   background: var(--surface-inset);
@@ -380,6 +386,7 @@ details {
   border-top: 1px solid var(--border);
 }
 summary {
+  transition: color 180ms ease;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -503,5 +510,15 @@ footer span {
 @media (forced-colors: active) {
   .radio input {
     appearance: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary, .export button, summary {
+    transition: none;
+  }
+
+  .primary:hover, .primary:active, .export button:hover {
+    transform: none;
   }
 }

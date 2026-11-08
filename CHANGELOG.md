@@ -1,6 +1,10 @@
 # Changelog
 
 ## Unreleased — Minimal Gaming HUD
+- Remove the Marketing Analytics header label and generate valid random sample
+  counts on each page load before calculating initial results.
+- Add more noticeable button hover lift, highlight, and glow, with reduced-motion
+  support.
 - Brighten the page background with broader, soft yellow glows while keeping
   inset fields and the chart black.
 - Apply the monochrome and yellow design system, Outfit typography, square panels,
