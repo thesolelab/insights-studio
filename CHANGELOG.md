@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased — Minimal Gaming HUD
+- Remove the analyzer/version subtitle from the header and show the version
+  number in the footer.
 - Remove the Marketing Analytics header label and generate valid random sample
   counts on each page load before calculating initial results.
 - Add more noticeable button hover lift, highlight, and glow, with reduced-motion
