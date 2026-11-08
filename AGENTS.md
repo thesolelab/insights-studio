@@ -33,6 +33,10 @@ Restyle the existing site visually only. Do NOT change statistical
 calculations, chart data logic, form behavior, or Export SVG/PNG
 functionality. Keep it responsive and accessible.
 
+The owner has additionally requested randomized valid sample visitor and
+conversion counts on every page load. Preserve this startup behavior while
+keeping statistical formulas and user-entered calculation behavior unchanged.
+
 ## Palette rule
 Strictly monochrome plus ONE accent. Black, grays, white, and
 yellow (#FFDC19). No other hues anywhere in the UI. Do not add
@@ -74,7 +78,7 @@ in components). Replace any existing equivalent values.
   brighten the background without competing with the content.
 - Font: load Outfit from Google Fonts, used site-wide. Bold,
   geometric headings.
-- Small labels ("MARKETING ANALYTICS", field labels, tile labels,
+- Small labels (field labels, tile labels,
   "Hypothesis"): 11-13px, uppercase, bold, letter-spacing 0.08em,
   muted color.
 - Numbers (stat tiles, p-value, axis ticks): bold,
@@ -108,11 +112,13 @@ in components). Replace any existing equivalent values.
 - Background var(--accent), text var(--on-accent), bold uppercase,
   letter-spacing 0.06em, radius 0, one clipped corner:
   clip-path: polygon(0 0, 100% 0, 100% 70%, 92% 100%, 0 100%).
-- Hover: var(--accent-hover). Active: 1px translate down.
+- Hover: var(--accent-hover) with a small lift and scale transition.
+  Active: 1px translate down. Respect prefers-reduced-motion.
 
 ### Secondary buttons (Export SVG, Export PNG)
 - Transparent, 1px var(--border-strong), uppercase muted text.
-- Hover: border and text become var(--accent).
+- Hover: border and text become var(--accent), with a subtle accent tint,
+  glow, and lift. Respect prefers-reduced-motion.
 
 ### Badges ("95% confidence", "Significant")
 - Small rectangular badges with square corners instead of pills.
