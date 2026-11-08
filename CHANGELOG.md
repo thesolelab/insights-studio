@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — Stat Console rebrand
+- Rename the product to Stat Console in the header, browser title, footer,
+  documentation, export fallback names, and PowerPoint author metadata.
+- Update the header monogram to SC and A/B image export filenames to the new name.
+
 ## Unreleased — Expanded chart styles and wider desktop workspace
 - Add 21 chart styles across combination, grouped/stacked/100% column and bar,
   line and area variants, scatter, bubble, pie/doughnut, and radar families.

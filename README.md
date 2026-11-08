@@ -1,4 +1,4 @@
-# Insights Studio
+# Stat Console
 
 Personal, browser-based chart creation, editable PowerPoint exports, and A/B test analysis.
 
