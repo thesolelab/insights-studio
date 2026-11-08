@@ -1,6 +1,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
 const SVGNS='http://www.w3.org/2000/svg';
+let latestResult=null;
 function erf(x){
   const s=x<0?-1:1;
   x=Math.abs(x);
@@ -114,6 +115,7 @@ function stat(label,value){
   return div;
 }
 function render(r){
+  latestResult=r;
   $('method-label').textContent='95% confidence · '+(r.hyp==='greater'?'One-sided (B > A)':'Two-sided (B ≠ A)');
   $('verdict-pill').textContent=r.significant?'Significant':'Not significant';
   $('verdict-pill').className='pill'+(r.significant?' significant':'');
@@ -200,3 +202,14 @@ for(const [id,value] of Object.entries({
   $(id).value=value;
 }
 $('test-form').requestSubmit();
+
+if(typeof window!=='undefined' && window.ChartColors){
+  for(const [name,variable] of [['Control A','--chart-control'],['Variant B','--chart-variant']]){
+    const initial=getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+    const picker=window.ChartColors.control(name,initial,color=>{
+      document.documentElement.style.setProperty(variable,color);
+      if(latestResult)drawChart(latestResult);
+    });
+    $('ab-colors').appendChild(picker.element);
+  }
+}

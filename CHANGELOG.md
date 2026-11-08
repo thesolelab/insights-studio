@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Graphite + Electric Cyan
+- Refresh the interface with graphite/slate surfaces, cyan accents, Inter body
+  typography, Outfit branding, softer corners, and a clean background.
+- Add reusable color-wheel/HEX controls, keyboard HSV sliders, and cancel/apply
+  behavior; provide Signal, Arcade, and Spectrum chart palettes.
+- Customize all chart-series colors, pie/doughnut slices, and A/B curves while
+  retaining selections across tabs/styles and matching preview/export colors.
+- Keep A/B calculations and chart data unchanged; replace the earlier yellow-only
+  design guidelines with the new Stat Console visual system.
+
 ## Unreleased — Stat Console rebrand
 - Rename the product to Stat Console in the header, browser title, footer,
   documentation, export fallback names, and PowerPoint author metadata.

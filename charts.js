@@ -3,10 +3,13 @@
   const $ = id => document.getElementById('builder-' + id);
   const D = window.ChartData;
   const M = window.ChartModes;
+  const C = window.ChartColors;
   const NS = 'http://www.w3.org/2000/svg';
   let table = null, workbook = null, revision = 0, current = null, exporting = false;
   let editorRows = [], dirty = false;
   const libraries = new Map();
+  const colorOverrides = new Map();
+  let seriesBindings = [], sliceBindings = [], sliceSignature = '';
 
   function el(tag, attrs = {}, text) {
     const element = document.createElement(tag);
@@ -21,7 +24,25 @@
     return element;
   }
   function token(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
-  function palette() { return ['--chart-variant', '--chart-control', '--text', '--accent-hover', '--text-muted', '--chart-control'].map(token); }
+  function palette() { return C.PALETTES[$('palette').value || 'signal'].colors; }
+  function colorFor(key, index) { return colorOverrides.get(key) || palette()[index % palette().length]; }
+  function sliceKey(name, index) { return 'slice:' + index + ':' + name; }
+  function colorControl(name, key, index, label) {
+    const control = C.control(name, colorFor(key, index), color => { colorOverrides.set(key, color); render(); }, label);
+    return { key, index, control };
+  }
+  function sliceControls(c) {
+    $('slice-colors').hidden = !c.definition.radial;
+    if (!c.definition.radial) return;
+    const signature = JSON.stringify(c.labels);
+    if (signature === sliceSignature) return;
+    sliceSignature = signature; sliceBindings = [];
+    $('slice-colors').replaceChildren();
+    c.labels.forEach((name, index) => {
+      const binding = colorControl(name, sliceKey(name, index), index, name);
+      sliceBindings.push(binding); $('slice-colors').appendChild(binding.control.element);
+    });
+  }
   function buttons(enabled) {
     for (const name of ['svg', 'png', 'pptx']) $(name).disabled = !enabled || (name === 'pptx' && exporting);
   }
@@ -33,9 +54,17 @@
   }
   function fail(error) {
     $('error').textContent = error.message || String(error);
+    $('slice-colors').hidden = true;
     invalidate('Update the data or settings to create a chart.');
   }
   function option(select, value, label) { select.appendChild(el('option', { value }, label)); }
+
+  for (const [id, preset] of Object.entries(C.PALETTES)) option($('palette'), id, preset.name);
+  $('palette').addEventListener('change', () => {
+    colorOverrides.clear();
+    for (const binding of [...seriesBindings, ...sliceBindings]) binding.control.setColor(colorFor(binding.key, binding.index));
+    render();
+  });
 
   for (const family of [...new Set(M.MODES.map(mode => mode.family))]) {
     const group = el('optgroup', { label: family });
@@ -55,6 +84,7 @@
     $('series').classList.toggle('single-style', !combo);
     $('right-format').disabled = !combo || !$('dual').checked;
     $('size-label').hidden = mode.id !== 'bubble';
+    if (!mode.radial) $('slice-colors').hidden = true;
     $('mode-help').textContent = mode.radial
       ? 'Select one numeric series and up to 12 categories. Values must be non-negative, with at least one positive value.'
       : mode.xy ? (mode.id === 'bubble' ? 'Choose a numeric X column, one or more Y series, and a separate bubble-size column. Sizes must be non-negative.' : 'Choose a numeric X column and one or more Y series. Points use their actual X values, not category spacing.')
@@ -73,6 +103,7 @@
       row.querySelector('.series-type').closest('label').hidden = !combo;
       row.querySelector('.series-axis').disabled = !combo || !$('dual').checked;
       row.querySelector('.series-axis').closest('label').hidden = !combo;
+      row.querySelector('.color-control').hidden = mode.radial;
     }
   }
 
@@ -173,6 +204,7 @@
 
   function seriesControls() {
     $('series').replaceChildren();
+    seriesBindings = [];
     const category = Number($('category').value);
     const columns = table.numeric.filter(index => index !== category);
     columns.forEach((index, position) => {
@@ -192,7 +224,9 @@
       axis.value = position === 1 && $('dual').checked ? 'right' : 'left';
       axis.disabled = !$('dual').checked;
       axisLabel.appendChild(axis);
-      row.append(include, typeLabel, axisLabel);
+      const binding = colorControl(table.headers[index], 'series:' + table.headers[index], position, 'Series color');
+      seriesBindings.push(binding);
+      row.append(include, typeLabel, axisLabel, binding.control.element);
       $('series').appendChild(row);
     });
     for (const [side, position] of [['left', 0], ['right', 1]]) {
@@ -254,7 +288,8 @@
         return number;
       });
       return { name: table.headers[column], values, type: row.querySelector('.series-type').value,
-        axis: combo && $('dual').checked ? row.querySelector('.series-axis').value : 'left', color: colors[index] };
+        axis: combo && $('dual').checked ? row.querySelector('.series-axis').value : 'left',
+        color: colorFor('series:' + table.headers[column], table.numeric.filter(i => i !== category).indexOf(column)) };
     });
     if (!series.some(item => item.axis === 'left')) throw new Error('Keep at least one selected series on the left axis.');
     const axes = {};
@@ -262,10 +297,12 @@
       const values = series.filter(item => item.axis === side).flatMap(item => item.values);
       if (values.length) axes[side] = { ...D.axisScale(values), format: $(side + '-format').value };
     }
-    return M.prepare({ title: $('title').value.trim() || 'Untitled chart', category: table.headers[category], labels, series, axes }, $('mode').value, {
+    const next = M.prepare({ title: $('title').value.trim() || 'Untitled chart', category: table.headers[category], labels, series, axes }, $('mode').value, {
       colors, xValues: table.rows.map(row => row[category]), xPercent: table.rows.some(row => row[category].endsWith('%')),
       sizes: table.rows.map(row => row[Number($('size').value)] ?? '')
     });
+    if (next.definition.radial) next.legend.forEach((item, index) => { item.color = colorFor(sliceKey(item.name, index), index); });
+    return next;
   }
 
   function format(number, mode) {
@@ -365,6 +402,7 @@
     try {
       const next = config();
       draw(next);
+      sliceControls(next);
       current = next;
       $('preview').hidden = false;
       $('error').textContent = '';
@@ -458,6 +496,7 @@
     try { useTable(D.normalizeTable(rows)); } catch (error) { fail(error); }
   });
   $('settings').addEventListener('input', event => {
+    if (event.target.closest('.color-control')) return;
     if (!table || [$('category'), $('mode'), $('size')].includes(event.target)) return;
     if (event.target === $('dual')) {
       modeControls();
@@ -556,7 +595,7 @@
       const pptx = new window.PptxGenJS();
       pptx.layout = 'LAYOUT_WIDE'; pptx.author = 'Stat Console'; pptx.subject = 'Editable chart and source data'; pptx.title = snapshot.title;
       addNativeChart(pptx, pptx.addSlide(), snapshot);
-      if (['bubble', 'percent-area'].includes(snapshot.mode)) {
+      if (['bubble', 'percent-area'].includes(snapshot.mode) || snapshot.definition.radial) {
         // PptxGenJS 4.0.1 writes zero-valued bubble cells as blanks. Restore them
         // in the embedded workbook so Edit Data preserves the source numbers.
         const zip = await window.JSZip.loadAsync(await pptx.write({ outputType: 'blob' }));
@@ -608,6 +647,20 @@
               const grouping = xml.createElementNS(ns, 'c:grouping');
               grouping.setAttribute('val', 'percentStacked');
               area.insertBefore(grouping, area.firstChild);
+            }
+            zip.file(name, new XMLSerializer().serializeToString(xml));
+          }
+        }
+        if (snapshot.definition.radial) {
+          for (const name of Object.keys(zip.files).filter(name => /^ppt\/charts\/chart\d+\.xml$/.test(name))) {
+            const xml = new DOMParser().parseFromString(await zip.file(name).async('string'), 'application/xml');
+            const chartNs = 'http://schemas.openxmlformats.org/drawingml/2006/chart';
+            const drawingNs = 'http://schemas.openxmlformats.org/drawingml/2006/main';
+            for (const label of xml.getElementsByTagNameNS(chartNs, 'dLbl')) {
+              const index = Number(label.getElementsByTagNameNS(chartNs, 'idx')[0]?.getAttribute('val'));
+              const slice = snapshot.legend[index];
+              if (!slice) continue;
+              for (const color of label.getElementsByTagNameNS(drawingNs, 'srgbClr')) color.setAttribute('val', C.foreground(slice.color).slice(1));
             }
             zip.file(name, new XMLSerializer().serializeToString(xml));
           }

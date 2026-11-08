@@ -27,152 +27,64 @@ These instructions apply throughout this repository.
 - In the pull request, describe what changed, why it changed, and how it was checked. Mention any remaining limitations.
 - Share the pull request link and explain the next step for the owner.
 
-# Design System: Stat Console, Minimal Gaming HUD
+# Design System: Stat Console, Graphite + Electric Cyan
 
-Use Stat Console as the product name and SC as its monogram. Keep the current
-repository name and hosting paths unless the owner explicitly requests a move.
+Use Stat Console as the product name and SC as its monogram. Keep repository
+names and hosting paths unless the owner explicitly requests a move.
 
-Restyle the existing site visually only. Do NOT change statistical
-calculations, chart data logic, form behavior, or Export SVG/PNG
-functionality. Keep it responsive and accessible.
+## Visual direction
+Use a clean analytics command center with a restrained gaming influence.
+Use graphite surfaces and cyan interface accents for the shell. Chart colors
+are independently customizable.
 
-The owner has additionally requested randomized valid sample visitor and
-conversion counts on every page load. Preserve this startup behavior while
-keeping statistical formulas and user-entered calculation behavior unchanged.
+- Page background: graphite `#11151B`.
+- Panels: slate `#1A2029`; inputs and chart canvases: deep slate `#151A22`.
+- Borders: steel `#323D4B`, stronger control borders `#465365`.
+- Primary text: soft white `#F2F5F9`; secondary text: cool gray `#A3AFBF`.
+- Buttons, active tabs, and focus: electric cyan `#36D6ED`; hover `#74E7F6`.
+- Define interface colors in :root; components use these tokens.
+- Use Inter for body text and chart labels, Outfit for the wordmark, with
+  system-font fallbacks. Use tabular numbers and compact, legible labels.
+- Use crisp borders, moderate 8px corners, and subtle hover movement. Respect
+  prefers-reduced-motion. Do not add page glow or repeating background texture.
+- Keep desktop workspaces wide and fluid up to 1,680px. Contain mobile table/chart
+  scrolling and keep keyboard focus visible.
+- Keep the version in the footer, not beneath the wordmark.
 
-The owner has also authorized Chart studio: pasted tables and CSV/Excel uploads,
-column and line charts with optional independent left/right axes, and native
-editable PowerPoint exports with an embedded data workbook. Keep the existing
-A/B analyzer and its formulas intact. Parse and process data in the browser.
-Keep chart-data.js independent of the DOM and cover parsing/scaling with Node's
-built-in tests. Load pinned Excel/PowerPoint libraries only when needed and keep
-their integrity hashes up to date with any intentional dependency upgrade.
+## Chart colors
+Interface accent and data colors are independent. colors.js owns Signal, Arcade,
+and Spectrum palette presets and reusable color-wheel/HEX controls.
 
-Chart Studio and the A/B Test Analyzer live in separate accessible tabs. Preserve
-both workspaces when switching tabs. The default chart data input is an editable
-table; retain bulk paste and file imports as alternatives. Keep table edits and
-serialized input synchronized, and prevent exports of unapplied data changes.
+- Allow per-series colors for all chart families, per-category slice colors for
+  pie/doughnut charts, and independent Control A/Variant B colors for A/B charts.
+- Support validated 3/6-digit HEX entry and wheel selection. Include keyboard
+  hue, saturation, and brightness sliders, a labeled modal, and cancel/apply.
+- Invalid HEX values retain the last valid chart color; never interpolate
+  unvalidated input into styles. Colors remain local to the current page session.
+- Keep selected colors stable across tab switches and chart-style changes.
+  Presets deliberately reset custom overrides.
+- Match preview, legend, SVG/PNG, and native PowerPoint colors. Serialize resolved
+  colors and styles into image exports; do not leave unresolved CSS variables.
+- Preserve centered names-only legends, title-free axes, and independent dual
+  scales for combination charts. Choose readable foregrounds for slice labels.
 
-Support the expanded chart-style picker and its native PowerPoint exports.
-Keep chart-family validation and stacking/export specifications in chart-modes.js
-testable without the DOM. Preserve numeric X values for scatter/bubble charts,
-validate incompatible data explicitly, and do not replace user data on style
-changes. Examples are loaded only by an explicit action. Keep desktop workspaces
-wide and fluid (up to 1,680px), with responsive gutters and contained mobile scroll.
+## Functional safeguards
+Keep A/B statistical formulas, validation, hypothesis behavior, and random valid
+startup samples intact. Changing colors must not change input data or results.
 
-## Palette rule
-Strictly monochrome plus ONE accent. Black, grays, white, and
-yellow (#FFDC19). No other hues anywhere in the UI. Do not add
-blue, green, purple, red, or any category colors.
+Keep Chart Studio and A/B Test Analyzer in separate accessible tabs. Preserve
+both workspaces while switching. The default chart data input is an editable
+table; retain bulk paste, CSV/Excel import, worksheet selection, and stale-export
+protection. Do not persist or transmit input data.
 
-## Step 1: Tokens
-Define in :root and use ONLY these variables (no hard-coded colors
-in components). Replace any existing equivalent values.
+Support the 21-style chart picker and native editable PowerPoint exports with
+embedded data. Chart-family validation and stacking/export specifications belong
+in chart-modes.js and must remain testable without the DOM. Preserve numeric X
+values for scatter/bubble charts. Validate incompatible data explicitly. Do not
+replace user data on style changes; examples require an explicit action.
 
-```css
-:root {
-  --bg: #0a0a0a;
-  --surface: rgba(255, 255, 255, 0.03);
-  --surface-inset: #000000;
-  --border: rgba(255, 255, 255, 0.10);
-  --border-strong: rgba(255, 255, 255, 0.20);
-
-  --accent: #FFDC19;
-  --accent-hover: #FFE64D;
-  --accent-tint: rgba(255, 220, 25, 0.07);
-  --accent-glow: rgba(255, 220, 25, 0.10);
-  --on-accent: #0a0a0a;
-
-  --text: #f2f2f2;
-  --text-muted: rgba(242, 242, 242, 0.55);
-
-  --chart-control: #c9c9c9;
-  --chart-variant: var(--accent);
-
-  --radius: 2px;
-  --font-body: "Outfit", system-ui, sans-serif;
-}
-```
-
-## Step 2: Global look
-- Page background: var(--bg) with a very subtle repeating "+" grid
-  pattern (~3-5% opacity). Use broad, soft yellow radial glows
-  (--accent-glow) near the upper-right and lower-left areas to gently
-  brighten the background without competing with the content.
-- Font: load Outfit from Google Fonts, used site-wide. Bold,
-  geometric headings.
-- Small labels (field labels, tile labels,
-  "Hypothesis"): 11-13px, uppercase, bold, letter-spacing 0.08em,
-  muted color.
-- Numbers (stat tiles, p-value, axis ticks): bold,
-  font-variant-numeric: tabular-nums.
-- Border radius: var(--radius) everywhere. Remove large rounded
-  corners.
-
-## Step 3: Components (mapped to this site)
-
-### Header
-- "Stat" in var(--text), "Console" in var(--accent), large, bold,
-  tight tracking.
-- Keep the yellow rule under the header, 2px, fading out toward
-  the right edge.
-
-### Panels ("Test data", "Experiment results")
-- background var(--surface), 1px var(--border), radius var(--radius).
-- Section titles: bold, with a short 3px accent bar to their left.
-
-### Inputs (Visitors A/B, Conversions A/B)
-- Dark inset fields (var(--surface-inset)), 1px var(--border-strong),
-  bold value text, square corners.
-- Focus: 1px var(--accent) border.
-- Labels above: uppercase, muted, small.
-
-### Hypothesis radios
-- Square or diamond marker, filled with var(--accent) when selected.
-- Selected text var(--text), unselected var(--text-muted).
-
-### Primary button ("Calculate results")
-- Background var(--accent), text var(--on-accent), bold uppercase,
-  letter-spacing 0.06em, radius 0, one clipped corner:
-  clip-path: polygon(0 0, 100% 0, 100% 70%, 92% 100%, 0 100%).
-- Hover: var(--accent-hover) with a small lift and scale transition.
-  Active: 1px translate down. Respect prefers-reduced-motion.
-
-### Secondary buttons (Export SVG, Export PNG)
-- Transparent, 1px var(--border-strong), uppercase muted text.
-- Hover: border and text become var(--accent), with a subtle accent tint,
-  glow, and lift. Respect prefers-reduced-motion.
-
-### Badges ("95% confidence", "Significant")
-- Small rectangular badges with square corners instead of pills.
-- "Significant" uses accent border and text. Neutral badges use
-  var(--border-strong) and muted text.
-
-### Result callout ("Variant B outperformed Control A")
-- Background var(--accent-tint), 1px var(--border), 3px solid
-  var(--accent) left border. Bold lead sentence, muted detail line.
-
-### Stat tiles (Control A, Variant B, Relative lift, P-value)
-- var(--surface-inset) background, 1px var(--border). All four tiles
-  look identical: no colored borders.
-- Tiny uppercase muted label, large bold value in var(--text).
-- Only Variant B's value uses var(--accent).
-- Add a small 8px corner notch or bracket detail (via
-  pseudo-element) in var(--border-strong) on the top-left of each
-  tile for the HUD feel.
-
-### Chart ("Expected conversion rate distributions")
-- Black container with 1px var(--border).
-- Control curve: var(--chart-control). Variant B curve and fill:
-  var(--chart-variant) with ~15% fill opacity.
-- Gridlines and ticks: very low-opacity white. Dashed 95% markers
-  stay subtle. Legend uses small square swatches.
-- Ensure exported SVG/PNG still render correctly (explicit colors
-  or inlined styles in the export, no unresolved CSS vars).
-
-### Collapsible ("Statistical calculations")
-- Styled as a section label with a chevron icon, 1px top border.
-- Hover turns text to var(--accent).
-
-### Footer
-- Small, centered, muted, uppercase.
+Keep chart-data.js independent of the DOM. Test parsing, scaling, color
+normalization/conversion, and chart families using Node's built-in tests.
+Load pinned Excel/PowerPoint libraries only when needed and keep integrity hashes
+in sync with intentional upgrades. Retain the native export fixes for percent
+area grouping and bubble workbook values/headers/ranges.

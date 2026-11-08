@@ -3,13 +3,13 @@
  <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <meta content="#0a0a0a" name="theme-color"/>
+  <meta content="#11151B" name="theme-color"/>
   <title>
    Stat Console | Charts &amp; Analysis
   </title>
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Outfit:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
   <link href="styles.css" rel="stylesheet"/>
  </head>
  <body>
@@ -35,7 +35,7 @@
     <button id="analyzer-tab" type="button" role="tab" aria-selected="false" aria-controls="analyzer-panel" tabindex="-1">A/B Test Analyzer</button>
    </div>
    <div id="studio-panel" role="tabpanel" aria-labelledby="studio-tab" tabindex="0">
-   <section class="panel" aria-labelledby="builder-heading">
+   <section class="panel chart-studio-panel" aria-labelledby="builder-heading">
     <div class="section-head">
      <div>
       <h2 id="builder-heading">Chart studio</h2>
@@ -91,9 +91,11 @@ Jun,42500,3.8%</textarea>
       <label class="builder-label">Right axis format<select id="builder-right-format"><option value="number">Number</option><option value="percent" selected>Percentage</option></select></label>
      </div>
      <div class="chart-style-help"><p class="note" id="builder-mode-help"></p><div class="export"><button id="builder-example" type="button">Load example for this style</button></div></div>
+     <div class="palette-toolbar"><label class="builder-label">Chart palette<select id="builder-palette"></select></label><p class="note">Choose a preset or customize each color with the wheel and HEX input. Colors apply to your chart and exports.</p></div>
      <label class="builder-toggle"><input id="builder-dual" type="checkbox" checked/> Use a second (right) axis</label>
      <p class="note" id="builder-dual-help">Use separate axes for different units or scales. Choose the type and axis for each series below. Values such as 3.8% are stored as 0.038.</p>
      <div id="builder-series" class="builder-series"></div>
+     <div id="builder-slice-colors" class="slice-colors" hidden></div>
     </div>
     <p id="builder-error" role="alert"></p>
     <div class="chart-heading builder-preview-heading">
@@ -234,6 +236,10 @@ Jun,42500,3.8%</textarea>
       </button>
      </div>
     </div>
+    <details class="ab-color-settings">
+     <summary>Chart colors</summary>
+     <div id="ab-colors" class="ab-colors"></div>
+    </details>
     <div aria-label="Conversion rate chart" class="chart-wrap" role="region" tabindex="0">
      <svg aria-label="Normal approximation sampling distributions for control and variant" id="distribution" role="img" viewbox="0 0 1100 510" xmlns="http://www.w3.org/2000/svg">
      </svg>
@@ -284,6 +290,7 @@ Jun,42500,3.8%</textarea>
     v0.1.1
    </footer>
   </main>
+  <script src="colors.js"></script>
   <script src="app.js">
   </script>
   <script src="tabs.js"></script>
