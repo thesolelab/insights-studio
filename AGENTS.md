@@ -37,6 +37,14 @@ The owner has additionally requested randomized valid sample visitor and
 conversion counts on every page load. Preserve this startup behavior while
 keeping statistical formulas and user-entered calculation behavior unchanged.
 
+The owner has also authorized Chart studio: pasted tables and CSV/Excel uploads,
+column and line charts with optional independent left/right axes, and native
+editable PowerPoint exports with an embedded data workbook. Keep the existing
+A/B analyzer and its formulas intact. Parse and process data in the browser.
+Keep chart-data.js independent of the DOM and cover parsing/scaling with Node's
+built-in tests. Load pinned Excel/PowerPoint libraries only when needed and keep
+their integrity hashes up to date with any intentional dependency upgrade.
+
 ## Palette rule
 Strictly monochrome plus ONE accent. Black, grays, white, and
 yellow (#FFDC19). No other hues anywhere in the UI. Do not add

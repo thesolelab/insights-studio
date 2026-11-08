@@ -5,7 +5,7 @@
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
   <meta content="#0a0a0a" name="theme-color"/>
   <title>
-   Insights Studio | A/B Test Analyzer
+   Insights Studio | Charts &amp; Analysis
   </title>
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/>
@@ -22,9 +22,6 @@
        Studio
       </span>
      </h1>
-     <p>
-      A/B Test Analyzer · v0.1.1
-     </p>
     </div>
     <div class="mark">
      IS
@@ -33,6 +30,68 @@
      </span>
     </div>
    </header>
+   <section class="panel" aria-labelledby="builder-heading">
+    <div class="section-head">
+     <div>
+      <h2 id="builder-heading">Chart studio</h2>
+      <p>Turn a table into a chart, then download an editable PowerPoint slide.</p>
+     </div>
+     <span class="pill">Editable charts</span>
+    </div>
+    <form id="builder-form">
+     <div class="builder-import">
+      <label class="builder-label" for="builder-data">Paste a table</label>
+      <textarea id="builder-data" rows="7" spellcheck="false" aria-describedby="builder-data-help">Month,Revenue,Conversion rate
+Jan,24000,2.4%
+Feb,28500,2.7%
+Mar,27000,2.5%
+Apr,34000,3.1%
+May,38000,3.4%
+Jun,42500,3.8%</textarea>
+      <p class="note" id="builder-data-help">Paste from a spreadsheet or use CSV with a header row. Up to 200 rows and 6 series; use a decimal point for numbers. The starting table is sample data.</p>
+      <div class="builder-upload">
+       <label class="builder-label" for="builder-file">Or upload CSV / Excel
+        <input id="builder-file" type="file" accept=".csv,.tsv,.xlsx,.xls" aria-describedby="builder-upload-help"/>
+       </label>
+       <label class="builder-label" id="builder-sheet-label" hidden>Worksheet
+        <select id="builder-sheet"></select>
+       </label>
+      </div>
+      <p class="note" id="builder-upload-help">Files stay in your browser. Maximum 5 MB. Excel reads the selected worksheet; use a table with column headers in its first row.</p>
+      <div class="actions">
+       <button class="primary" type="submit">Create chart</button>
+       <span id="builder-import-status" role="status"></span>
+      </div>
+     </div>
+    </form>
+    <div id="builder-settings" hidden>
+     <div class="builder-fields">
+      <label class="builder-label">Chart title<input id="builder-title" type="text" maxlength="100" value="Revenue and conversion rate"/></label>
+      <label class="builder-label">Category column<select id="builder-category"></select></label>
+      <label class="builder-label">Left axis title<input id="builder-left-title" type="text" maxlength="60" value="Revenue"/></label>
+      <label class="builder-label">Left axis format<select id="builder-left-format"><option value="number">Number</option><option value="percent">Percentage</option></select></label>
+      <label class="builder-label">Right axis title<input id="builder-right-title" type="text" maxlength="60" value="Conversion rate"/></label>
+      <label class="builder-label">Right axis format<select id="builder-right-format"><option value="number">Number</option><option value="percent" selected>Percentage</option></select></label>
+     </div>
+     <label class="builder-toggle"><input id="builder-dual" type="checkbox" checked/> Use a second (right) axis</label>
+     <p class="note">Use separate axes for different units or scales. Choose the type and axis for each series below. Values such as 3.8% are stored as 0.038.</p>
+     <div id="builder-series" class="builder-series"></div>
+    </div>
+    <p id="builder-error" role="alert"></p>
+    <div class="chart-heading builder-preview-heading">
+     <h3>Chart preview</h3>
+     <div class="export">
+      <button id="builder-svg" type="button" disabled>Export SVG</button>
+      <button id="builder-png" type="button" disabled>Export PNG</button>
+      <button id="builder-pptx" type="button" disabled>Export PowerPoint</button>
+     </div>
+    </div>
+    <p id="builder-status" class="note" role="status"></p>
+    <div class="chart-wrap" id="builder-preview" role="region" aria-label="Chart preview; scroll horizontally on small screens" tabindex="0" hidden>
+     <svg id="builder-chart" role="img" viewBox="0 0 1100 620" xmlns="http://www.w3.org/2000/svg" aria-label="Chart preview"></svg>
+    </div>
+    <p class="note">PowerPoint downloads contain a native chart and an embedded data worksheet. In PowerPoint, select the chart and choose Edit Data to change values. SVG and PNG exports are images.</p>
+   </section>
    <section class="panel">
     <div class="section-head">
      <div>
@@ -198,10 +257,16 @@
      ·
     </span>
     No data uploaded or saved
+    <span>
+     ·
+    </span>
+    v0.1.1
    </footer>
   </main>
   <script src="app.js">
   </script>
+  <script src="chart-data.js"></script>
+  <script src="charts.js"></script>
  </body>
 </html>
 
