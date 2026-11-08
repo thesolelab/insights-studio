@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — Expanded chart styles and wider desktop workspace
+- Add 21 chart styles across combination, grouped/stacked/100% column and bar,
+  line and area variants, scatter, bubble, pie/doughnut, and radar families.
+- Provide style-specific examples, data guidance, shared-scale validation, and
+  preserved dual axes for combination charts.
+- Render all styles in SVG/PNG and export native editable PowerPoint charts
+  with embedded data, including a fix for zero-valued bubble workbook cells.
+- Preserve centered, names-only legends and title-free axes; grow image height
+  when longer legends need extra rows.
+- Widen the desktop layout to 1,680px with fluid gutters, using BuilderLab's
+  broader desktop spacing as a reference while retaining mobile layouts.
+
 ## Unreleased — Chart presentation cleanup
 - Remove axis titles from Chart Studio previews and exports while keeping tick
   labels and independent left/right scales.

@@ -2,6 +2,7 @@
   'use strict';
   const $ = id => document.getElementById('builder-' + id);
   const D = window.ChartData;
+  const M = window.ChartModes;
   const NS = 'http://www.w3.org/2000/svg';
   let table = null, workbook = null, revision = 0, current = null, exporting = false;
   let editorRows = [], dirty = false;
@@ -35,6 +36,45 @@
     invalidate('Update the data or settings to create a chart.');
   }
   function option(select, value, label) { select.appendChild(el('option', { value }, label)); }
+
+  for (const family of [...new Set(M.MODES.map(mode => mode.family))]) {
+    const group = el('optgroup', { label: family });
+    M.MODES.filter(mode => mode.family === family).forEach(mode => option(group, mode.id, mode.name));
+    $('mode').appendChild(group);
+  }
+
+  function modeControls() {
+    const mode = M.definition($('mode').value), combo = mode.id === 'combo';
+    $('dual').disabled = !combo;
+    $('dual').closest('label').hidden = !combo;
+    $('dual-help').hidden = !combo;
+    $('right-format').closest('label').hidden = !combo;
+    $('left-format').closest('label').hidden = mode.radial;
+    $('category-label').textContent = mode.xy ? 'X values column' : 'Category column';
+    $('value-format-label').textContent = combo ? 'Left axis format' : 'Value format';
+    $('series').classList.toggle('single-style', !combo);
+    $('right-format').disabled = !combo || !$('dual').checked;
+    $('size-label').hidden = mode.id !== 'bubble';
+    $('mode-help').textContent = mode.radial
+      ? 'Select one numeric series and up to 12 categories. Values must be non-negative, with at least one positive value.'
+      : mode.xy ? (mode.id === 'bubble' ? 'Choose a numeric X column, one or more Y series, and a separate bubble-size column. Sizes must be non-negative.' : 'Choose a numeric X column and one or more Y series. Points use their actual X values, not category spacing.')
+      : mode.native === 'radar' ? 'Compare series across 3–12 categories using non-negative values on a shared scale.'
+      : combo ? 'Choose column or line for each series. Optional independent left/right axes support different units.'
+      : mode.percent ? 'Show each category as a share of 100%. Select multiple non-negative series to compare contributions.'
+      : mode.stacked && mode.native === 'area' ? 'Stack non-negative series to show their combined contribution on a shared scale.'
+      : 'All selected series use this chart style on a shared scale. Choose Combination for independent left/right axes.';
+    let selected = 0;
+    for (const row of $('series').children) {
+      const check = row.querySelector('input');
+      check.disabled = mode.id === 'bubble' && row.dataset.column === $('size').value;
+      if (check.disabled) check.checked = false;
+      if (mode.radial && check.checked && selected++) check.checked = false;
+      row.querySelector('.series-type').disabled = !combo;
+      row.querySelector('.series-type').closest('label').hidden = !combo;
+      row.querySelector('.series-axis').disabled = !combo || !$('dual').checked;
+      row.querySelector('.series-axis').closest('label').hidden = !combo;
+    }
+  }
 
   function edited() {
     revision++; dirty = true; workbook = null;
@@ -159,6 +199,11 @@
       const index = columns[position];
       $(side + '-format').value = index !== undefined && table.rows.some(row => row[index].endsWith('%')) ? 'percent' : 'number';
     }
+    const previousSize = $('size').value;
+    $('size').replaceChildren();
+    columns.forEach(index => option($('size'), index, table.headers[index]));
+    $('size').value = columns.map(String).includes(previousSize) ? previousSize : String(columns[columns.length - 1] ?? '');
+    modeControls();
   }
 
   function useTable(next) {
@@ -200,6 +245,7 @@
     const selected = [...$('series').children].filter(row => row.querySelector('input').checked);
     if (!selected.length) throw new Error('Select at least one numeric series.');
     if (selected.length > D.MAX_SERIES) throw new Error(`Select at most ${D.MAX_SERIES} series.`);
+    const combo = $('mode').value === 'combo';
     const series = selected.map((row, index) => {
       const column = Number(row.dataset.column);
       const values = table.rows.map((data, i) => {
@@ -208,7 +254,7 @@
         return number;
       });
       return { name: table.headers[column], values, type: row.querySelector('.series-type').value,
-        axis: $('dual').checked ? row.querySelector('.series-axis').value : 'left', color: colors[index] };
+        axis: combo && $('dual').checked ? row.querySelector('.series-axis').value : 'left', color: colors[index] };
     });
     if (!series.some(item => item.axis === 'left')) throw new Error('Keep at least one selected series on the left axis.');
     const axes = {};
@@ -216,7 +262,10 @@
       const values = series.filter(item => item.axis === side).flatMap(item => item.values);
       if (values.length) axes[side] = { ...D.axisScale(values), format: $(side + '-format').value };
     }
-    return { title: $('title').value.trim() || 'Untitled chart', category: table.headers[category], labels, series, axes };
+    return M.prepare({ title: $('title').value.trim() || 'Untitled chart', category: table.headers[category], labels, series, axes }, $('mode').value, {
+      colors, xValues: table.rows.map(row => row[category]), xPercent: table.rows.some(row => row[category].endsWith('%')),
+      sizes: table.rows.map(row => row[Number($('size').value)] ?? '')
+    });
   }
 
   function format(number, mode) {
@@ -226,7 +275,9 @@
   }
 
   function draw(c) {
+    if (c.mode !== 'combo') { M.render(c, $('chart'), token); return; }
     const svg = $('chart'), chart = document.createDocumentFragment();
+    svg.setAttribute('viewBox', '0 0 1100 620');
     const text = token('--text'), muted = token('--text-muted'), font = token('--font-body');
     const left = 110, right = 990, top = 95, bottom = 460;
     const x = i => left + (i + 0.5) * (right - left) / c.labels.length;
@@ -317,7 +368,7 @@
       current = next;
       $('preview').hidden = false;
       $('error').textContent = '';
-      $('status').textContent = `${next.labels.length} categories · ${next.series.length} series${next.axes.right ? ' · Independent left and right scales' : ''}`;
+      $('status').textContent = `${next.definition.name} · ${next.labels.length} ${next.definition.xy ? 'points' : 'categories'} · ${next.series.length} series${next.axes.right ? ' · Independent left and right scales' : ''}`;
       buttons(true);
     } catch (error) { fail(error); }
   }
@@ -389,17 +440,34 @@
   });
   $('sheet').addEventListener('change', () => { try { useSheet(); } catch (error) { fail(error); } });
   $('category').addEventListener('change', () => { if (table) { seriesControls(); render(); } });
+  $('mode').addEventListener('change', () => {
+    if (!table) return;
+    const mode = M.definition($('mode').value);
+    if (mode.xy && !table.numeric.includes(Number($('category').value))) {
+      $('category').value = table.numeric[0]; seriesControls();
+    }
+    modeControls(); render();
+  });
+  $('size').addEventListener('change', () => { modeControls(); render(); });
+  $('example').addEventListener('click', () => {
+    revision++; table = null; workbook = null; $('sheet-label').hidden = true;
+    const rows = M.example($('mode').value);
+    $('data').value = D.serializeTable(rows);
+    $('title').value = M.definition($('mode').value).name + ' example';
+    $('data-source').textContent = 'Sample data · editable';
+    try { useTable(D.normalizeTable(rows)); } catch (error) { fail(error); }
+  });
   $('settings').addEventListener('input', event => {
-    if (!table || event.target === $('category')) return;
+    if (!table || [$('category'), $('mode'), $('size')].includes(event.target)) return;
     if (event.target === $('dual')) {
-      for (const select of $('series').querySelectorAll('.series-axis')) select.disabled = !$('dual').checked;
+      modeControls();
     }
     render();
   });
 
   function serializedChart() {
     const copy = $('chart').cloneNode(true);
-    copy.setAttribute('width', '2200'); copy.setAttribute('height', '1240');
+    copy.setAttribute('width', '2200'); copy.setAttribute('height', String($('chart').viewBox.baseVal.height * 2));
     copy.setAttribute('xmlns', NS);
     return new XMLSerializer().serializeToString(copy);
   }
@@ -419,7 +487,7 @@
     const image = new Image();
     image.onload = () => {
       try {
-        const canvas = document.createElement('canvas'); canvas.width = 2200; canvas.height = 1240;
+        const canvas = document.createElement('canvas'); canvas.width = image.naturalWidth; canvas.height = image.naturalHeight;
         canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
         canvas.toBlob(blob => { if (blob) save(blob, name); else $('error').textContent = 'PNG export failed. Try SVG.'; }, 'image/png');
       } catch (error) { $('error').textContent = 'PNG export failed. Try SVG.'; }
@@ -449,17 +517,17 @@
         groups.push({ type: type === 'bar' ? pptx.ChartType.bar : pptx.ChartType.line,
           data: series.map(s => ({ name: s.name, labels: c.labels, values: s.values })),
           options: { chartColors: series.map(s => officeColor(s.color)), secondaryValAxis: axis === 'right', secondaryCatAxis: axis === 'right',
-            barDir: 'col', grouping: 'clustered', showMarker: type === 'line', markerSize: 4, lineSize: 2 } });
+            barDir: 'col', barGrouping: 'clustered', lineDataSymbol: type === 'line' ? 'circle' : 'none', lineDataSymbolSize: 4, lineSize: 2 } });
       }
     }
     const axisOptions = axis => ({ valAxisTitle: '', showValAxisTitle: false,
       valAxisMinVal: axis.min, valAxisMaxVal: axis.max, valAxisMajorUnit: axis.step,
       valAxisLabelFormatCode: axis.format === 'percent' ? '0.##%' : '#,##0.####', valAxisLabelColor: muted, valAxisTitleColor: text });
-    const axes = [axisOptions(c.axes.left)];
+    const axes = c.axes.left ? [axisOptions(c.axes.left)] : [];
     if (c.axes.right) axes.push({ ...axisOptions(c.axes.right), valGridLine: { style: 'none' } });
     slide.background = { color: officeColor(token('--bg')) };
     slide.addText(c.title, { x: 0.6, y: 0.3, w: 12.1, h: 0.55, fontFace: 'Arial', fontSize: 26, bold: true, color: text, margin: 0 });
-    slide.addChart(groups, {
+    const options = {
       x: 0.6, y: 1.05, w: 12.1, h: 5.7, showTitle: false, showLegend: true, legendPos: 'b',
       legendColor: text, legendFontSize: 11, fontFace: 'Arial', fontSize: 11,
       chartArea: { fill: { color: background }, border: { color: background, pt: 0 } },
@@ -470,8 +538,13 @@
       catAxisLabelFrequency: Math.max(1, Math.ceil(c.labels.length / 10)).toString(),
       valGridLine: { color: officeColor(token('--border')), width: 0.5 }, catGridLine: { style: 'none' },
       barDir: 'col', showValue: false, showBorder: false,
-      valAxes: axes, catAxes: c.axes.right ? [{}, { catAxisHidden: true, showCatAxisTitle: false, catAxisTitle: '' }] : [{}]
-    });
+      valAxes: axes.length ? axes : undefined, catAxes: c.axes.right ? [{}, { catAxisHidden: true, showCatAxisTitle: false, catAxisTitle: '' }] : [{}]
+    };
+    if (c.mode === 'combo') slide.addChart(groups, options);
+    else {
+      const spec = M.nativeSpec(c, officeColor);
+      slide.addChart(spec.type, spec.data, { ...options, ...spec.options });
+    }
   }
 
   $('pptx').addEventListener('click', async () => {
@@ -483,7 +556,64 @@
       const pptx = new window.PptxGenJS();
       pptx.layout = 'LAYOUT_WIDE'; pptx.author = 'Insights Studio'; pptx.subject = 'Editable chart and source data'; pptx.title = snapshot.title;
       addNativeChart(pptx, pptx.addSlide(), snapshot);
-      await pptx.writeFile({ fileName: filename(snapshot, 'pptx') });
+      if (['bubble', 'percent-area'].includes(snapshot.mode)) {
+        // PptxGenJS 4.0.1 writes zero-valued bubble cells as blanks. Restore them
+        // in the embedded workbook so Edit Data preserves the source numbers.
+        const zip = await window.JSZip.loadAsync(await pptx.write({ outputType: 'blob' }));
+        for (const name of Object.keys(zip.files).filter(name => snapshot.mode === 'bubble' && name.startsWith('ppt/embeddings/') && name.endsWith('.xlsx'))) {
+          const workbookZip = await window.JSZip.loadAsync(await zip.file(name).async('uint8array'));
+          const path = 'xl/worksheets/sheet1.xml';
+          const xml = new DOMParser().parseFromString(await workbookZip.file(path).async('string'), 'application/xml');
+          for (const row of xml.getElementsByTagName('row')) {
+            if (Number(row.getAttribute('r')) < 2) continue;
+            for (const value of row.getElementsByTagName('v')) if (value.textContent === '') value.textContent = '0';
+          }
+          workbookZip.file(path, new XMLSerializer().serializeToString(xml));
+          // Rebuild the table headers with XML escaping and the full data range.
+          // The bundled bubble writer truncates this range and leaves names raw.
+          const ns = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main';
+          const headers = [snapshot.category, ...snapshot.series.flatMap((series, i) => [series.name, `Bubble size ${i + 1}`])];
+          const used = new Set();
+          headers.forEach((header, i) => {
+            let unique = header, suffix = 2;
+            while (used.has(unique)) unique = header + ' ' + suffix++;
+            used.add(unique); headers[i] = unique;
+          });
+          const strings = document.implementation.createDocument(ns, 'sst');
+          strings.documentElement.setAttribute('count', headers.length);
+          strings.documentElement.setAttribute('uniqueCount', headers.length);
+          const definition = document.implementation.createDocument(ns, 'table');
+          const tableRoot = definition.documentElement;
+          for (const [key, value] of Object.entries({ id: 1, name: 'Table1', displayName: 'Table1', ref: `A1:${String.fromCharCode(64 + headers.length)}${snapshot.labels.length + 1}`, totalsRowShown: 0 })) tableRoot.setAttribute(key, value);
+          const columns = definition.createElementNS(ns, 'tableColumns');
+          columns.setAttribute('count', headers.length);
+          headers.forEach((header, i) => {
+            const item = strings.createElementNS(ns, 'si'), text = strings.createElementNS(ns, 't');
+            text.textContent = header; item.appendChild(text); strings.documentElement.appendChild(item);
+            const column = definition.createElementNS(ns, 'tableColumn');
+            column.setAttribute('id', i + 1); column.setAttribute('name', header); columns.appendChild(column);
+          });
+          tableRoot.appendChild(columns);
+          workbookZip.file('xl/sharedStrings.xml', new XMLSerializer().serializeToString(strings));
+          workbookZip.file('xl/tables/table1.xml', new XMLSerializer().serializeToString(definition));
+          zip.file(name, await workbookZip.generateAsync({ type: 'uint8array' }));
+        }
+        // The library accepts percentStacked area options but omits their XML
+        // grouping element. Add it while retaining the original editable data.
+        if (snapshot.mode === 'percent-area') {
+          for (const name of Object.keys(zip.files).filter(name => /^ppt\/charts\/chart\d+\.xml$/.test(name))) {
+            const xml = new DOMParser().parseFromString(await zip.file(name).async('string'), 'application/xml');
+            const ns = 'http://schemas.openxmlformats.org/drawingml/2006/chart';
+            for (const area of xml.getElementsByTagNameNS(ns, 'areaChart')) {
+              const grouping = xml.createElementNS(ns, 'c:grouping');
+              grouping.setAttribute('val', 'percentStacked');
+              area.insertBefore(grouping, area.firstChild);
+            }
+            zip.file(name, new XMLSerializer().serializeToString(xml));
+          }
+        }
+        save(await zip.generateAsync({ type: 'blob' }), filename(snapshot, 'pptx'));
+      } else await pptx.writeFile({ fileName: filename(snapshot, 'pptx') });
       $('status').textContent = 'PowerPoint downloaded. Select the chart → Edit Data to change its values.';
     } catch (error) {
       $('error').textContent = 'PowerPoint export failed. ' + error.message;
