@@ -2,6 +2,13 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 const D = require('../chart-data.js');
 
+test('edited tables round-trip through CSV without losing commas, quotes, or percentages', () => {
+  const rows = [['Region', 'Sales', 'Rate'], ['North, "HQ"', '24,000', '2.4%'], ['Two\nlines', '0', '-1.5%']];
+  const table = D.parseDelimited(D.serializeTable(rows));
+  assert.deepEqual([table.headers, ...table.rows], rows);
+  assert.equal(D.numberCell(table.rows[0][1]), 24000);
+});
+
 test('CSV supports BOM, quoted commas, escaped quotes and multiline labels', () => {
   const table = D.parseDelimited('\uFEFFCategory,Revenue,Rate\r\n"North, \"\"new\"\"",1200,3.5%\r\n"Two\nlines",2500,4%\r\n');
   assert.equal(table.rows[0][0], 'North, "new"');

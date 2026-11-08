@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Workspace tabs and table editor
+- Separate Chart Studio and A/B Test Analyzer into keyboard-accessible tabs,
+  preserving each workspace's inputs and results when switching.
+- Replace the default CSV block with editable table cells, readable aligned
+  numbers, and controls to add/remove rows and series.
+- Keep bulk paste under a disclosure and retain CSV/Excel uploads, dual axes,
+  and editable PowerPoint/image exports.
+- Preserve chart settings after value-only edits and disable stale exports until
+  Update chart is selected.
+
 ## Unreleased — Chart studio
 - Paste tables or import CSV, TSV, XLSX, and XLS files, with Excel worksheet selection.
 - Configure column, line, and combination charts with independent left/right axes,

@@ -4,6 +4,7 @@
   const D = window.ChartData;
   const NS = 'http://www.w3.org/2000/svg';
   let table = null, workbook = null, revision = 0, current = null, exporting = false;
+  let editorRows = [], dirty = false;
   const libraries = new Map();
 
   function el(tag, attrs = {}, text) {
@@ -34,6 +35,101 @@
     invalidate('Update the data or settings to create a chart.');
   }
   function option(select, value, label) { select.appendChild(el('option', { value }, label)); }
+
+  function edited() {
+    revision++; dirty = true; workbook = null;
+    $('sheet-label').hidden = true;
+    $('data-source').textContent = 'Your data · editable';
+    $('error').textContent = '';
+    $('import-status').textContent = 'Changes not applied';
+    invalidate('Data changed. Select Update chart to refresh the preview.');
+  }
+
+  function syncEditor() {
+    $('data').value = D.serializeTable(editorRows);
+    edited();
+  }
+
+  function drawEditor() {
+    const grid = el('table', { class: 'data-grid' });
+    grid.appendChild(el('caption', { class: 'sr-only' }, 'Chart data. Edit column names and values, then select Update chart.'));
+    const head = el('thead'), header = el('tr');
+    header.appendChild(el('th', { scope: 'col', class: 'row-number' }, '#'));
+    editorRows[0].forEach((name, column) => {
+      const cell = el('th', { scope: 'col' });
+      const field = el('input', { type: 'text', 'data-row': 0, 'data-column': column,
+        'aria-label': `Column ${column + 1} name`, maxlength: 80 });
+      field.value = name;
+      const remove = el('button', { type: 'button', class: 'grid-remove', 'data-remove-column': column,
+        'aria-label': `Remove column ${name || column + 1}`, title: 'Remove column' }, '×');
+      remove.disabled = editorRows[0].length <= 2;
+      cell.append(field, remove); header.appendChild(cell);
+    });
+    const actionHeader = el('th', { scope: 'col', class: 'row-actions' });
+    actionHeader.appendChild(el('span', { class: 'sr-only' }, 'Row actions'));
+    header.appendChild(actionHeader);
+    head.appendChild(header); grid.appendChild(head);
+    const body = el('tbody');
+    editorRows.slice(1).forEach((values, index) => {
+      const row = el('tr');
+      row.appendChild(el('th', { scope: 'row', class: 'row-number' }, String(index + 1).padStart(2, '0')));
+      values.forEach((value, column) => {
+        const numeric = table && table.numeric.includes(column);
+        const cell = el('td');
+        const field = el('input', { type: 'text', class: numeric ? 'numeric-cell' : '',
+          'data-row': index + 1, 'data-column': column,
+          inputmode: numeric ? 'decimal' : 'text',
+          'aria-label': `${editorRows[0][column] || 'Column ' + (column + 1)}, row ${index + 1}` });
+        field.value = numeric && /^[+-]?\d+$/.test(value) && D.numberCell(value) !== null
+          ? Number(value).toLocaleString('en-US', { maximumFractionDigits: 0 }) : value;
+        cell.appendChild(field); row.appendChild(cell);
+      });
+      const actions = el('td', { class: 'row-actions' });
+      const remove = el('button', { type: 'button', class: 'grid-remove', 'data-remove-row': index + 1,
+        'aria-label': `Remove row ${index + 1}`, title: 'Remove row' }, '×');
+      remove.disabled = editorRows.length <= 2;
+      actions.appendChild(remove); row.appendChild(actions); body.appendChild(row);
+    });
+    grid.appendChild(body); $('grid').replaceChildren(grid);
+    $('add-row').disabled = editorRows.length - 1 >= D.MAX_ROWS;
+    $('add-column').disabled = editorRows[0].length >= D.MAX_SERIES + 1;
+  }
+
+  $('grid').addEventListener('input', event => {
+    const field = event.target.closest('input[data-row]');
+    if (!field) return;
+    editorRows[Number(field.dataset.row)][Number(field.dataset.column)] = field.value;
+    syncEditor();
+  });
+  $('grid').addEventListener('click', event => {
+    const row = event.target.closest('[data-remove-row]');
+    const column = event.target.closest('[data-remove-column]');
+    if (row && editorRows.length > 2) editorRows.splice(Number(row.dataset.removeRow), 1);
+    else if (column && editorRows[0].length > 2) editorRows.forEach(values => values.splice(Number(column.dataset.removeColumn), 1));
+    else return;
+    syncEditor(); drawEditor(); $('grid').focus();
+  });
+  $('grid').addEventListener('paste', event => {
+    const text = event.clipboardData.getData('text/plain');
+    if (!/[\t\r\n]/.test(text)) return;
+    event.preventDefault(); $('data').value = text; edited();
+    try { useTable(D.parseDelimited(text)); } catch (error) { fail(error); }
+  });
+  $('add-row').addEventListener('click', () => {
+    if (editorRows.length - 1 >= D.MAX_ROWS) return;
+    editorRows.push(editorRows[0].map(() => ''));
+    syncEditor(); drawEditor();
+    $('grid').querySelector(`input[data-row="${editorRows.length - 1}"]`).focus();
+  });
+  $('add-column').addEventListener('click', () => {
+    if (editorRows[0].length >= D.MAX_SERIES + 1) return;
+    let number = editorRows[0].length;
+    while (editorRows[0].includes('Series ' + number)) number++;
+    editorRows[0].push('Series ' + number);
+    editorRows.slice(1).forEach(row => row.push('0'));
+    syncEditor(); drawEditor();
+    $('grid').querySelector(`input[data-row="0"][data-column="${editorRows[0].length - 1}"]`).focus();
+  });
 
   function seriesControls() {
     $('series').replaceChildren();
@@ -67,11 +163,29 @@
   }
 
   function useTable(next) {
+    const sameHeaders = table && JSON.stringify(table.headers) === JSON.stringify(next.headers);
+    // A typo in an edited numeric series must not silently remove that series.
+    if (sameHeaders) {
+      for (const control of $('series').children) {
+        if (!control.querySelector('input').checked) continue;
+        const column = Number(control.dataset.column);
+        next.rows.forEach((row, index) => {
+          if (D.numberCell(row[column]) === null) throw new Error(`Enter a numeric value for ${next.headers[column]} in row ${index + 2}.`);
+        });
+      }
+    }
+    const preserveSettings = sameHeaders
+      && JSON.stringify(table.numeric) === JSON.stringify(next.numeric);
     table = next;
-    $('category').replaceChildren();
-    table.headers.forEach((header, index) => option($('category'), index, header));
+    dirty = false;
+    editorRows = [table.headers.slice(), ...table.rows.map(row => row.slice())];
+    drawEditor();
+    if (!preserveSettings) {
+      $('category').replaceChildren();
+      table.headers.forEach((header, index) => option($('category'), index, header));
+      seriesControls();
+    }
     $('settings').hidden = false;
-    seriesControls();
     $('import-status').textContent = `${table.rows.length} rows · ${table.headers.length} columns`;
     render();
   }
@@ -177,6 +291,7 @@
   }
 
   function render() {
+    if (dirty) { invalidate('Data changed. Select Update chart to refresh the preview.'); return; }
     try {
       const next = config();
       draw(next);
@@ -215,23 +330,22 @@
     const worksheet = workbook.Sheets[$('sheet').value];
     const rows = window.XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false, defval: '', blankrows: false });
     useTable(D.normalizeTable(rows));
-    $('data').value = rows.map(row => row.map(value => '"' + String(value).replace(/"/g, '""') + '"').join(',')).join('\n');
+    $('data').value = D.serializeTable(rows);
   }
 
   $('form').addEventListener('submit', event => {
-    event.preventDefault(); revision++; table = null;
+    event.preventDefault(); revision++; dirty = true;
     try { useTable(D.parseDelimited($('data').value)); } catch (error) { fail(error); }
   });
   $('data').addEventListener('input', () => {
-    revision++; workbook = null; table = null; $('sheet-label').hidden = true;
-    $('error').textContent = '';
-    $('import-status').textContent = '';
-    invalidate('Data changed. Select Create chart to update the preview.');
+    edited();
   });
   $('file').addEventListener('change', async () => {
     const file = $('file').files[0];
     if (!file) return;
     const request = ++revision;
+    dirty = true;
+    $('data-source').textContent = 'Your data · editable';
     invalidate('Reading file…'); $('error').textContent = '';
     workbook = null; table = null; $('sheet-label').hidden = true;
     try {

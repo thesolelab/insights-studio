@@ -3,11 +3,13 @@
 Personal, browser-based chart creation, editable PowerPoint exports, and A/B test analysis.
 
 ## Create a chart for PowerPoint
-1. In **Chart studio**, paste a table from a spreadsheet or upload CSV, TSV,
+1. Open the **Chart Studio** tab and edit the spreadsheet-style table directly.
+   Add or remove rows and series as needed. Paste a full table with headers into
+   any cell, expand **Paste a table or CSV**, or upload CSV, TSV,
    XLSX, or XLS data. Include column headers in the first row. For Excel files,
    select the worksheet to use. Save workbooks with formulas in Excel first so
    their calculated values are available.
-2. Select **Create chart** after editing pasted data. Choose the category column
+2. Select **Update chart** after editing data. Choose the category column
    and the numeric series to include, then choose Column or Line for each series.
 3. For different units or scales, enable the second axis and assign the desired
    series to **Right**. Set titles and number/percentage formats for each axis.
@@ -21,12 +23,16 @@ series, and 5 MB uploads. Use decimal points for numbers. Percentages such as
 `3.8%` are stored as `0.038`; choose Percentage format for fractional values.
 Blank numeric cells are flagged rather than silently treated as zero.
 
+Use the **A/B Test Analyzer** tab for experiment inputs and results. Switching
+tabs preserves both workspaces during the current page session. Arrow keys,
+Home, and End navigate the tabs. Data is not persisted across reloads.
+
 Each page load starts with newly randomized sample visitor and conversion counts
 and calculates the sample results automatically. Replace these demo values with
 your experiment counts to run your own analysis. Sample data is not saved.
 
 ## Deploy on GitHub Pages
-1. Upload `index.html`, `styles.css`, `app.js`, `chart-data.js`, and `charts.js` to the root of your `insights-studio` repository.
+1. Upload `index.html`, `styles.css`, `app.js`, `tabs.js`, `chart-data.js`, and `charts.js` to the root of your `insights-studio` repository.
 2. Open **Settings → Pages**.
 3. Under **Build and deployment**, select **Deploy from a branch**.
 4. Choose **main** and **/(root)**, then save.

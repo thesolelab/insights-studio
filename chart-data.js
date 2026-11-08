@@ -87,7 +87,11 @@
     return { min: Math.floor(min / step) * step, max: Math.ceil((min === max ? 1 : max) / step) * step, step };
   }
 
-  const api = { MAX_ROWS, MAX_SERIES, parseDelimited, normalizeTable, numberCell, axisScale };
+  function serializeTable(rows) {
+    return rows.map(row => row.map(value => '"' + String(value ?? '').replace(/"/g, '""') + '"').join(',')).join('\n');
+  }
+
+  const api = { MAX_ROWS, MAX_SERIES, parseDelimited, normalizeTable, numberCell, axisScale, serializeTable };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.ChartData = api;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -30,6 +30,11 @@
      </span>
     </div>
    </header>
+   <div class="workspace-tabs" role="tablist" aria-label="Workspace">
+    <button id="studio-tab" type="button" role="tab" aria-selected="true" aria-controls="studio-panel">Chart Studio</button>
+    <button id="analyzer-tab" type="button" role="tab" aria-selected="false" aria-controls="analyzer-panel" tabindex="-1">A/B Test Analyzer</button>
+   </div>
+   <div id="studio-panel" role="tabpanel" aria-labelledby="studio-tab" tabindex="0">
    <section class="panel" aria-labelledby="builder-heading">
     <div class="section-head">
      <div>
@@ -40,7 +45,18 @@
     </div>
     <form id="builder-form">
      <div class="builder-import">
-      <label class="builder-label" for="builder-data">Paste a table</label>
+      <div class="data-editor-heading">
+       <div><h3>Your data</h3><p class="note" id="builder-grid-help">Edit any cell or column name. Paste a full table with headers into any cell, or upload a spreadsheet below.</p></div>
+       <span id="builder-data-source" class="pill">Sample data · editable</span>
+      </div>
+      <div id="builder-grid" class="data-grid-wrap" role="region" aria-label="Editable chart data" tabindex="0" aria-describedby="builder-grid-help"></div>
+      <div class="data-grid-actions export">
+       <button id="builder-add-row" type="button">+ Add row</button>
+       <button id="builder-add-column" type="button">+ Add series</button>
+      </div>
+      <details class="paste-data">
+       <summary>Paste a table or CSV</summary>
+      <label class="builder-label" for="builder-data">Paste from Excel, Google Sheets, or a CSV file</label>
       <textarea id="builder-data" rows="7" spellcheck="false" aria-describedby="builder-data-help">Month,Revenue,Conversion rate
 Jan,24000,2.4%
 Feb,28500,2.7%
@@ -49,6 +65,7 @@ Apr,34000,3.1%
 May,38000,3.4%
 Jun,42500,3.8%</textarea>
       <p class="note" id="builder-data-help">Paste from a spreadsheet or use CSV with a header row. Up to 200 rows and 6 series; use a decimal point for numbers. The starting table is sample data.</p>
+      </details>
       <div class="builder-upload">
        <label class="builder-label" for="builder-file">Or upload CSV / Excel
         <input id="builder-file" type="file" accept=".csv,.tsv,.xlsx,.xls" aria-describedby="builder-upload-help"/>
@@ -59,7 +76,7 @@ Jun,42500,3.8%</textarea>
       </div>
       <p class="note" id="builder-upload-help">Files stay in your browser. Maximum 5 MB. Excel reads the selected worksheet; use a table with column headers in its first row.</p>
       <div class="actions">
-       <button class="primary" type="submit">Create chart</button>
+       <button class="primary" type="submit">Update chart</button>
        <span id="builder-import-status" role="status"></span>
       </div>
      </div>
@@ -92,6 +109,8 @@ Jun,42500,3.8%</textarea>
     </div>
     <p class="note">PowerPoint downloads contain a native chart and an embedded data worksheet. In PowerPoint, select the chart and choose Edit Data to change values. SVG and PNG exports are images.</p>
    </section>
+   </div>
+   <div id="analyzer-panel" role="tabpanel" aria-labelledby="analyzer-tab" tabindex="0" hidden>
    <section class="panel">
     <div class="section-head">
      <div>
@@ -247,6 +266,7 @@ Jun,42500,3.8%</textarea>
      </p>
     </details>
    </section>
+   </div>
    <footer>
     INSIGHTS STUDIO
     <span>
@@ -265,6 +285,7 @@ Jun,42500,3.8%</textarea>
   </main>
   <script src="app.js">
   </script>
+  <script src="tabs.js"></script>
   <script src="chart-data.js"></script>
   <script src="charts.js"></script>
  </body>
