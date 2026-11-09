@@ -42,6 +42,19 @@ CSV downloads escape text that could be interpreted as spreadsheet formulas.
 This version runs locally in the browser: it has no account system, integrations,
 scheduled jobs, or AI service. Briefs are templates based on entered records.
 
+## Percentage calculator
+Open **Calculators** in the sidebar or command search for three standalone tools:
+- What is X% of Y?
+- X is what percent of Y?
+- Percentage increase/decrease from X to Y.
+
+Enter both values and select **Calculate** (or press Enter), then **Copy** the
+result. Decimal and negative numbers are supported; percentage change requires
+a positive starting value. Zero totals and undefined changes show an explanation.
+Editing an input clears its previous result. Inputs remain while navigating tools
+or switching projects, but reset on reload and are never stored in project files.
+Results display up to 12 significant digits; copied percentages include `%`.
+
 ## Customize chart colors
 - Choose Signal, Arcade, or Spectrum in **Chart palette**, then customize each
   series using its swatch and HEX field. Pie and doughnut charts have a color
@@ -105,7 +118,7 @@ and calculates the sample results automatically. Replace these demo values with
 your experiment counts to run your own analysis. Sample data is not saved.
 
 ## Deploy on GitHub Pages
-1. Upload `index.html`, `styles.css`, `console.css`, `console-core.js`, `console.js`, `colors.js`, `app.js`, `tabs.js`, `chart-data.js`, `chart-modes.js`, and `charts.js` to the root of your `stat-console` repository.
+1. Upload `index.html`, `styles.css`, `console.css`, `console-core.js`, `console.js`, `percentages.js`, `colors.js`, `app.js`, `tabs.js`, `chart-data.js`, `chart-modes.js`, and `charts.js` to the root of your `stat-console` repository.
 2. Open **Settings → Pages**.
 3. Under **Build and deployment**, select **Deploy from a branch**.
 4. Choose **main** and **/(root)**, then save.

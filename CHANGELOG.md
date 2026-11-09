@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — Percentage calculator
+- Add standalone percentage-of, proportion, and increase/decrease calculators
+  with copyable results, keyboard submission, and explicit zero-base validation.
+- Retain calculator inputs across tool/project navigation without saving them.
+
 ## 0.2.0 — Project command center
 - Add project spaces, overview actions/notes, command search, and explicit local
   saving with portable JSON backups and validated imports.

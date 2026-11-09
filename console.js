@@ -2,7 +2,7 @@
   'use strict';
   const C = window.ConsoleCore, D = window.ChartData;
   const storageKey = 'stat-console-projects-v1';
-  const views = ['Overview','Workbench','Analyze','Scenarios','Decisions','Create','Automate'];
+  const views = ['Overview','Workbench','Analyze','Scenarios','Decisions','Create','Automate','Calculators'];
   let projects = [C.project('My workspace')], active = projects[0].id, view = 'Overview', working = null, steps = [], saved = false;
   const $ = id => document.getElementById(id);
   const p = () => projects.find(x => x.id === active);
@@ -105,7 +105,7 @@
   const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');};
   function render() {
     projectSelect.replaceChildren(...projects.map(x=>el('option',x.name,{value:x.id})));projectSelect.value=active;
-    for(const name of views)if(name!=='Analyze')$('view-'+name.toLowerCase()).replaceChildren();
+    for(const name of views)if(name!=='Analyze'&&name!=='Calculators')$('view-'+name.toLowerCase()).replaceChildren();
     overview();workbench();scenarios();decisions();create();automate();
   }
   function overview() {
@@ -238,5 +238,6 @@
       const selected=data.projects.findIndex(x=>x.id===data.active);projects=data.projects.map(project=>C.importProject(JSON.stringify({version:1,project})));active=projects[Math.max(0,selected)].id;saved=true;$('save-state').textContent='Loaded from this browser';}
   } catch(error){message('Saved workspace could not be loaded. Your saved copy has not been overwritten. '+error.message,true);}
   window.addEventListener('beforeunload',event=>{if(!saved&&(projects.some(x=>x.tasks.length||x.datasets.length||x.charts.length||x.scenarios.length||x.decisions.length||x.notes||x.workflows.length)||projects.length>1)){event.preventDefault();event.returnValue='';}});
+  window.PercentageCalculator.mount($('view-calculators'));
   navigate('Overview');
 })();
