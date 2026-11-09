@@ -27,29 +27,32 @@ These instructions apply throughout this repository.
 - In the pull request, describe what changed, why it changed, and how it was checked. Mention any remaining limitations.
 - Share the pull request link and explain the next step for the owner.
 
-# Design System: Stat Console, Graphite + Electric Mint
+# Design System: Queue Works, Ambient Electric Violet
 
-Use Stat Console as the product name and SC as its monogram. Keep repository
+Use Queue Works as the product name, QW as its monogram, and “From rough to ready.” as its tagline. Keep repository
 names and hosting paths unless the owner explicitly requests a move.
 
 ## Visual direction
-Use a clean analytics command center with a restrained gaming influence.
-Use graphite surfaces and mint interface accents for the shell. Chart colors
-are independently customizable.
+Use a soft, modern SaaS toolkit with a restrained gaming influence. Apply the
+user's Ambient Electric Violet palette: midnight slate #0f172a, primary violet
+#8b5cf6, secondary teal #2dd4bf. Use subtle violet/teal radial glows behind the
+workspace; no repeating grid texture. Keep the five tools and their behavior.
 
-- Page background: graphite `#11151B`.
-- Panels: slate `#1A2029`; inputs and chart canvases: deep slate `#151A22`.
-- Borders: steel `#323D4B`, stronger control borders `#465365`.
-- Primary text: soft white `#F2F5F9`; secondary text: cool gray `#A3AFBF`.
-- Buttons, active tabs, and focus: electric mint `#04E2B7`; hover `#0EF3C5`.
-- Define interface colors in :root; components use these tokens.
-- Use Inter for body text and chart labels, Outfit for the wordmark, with
-  system-font fallbacks. Use tabular numbers and compact, legible labels.
-- Use crisp borders, moderate 8px corners, and subtle hover movement. Respect
-  prefers-reduced-motion. Do not add page glow or repeating background texture.
-- Keep desktop workspaces wide and fluid up to 1,920px. Contain mobile table/chart
-  scrolling and keep keyboard focus visible.
-- Keep the version in the footer, not beneath the wordmark.
+- Define interface colors in :root. Components use tokens from styles.css.
+- Surfaces: #172238; inset fields/chart canvases: #101b30.
+- Borders: #2b3954; stronger control borders: #596f95.
+- Text: #f4f6fc; muted text: #b0bdd2; accent text: #c4b5fd.
+- Violet primary buttons use near-black #080611 labels for sufficient contrast;
+  use #a78bfa on hover. Teal is a secondary highlight, independent of chart colors.
+- Use Inter for body text and chart labels; Outfit for wordmark and display text.
+- Use rounded 12px panels, clear input boundaries, quiet depth, and restrained
+  hover movement. Respect reduced motion and forced colors; keep focus visible.
+- queue-works.css owns the branded shell refinements; styles.css owns tokens
+  and shared components, tools.css owns tool-specific layout.
+- Preserve wide/fluid workspaces up to 1,920px and contained mobile scrolling.
+- Keep top tool tabs sticky and the version in the footer. The page scrollbar
+  remains visually hidden while wheel, touch, and keyboard scrolling work.
+- Use the branded QW favicon and “From rough to ready.” tagline.
 
 ## Chart colors
 Interface accent and data colors are independent. colors.js owns Signal, Arcade,

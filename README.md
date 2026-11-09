@@ -1,4 +1,9 @@
-# Stat Console
+# Queue Works
+
+*From rough to ready.*
+
+Queue Works is the product name; the GitHub repository and hosting path remain
+`stat-console`.
 
 Five focused tools in one tabbed interface:
 
@@ -10,7 +15,9 @@ Five focused tools in one tabbed interface:
 - **Note Organizer** — clean meeting notes into editable plain lines for Wrike.
 - **Slide Format Advisor** — describe your message and get five slide-layout ideas.
 
-The graphite/mint design, wide responsive layout, and custom chart colors remain.
+The Ambient Electric Violet design uses midnight slate (`#0f172a`), violet
+(`#8b5cf6`), and secondary teal (`#2dd4bf`) with soft ambient glows, rounded panels,
+and a wide responsive layout. Chart-series colors remain independently customizable.
 The previous dashboards, project management, broad utility categories, calculators,
 visual tools, and multi-slide deck builder are removed. Inputs remain mounted
 while switching tabs; Arrow keys, Home, and End navigate the tabs.
@@ -149,7 +156,8 @@ your experiment counts to run your own analysis. Sample data is not saved.
 
 ## Deploy on GitHub Pages
 Publish the repository root on GitHub Pages (Settings → Pages → main / root).
-Keep `index.html`, `styles.css`, `tools.css`, `colors.js`, `app.js`, `tabs.js`,
+Keep `index.html`, `styles.css`, `tools.css`, `queue-works.css`, `favicon.svg`,
+`colors.js`, `app.js`, `tabs.js`,
 `chart-data.js`, `chart-modes.js`, `charts.js`, `dedupe-core.js`, `deduper.js`,
 `notes-core.js`, `notes.js`, and `slide-formats.js` together. No build step,
 backend, account, or tracking is required.

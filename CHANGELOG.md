@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — Queue Works rebrand
+- Rename the product to Queue Works, with QW monogram, branded favicon, and
+  “From rough to ready.” tagline. Keep repository and hosting paths unchanged.
+- Apply Ambient Electric Violet: midnight slate #0f172a, violet #8b5cf6, and
+  secondary teal #2dd4bf, with soft glows, refreshed panels, controls, and tabs.
+- Update documentation, browser metadata, A/B export filenames, chart fallback
+  filenames, and PowerPoint author metadata. Preserve all five tools and chart colors.
+
 ## Unreleased — Plain-text meeting recaps
 - Remove meeting title/group controls and output headings/list markers.
 - Clean spacing, empty lines, explicit headings, and repeated notes while
