@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — Meeting recap builder
+- Replace the note-cleaner UI with a three-section reviewed recap matching the
+  meeting notes/topics, personal tasks, and action items template.
+- Draft placements from labels, existing headings, and conservative follow-up
+  wording; support editing, moving, adding, and removing notes before copying.
+- Copy individual sections or a combined recap as plain lines for manual Wrike
+  pasting. Preserve drafts on source changes and require explicit rebuilding.
+- Keep all processing local with no AI service or automatic task creation.
+
 ## Unreleased — Branded percentage calculator
 - Add a dedicated Queue Works tab for percentage-of, proportions, and percentage
   increase/decrease, with copy buttons and one-decimal display/copy rounding.

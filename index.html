@@ -33,7 +33,7 @@
     <button id="studio-tab" type="button" role="tab" aria-selected="true" aria-controls="studio-panel">Chart Creator</button>
     <button id="analyzer-tab" type="button" role="tab" aria-selected="false" aria-controls="analyzer-panel" tabindex="-1">A/B Test Analyzer</button>
     <button id="dedupe-tab" type="button" role="tab" aria-selected="false" aria-controls="dedupe-panel" tabindex="-1">Excel De-duper</button>
-    <button id="notes-tab" type="button" role="tab" aria-selected="false" aria-controls="notes-panel" tabindex="-1">Note Organizer</button>
+    <button id="notes-tab" type="button" role="tab" aria-selected="false" aria-controls="notes-panel" tabindex="-1">Meeting Recap Builder</button>
     <button id="formats-tab" type="button" role="tab" aria-selected="false" aria-controls="formats-panel" tabindex="-1">Slide Format Advisor</button>
     <button id="percentage-tab" type="button" role="tab" aria-selected="false" aria-controls="percentage-panel" tabindex="-1">Percentage Calculator</button>
    </div>
@@ -337,18 +337,22 @@ Jun,42500,3.8%</textarea>
    </div>
    <div id="notes-panel" role="tabpanel" aria-labelledby="notes-tab" tabindex="0" hidden>
     <section class="panel notes-panel" aria-labelledby="notes-heading">
-     <h2 id="notes-heading">Note organizer</h2>
-     <p class="note">Clean up meeting notes into plain lines you can format in Wrike. Extra spacing, list markers, standalone headings, and repeated lines are removed. Your wording and details stay intact. Notes stay in this tab—copy your recap before closing or reloading.</p>
+     <h2 id="notes-heading">Meeting recap builder</h2>
+     <p class="note">Take your notes, build a draft, and review the three sections for your Wrike recap. You can edit, move, add, or remove any item before copying.</p>
      <form id="notes-form">
-      <label class="builder-label" for="notes-source">Your notes<textarea id="notes-source" rows="12" maxlength="100000" placeholder="Campaign launch moved to Thursday&#10;Decision: Keep the current budget&#10;Action: Alex to send revised assets by Tuesday&#10;Question: Do we need legal approval?" aria-describedby="notes-help"></textarea></label>
-      <p id="notes-help" class="note">Use one note per line. Names, dates, amounts, and action labels stay as written. The recap has no title, section headings, or bullets. Cleanup does not summarize or rewrite your notes.</p>
-      <div class="notes-options"><label><input id="notes-merge" type="checkbox" checked/> Remove repeated lines</label></div>
-      <div class="dedupe-actions"><button class="primary" type="submit">Clean up notes</button></div>
+      <label class="builder-label" for="notes-source">Meeting notes<textarea id="notes-source" rows="10" maxlength="100000" placeholder="CONNECT space was set up 2 years ago&#10;Should we consider a paid component for CY27?&#10;For me: Create a follow-up task for the monthly call&#10;Matt will find out whether CONNECT engagement data is available" aria-describedby="notes-help"></textarea></label>
+      <p id="notes-help" class="note">Use one point per line. Labels such as “For me:” or “Action:” and existing recap headings guide placement. Simple follow-up wording may suggest a section; review every item. This uses local rules, not AI, and keeps your wording. Up to 500 notes.</p>
+      <div class="notes-options"><label><input id="notes-merge" type="checkbox" checked/> Remove repeated notes within the same section</label></div>
+      <div class="dedupe-actions"><button id="notes-build" class="primary" type="submit">Build recap</button></div>
      </form>
      <p id="notes-status" class="note" role="status"></p>
      <div id="notes-result" hidden>
-      <label class="builder-label" for="notes-output">Editable meeting recap<textarea id="notes-output" rows="14"></textarea></label>
-      <div class="dedupe-actions"><button id="notes-copy" class="primary" type="button" disabled>Copy recap for Wrike</button></div>
+      <p class="note">Copy a section into its matching Wrike section, or copy the full recap with headings. Notes copy as plain lines without bullets. No tasks are posted to Wrike.</p>
+      <div id="notes-sections" class="recap-grid"></div>
+      <details class="recap-preview"><summary>Combined recap preview</summary><label class="builder-label" for="notes-output">Preview (edit the items above)<textarea id="notes-output" rows="12" readonly></textarea></label></details>
+      <div class="dedupe-actions"><button id="notes-copy" class="primary" type="button" disabled>Copy full recap for Wrike</button></div>
+      <label class="builder-label"><textarea id="notes-manual-copy" rows="8" aria-label="Recap text to copy manually" hidden readonly></textarea></label>
+      <p class="note">Notes and draft edits stay in this tab only. Copy your recap before closing or reloading. Rebuilding replaces the current reviewed draft.</p>
      </div>
     </section>
    </div>
