@@ -57,3 +57,23 @@
 @media(max-width:760px) {.slide-format-grid{grid-template-columns:1fr}.slide-format-card{padding:18px}}
 .notes-panel input[type=text],.notes-panel textarea {box-sizing:border-box;width:100%;padding:12px 14px;background:var(--surface-inset);border:1px solid var(--border-strong);border-radius:var(--radius);color:var(--text);font:400 14px var(--font-body);line-height:1.7}
 .dedupe-panel #dedupe-options > .builder-label {margin:16px 0}
+
+/* Queue Works percentage calculator. */
+.percentage-intro {margin:24px 0}
+.percentage-intro h2 {font-size:24px;margin-bottom:10px}
+.percentage-card {padding:24px;margin-bottom:18px}
+.percentage-card h3 {font-size:16px;margin:0 0 20px}
+.percentage-form {display:flex;align-items:end;justify-content:space-between;gap:28px;flex-wrap:wrap}
+.percentage-sentence,.percentage-actions {display:flex;align-items:end;gap:14px;flex-wrap:wrap}
+.percentage-sentence>span {padding-bottom:12px;color:var(--text-muted);line-height:1.4}
+.percentage-input {display:flex;flex-direction:column;gap:8px;width:130px;max-width:100%;font-size:12px;font-weight:600;color:var(--text-muted)}
+.percentage-input input {width:100%;min-width:0;border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--surface-inset);color:var(--text);padding:12px;font:inherit;font-size:16px;font-variant-numeric:tabular-nums}
+.percentage-input input:focus-visible {outline:2px solid var(--accent);outline-offset:3px}
+.percentage-actions {align-items:center}
+.percentage-result {display:block;min-width:150px;max-width:100%;padding:12px 16px;background:var(--surface-inset);border:1px solid var(--border);border-radius:var(--radius);color:var(--accent-text);font-weight:700;font-size:18px;line-height:1.4;overflow-wrap:anywhere;font-variant-numeric:tabular-nums;user-select:text}
+.percentage-copy {border:1px solid var(--border-strong);border-radius:var(--radius);padding:12px;background:transparent;color:var(--text);cursor:pointer}
+.percentage-copy:hover:enabled {border-color:var(--accent-text);color:var(--accent-text)}
+.percentage-copy:disabled {opacity:.45;cursor:default}
+.percentage-feedback {min-height:22px;font-size:13px;color:var(--text);margin:12px 0 0}
+.percentage-card>.note {line-height:1.7;margin-bottom:0}
+@media(max-width:640px) {.percentage-card{padding:18px}.percentage-form{gap:18px}.percentage-input{width:105px}.percentage-sentence{gap:10px}.percentage-actions{gap:10px;width:100%}.percentage-result{min-width:100px;flex:1}.percentage-actions .primary{padding:12px;font-size:12px}.percentage-copy{font-size:12px}}

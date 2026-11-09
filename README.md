@@ -3,7 +3,7 @@
 Queue Works is the product name; the GitHub repository and hosting path remain
 `stat-console`.
 
-Five focused tools in one tabbed interface:
+Six focused tools in one tabbed interface:
 
 - **Chart Creator** — turn Excel/CSV or pasted data into customizable charts and
   export SVG, PNG, or a native editable PowerPoint slide.
@@ -12,16 +12,18 @@ Five focused tools in one tabbed interface:
 - **Excel De-duper** — remove duplicates within a column or exclude a second list.
 - **Note Organizer** — clean meeting notes into editable plain lines for Wrike.
 - **Slide Format Advisor** — describe your message and get five slide-layout ideas.
+- **Percentage Calculator** — percentage-of, proportions, and increase/decrease.
 
 The Ambient Electric Violet design uses midnight slate (`#0f172a`), violet
 (`#8b5cf6`), and secondary teal (`#2dd4bf`) with soft ambient glows, rounded panels,
 and a wide responsive layout. Chart-series colors remain independently customizable.
-The previous dashboards, project management, broad utility categories, calculators,
+The previous dashboards, project management, broad utility categories, other calculators,
 visual tools, and multi-slide deck builder are removed. Inputs remain mounted
 while switching tabs; Arrow keys, Home, and End navigate the tabs.
 
 ## Excel de-duper
-1. Upload XLSX, XLS, or CSV (up to 10 MB).
+1. Drag and drop XLSX, XLS, or CSV into the upload area, or choose **browse files**
+   (up to 10 MB).
 2. Choose the worksheet and the column to check. The first used row is the header.
    Columns are identified by letter and header, so repeated/blank headers work.
 3. Select **Preview de-dupe**. The first row for each matching column value is
@@ -90,6 +92,17 @@ causes, and decisions. General briefs receive flexible fallback formats. This is
 a rule-based layout guide, not an AI content generator; it does not invent slide
 facts or create a deck. Limits: 15–5,000 characters per brief.
 
+## Percentage calculator
+Use the Percentage Calculator tab for X% of Y, X as a percentage of Y, or
+percentage increase/decrease from X to Y. Each card has a Calculate button,
+keyboard submission, and a Copy button. Output and copied values round to one
+decimal place (`36.25%` → `36.3%`); percentage results include `%` when copied.
+Changing either input clears its stale result. Inputs remain across tab switches
+and reset on reload. Decimals and negative values are accepted, except that
+percentage-change starting values must be positive; zero denominators receive an
+explanation. Clipboard failures select the result for manual copying. All math
+runs locally without an account, model download, or AI service.
+
 ## Customize chart colors
 - Choose Signal, Arcade, or Spectrum in **Chart palette**, then customize each
   series using its swatch and HEX field. Pie and doughnut charts have a color
@@ -106,7 +119,7 @@ facts or create a deck. Limits: 15–5,000 characters per brief.
 ## Create a chart for PowerPoint
 1. Open the **Chart Creator** tab and edit the spreadsheet-style table directly.
    Add or remove rows and series as needed. Paste a full table with headers into
-   any cell, expand **Paste a table or CSV**, or upload CSV, TSV,
+   any cell, expand **Paste a table or CSV**, or drag and drop / browse for CSV, TSV,
    XLSX, or XLS data. Include column headers in the first row. For Excel files,
    select the worksheet to use. Save workbooks with formulas in Excel first so
    their calculated values are available.
@@ -157,7 +170,8 @@ Publish the repository root on GitHub Pages (Settings → Pages → main / root)
 Keep `index.html`, `styles.css`, `tools.css`, `queue-works.css`, `favicon.svg`,
 `colors.js`, `app.js`, `tabs.js`,
 `chart-data.js`, `chart-modes.js`, `charts.js`, `dedupe-core.js`, `deduper.js`,
-`notes-core.js`, `notes.js`, and `slide-formats.js` together. No build step,
+`notes-core.js`, `notes.js`, `file-uploads.js`, `percentages.js`, and
+`slide-formats.js` together. No build step,
 backend, account, or tracking is required.
 
 Inter and Outfit load from Google Fonts with system fallbacks. SheetJS 0.20.3
@@ -185,3 +199,8 @@ PowerPoint exports, and desktop/mobile layouts.
 All processing runs in the browser. Inputs are not transmitted or automatically
 saved. Downloaded/copied outputs contain entered data. Old local workspace
 storage is left untouched, although its management UI is no longer included.
+
+File upload areas support one file at a time, visible drag-over feedback, and
+native keyboard/touch file browsing. Dropped and browsed files use identical
+validation and import paths. Dropping files outside the areas does not navigate
+away from open work.

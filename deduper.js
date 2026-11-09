@@ -5,7 +5,8 @@
     source = null,
     result = null,
     revision = 0,
-    libraryPromise;
+    libraryPromise,
+    sourceFilename = 'data';
   function status(text, error = false) {
     $('status').textContent = text;
     $('status').setAttribute('role', error ? 'alert' : 'status');
@@ -98,37 +99,40 @@
       status(error.message, true);
     }
   }
-  $('file').addEventListener('change', async () => {
-    invalidate();
-    workbook = null;
-    source = null;
-    $('setup').hidden = true;
-    $('options').hidden = true;
-    const file = $('file').files[0];
-    if (!file) {
-      status('');
-      return;
+  window.FileUploads.bind(
+    $('file'),
+    async (file) => {
+      invalidate();
+      workbook = null;
+      source = null;
+      $('setup').hidden = true;
+      $('options').hidden = true;
+      sourceFilename = file.name;
+      const request = revision;
+      try {
+        if (!/\.(xlsx|xls|csv)$/i.test(file.name))
+          throw new Error('Choose an XLSX, XLS, or CSV file.');
+        if (file.size > 10 * 1024 * 1024) throw new Error('Choose a file under 10 MB.');
+        status('Reading your file in this browser…');
+        const X = await library(),
+          bytes = await file.arrayBuffer();
+        if (request !== revision) return;
+        const next = X.read(bytes, { type: 'array', cellNF: true, raw: true });
+        if (!next.SheetNames.length) throw new Error('No worksheets found.');
+        workbook = next;
+        $('sheet').replaceChildren();
+        next.SheetNames.forEach((name) => option($('sheet'), name, name));
+        $('setup').hidden = false;
+        loadSheet();
+      } catch (error) {
+        if (request === revision) status(error.message, true);
+      }
+    },
+    (error) => {
+      invalidate();
+      status(error.message, true);
     }
-    const request = revision;
-    try {
-      if (!/\.(xlsx|xls|csv)$/i.test(file.name))
-        throw new Error('Choose an XLSX, XLS, or CSV file.');
-      if (file.size > 10 * 1024 * 1024) throw new Error('Choose a file under 10 MB.');
-      status('Reading your file in this browser…');
-      const X = await library(),
-        bytes = await file.arrayBuffer();
-      if (request !== revision) return;
-      const next = X.read(bytes, { type: 'array', cellNF: true, raw: true });
-      if (!next.SheetNames.length) throw new Error('No worksheets found.');
-      workbook = next;
-      $('sheet').replaceChildren();
-      next.SheetNames.forEach((name) => option($('sheet'), name, name));
-      $('setup').hidden = false;
-      loadSheet();
-    } catch (error) {
-      if (request === revision) status(error.message, true);
-    }
-  });
+  );
   function exclusionMode() {
     return $('mode').value === 'exclude';
   }
@@ -267,9 +271,7 @@
       cleaned['!autofilter'] = { ref: cleaned['!ref'] };
       const output = X.utils.book_new();
       X.utils.book_append_sheet(output, cleaned, source.name);
-      const name = ($('file').files[0]?.name || 'data')
-        .replace(/\.[^.]+$/, '')
-        .replace(/[^\w-]+/g, '-');
+      const name = sourceFilename.replace(/\.[^.]+$/, '').replace(/[^\w-]+/g, '-');
       X.writeFile(
         output,
         (name || 'data') + (exclusionMode() ? '-excluded.xlsx' : '-deduped.xlsx')

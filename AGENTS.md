@@ -36,7 +36,7 @@ Keep repository names and hosting paths unless the owner explicitly requests a m
 Use a soft, modern SaaS toolkit with a restrained gaming influence. Apply the
 user's Ambient Electric Violet palette: midnight slate #0f172a, primary violet
 #8b5cf6, secondary teal #2dd4bf. Use subtle violet/teal radial glows behind the
-workspace; no repeating grid texture. Keep the five tools and their behavior.
+workspace; no repeating grid texture. Keep the six authorized tools and their behavior.
 
 - Define interface colors in :root. Components use tokens from styles.css.
 - Surfaces: #172238; inset fields/chart canvases: #101b30.
@@ -100,8 +100,8 @@ area grouping and bubble workbook values/headers/ranges.
 
 ## Focused tool architecture
 Keep exactly the authorized tools: Chart Creator, A/B Test Analyzer, Excel
-De-duper, Note Organizer, and Slide Format Advisor. Do not restore dashboards,
-project management, utility categories, calculators, visual tools, or deck building.
+De-duper, Note Organizer, Slide Format Advisor, and Percentage Calculator. Do not restore dashboards,
+project management, utility categories, other calculators, visual tools, or deck building.
 Each tool stays mounted while switching accessible tabs. tools.css styles new
 tools; the existing styles.css owns chart/A/B/shared design tokens.
 Dedupe matching belongs in DOM-free dedupe-core.js, with workbook/UI logic in
@@ -119,3 +119,15 @@ recaps and clipboard fallback. Do not add AI, model downloads, or a note backend
 brief themes and shows wireframes; describe its rule-based limits accurately.
 Use textContent for user content, never HTML interpolation or eval. Do not send
 notes to Wrike; only copy the user's reviewed recap for manual pasting.
+
+## File uploads
+Use shared file-uploads.js drop areas for every file upload: visible drag/drop
+copy, browse access for keyboard/touch, formats/limits, selected filenames, and
+drag-over feedback. Feed dropped and browsed files through the same importer.
+Keep file processing local, single-file validation, stale-request protection,
+and source filenames for exports. Prevent accidental file navigation on drops.
+
+Percentage Calculator uses percentages.js for DOM-free math plus its own UI. Keep
+percentage-of, proportion, and increase/decrease calculations separate. Display
+and copy round to one decimal (36.25% → 36.3%). Clear stale outputs on edits,
+handle zero bases explicitly, and preserve inputs while switching tools.

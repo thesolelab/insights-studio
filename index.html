@@ -35,6 +35,7 @@
     <button id="dedupe-tab" type="button" role="tab" aria-selected="false" aria-controls="dedupe-panel" tabindex="-1">Excel De-duper</button>
     <button id="notes-tab" type="button" role="tab" aria-selected="false" aria-controls="notes-panel" tabindex="-1">Note Organizer</button>
     <button id="formats-tab" type="button" role="tab" aria-selected="false" aria-controls="formats-panel" tabindex="-1">Slide Format Advisor</button>
+    <button id="percentage-tab" type="button" role="tab" aria-selected="false" aria-controls="percentage-panel" tabindex="-1">Percentage Calculator</button>
    </div>
    <div id="studio-panel" role="tabpanel" aria-labelledby="studio-tab" tabindex="0">
    <section class="panel chart-studio-panel" aria-labelledby="builder-heading">
@@ -69,8 +70,13 @@ Jun,42500,3.8%</textarea>
       <p class="note" id="builder-data-help">Paste from a spreadsheet or use CSV with a header row. Up to 200 rows and 6 series; use a decimal point for numbers. The starting table is sample data.</p>
       </details>
       <div class="builder-upload">
-       <label class="builder-label" for="builder-file">Or upload CSV / Excel
-        <input id="builder-file" type="file" accept=".csv,.tsv,.xlsx,.xls" aria-describedby="builder-upload-help"/>
+       <label class="file-drop-zone" for="builder-file" data-file-drop>
+        <span class="file-drop-icon" aria-hidden="true">↑</span>
+        <span class="file-drop-title">Drag and drop your data file here</span>
+        <span class="file-drop-browse">or browse files</span>
+        <span class="file-drop-formats">CSV, TSV, XLSX or XLS · Up to 5 MB</span>
+        <span class="file-drop-filename" data-upload-filename role="status"></span>
+        <input id="builder-file" type="file" accept=".csv,.tsv,.xlsx,.xls" aria-label="Upload chart data" aria-describedby="builder-upload-help"/>
        </label>
        <label class="builder-label" id="builder-sheet-label" hidden>Worksheet
         <select id="builder-sheet"></select>
@@ -280,8 +286,13 @@ Jun,42500,3.8%</textarea>
     <section class="panel dedupe-panel" aria-labelledby="dedupe-heading">
      <h2 id="dedupe-heading">Excel de-duper</h2>
      <p class="note">Remove duplicates within a column, or exclude companies in your main list that appear in another column.</p>
-     <label class="builder-label" for="dedupe-file">Excel or CSV file
-      <input id="dedupe-file" type="file" accept=".xlsx,.xls,.csv" aria-describedby="dedupe-file-help"/>
+     <label class="file-drop-zone" for="dedupe-file" data-file-drop>
+      <span class="file-drop-icon" aria-hidden="true">↑</span>
+      <span class="file-drop-title">Drag and drop your spreadsheet here</span>
+      <span class="file-drop-browse">or browse files</span>
+      <span class="file-drop-formats">XLSX, XLS or CSV · Up to 10 MB</span>
+      <span class="file-drop-filename" data-upload-filename role="status"></span>
+      <input id="dedupe-file" type="file" accept=".xlsx,.xls,.csv" aria-label="Upload spreadsheet for de-duping or exclusions" aria-describedby="dedupe-file-help"/>
      </label>
      <p class="note" id="dedupe-file-help">Files stay in your browser. Up to 10 MB, 50,000 data rows, 200 columns, and 1 million cells. The first used row is treated as headers.</p>
      <div id="dedupe-setup" hidden>
@@ -355,6 +366,7 @@ Jun,42500,3.8%</textarea>
      <textarea id="slide-manual-copy" class="slide-manual-copy" rows="8" aria-label="Slide outline to copy manually" hidden></textarea>
     </section>
    </div>
+   <div id="percentage-panel" role="tabpanel" aria-labelledby="percentage-tab" tabindex="0" hidden></div>
    <footer>
     QUEUE WORKS
     <span>
@@ -377,11 +389,13 @@ Jun,42500,3.8%</textarea>
   <script src="tabs.js"></script>
   <script src="chart-data.js"></script>
   <script src="chart-modes.js"></script>
+  <script src="file-uploads.js"></script>
   <script src="charts.js"></script>
   <script src="dedupe-core.js"></script>
   <script src="deduper.js"></script>
   <script src="notes-core.js"></script>
   <script src="notes.js"></script>
   <script src="slide-formats.js"></script>
+  <script src="percentages.js"></script>
  </body>
 </html>

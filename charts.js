@@ -448,9 +448,7 @@
   $('data').addEventListener('input', () => {
     edited();
   });
-  $('file').addEventListener('change', async () => {
-    const file = $('file').files[0];
-    if (!file) return;
+  window.FileUploads.bind($('file'), async file => {
     const request = ++revision;
     dirty = true;
     $('data-source').textContent = 'Your data · editable';
@@ -474,8 +472,7 @@
         useSheet();
       } else throw new Error('Choose a CSV, TSV, XLSX, or XLS file.');
     } catch (error) { if (request === revision) fail(error); }
-    finally { $('file').value = ''; }
-  });
+  }, error => { revision++; dirty = true; fail(error); });
   $('sheet').addEventListener('change', () => { try { useSheet(); } catch (error) { fail(error); } });
   $('category').addEventListener('change', () => { if (table) { seriesControls(); render(); } });
   $('mode').addEventListener('change', () => {
