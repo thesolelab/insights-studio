@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased — Branded percentage calculator
+- Add a dedicated Queue Works tab for percentage-of, proportions, and percentage
+  increase/decrease, with copy buttons and one-decimal display/copy rounding.
+- Validate undefined results and clear stale outputs while retaining tab state.
+
+## Unreleased — Clear drag-and-drop uploads
+- Add visible drag-and-drop / browse areas to Chart Creator and Excel De-duper.
+- Show supported formats, file limits, drag-over state, and selected filenames.
+- Share picker/drop import validation and preserve repeat-selection, keyboard
+  access, source export names, and stale-request protection.
+
 ## Unreleased — Wordmark polish
 - Give the gradient wordmark end padding so the final s renders fully.
 - Match the badge and favicon W to the wordmark’s violet-to-teal gradient.
