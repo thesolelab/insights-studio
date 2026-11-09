@@ -10,7 +10,7 @@ Six focused tools in one tabbed interface:
 - **A/B Test Analyzer** — compare experiment conversion rates with the existing
   two-proportion test and export the distribution chart.
 - **Excel De-duper** — remove duplicates within a column or exclude a second list.
-- **Note Organizer** — clean meeting notes into editable plain lines for Wrike.
+- **Meeting Recap Builder** — review notes, personal tasks, and action items for Wrike.
 - **Slide Format Advisor** — describe your message and get five slide-layout ideas.
 - **Percentage Calculator** — percentage-of, proportions, and increase/decrease.
 
@@ -61,25 +61,39 @@ entries identify the matching exclusion row. Changing either column, the mode,
 or matching settings requires a new preview. If all entries are excluded, the
 export contains the header only.
 
-## Note organizer
-Type or paste one note per line and select **Clean up notes**. The editable recap
-contains one note per line, with no meeting title, section headings, bullets, or
-numbering. Extra spaces/tabs and empty lines are cleaned up. Checkboxes become `Completed:`
-or `To do:` text so their status is retained. Explicit Markdown
-headings, standalone section labels, and labeled meeting titles are omitted.
-Unlabeled first lines remain because the tool cannot safely guess that they are titles.
+## Meeting recap builder
+Paste one point per line and select **Build recap**. Review the draft in the three
+sections matching your meeting template:
+- Meeting notes/topics
+- What's Needed from Me | Tasks to Create
+- Action Items
 
-Repeated lines are consolidated by default, ignoring case and spacing; turn the
-option off to retain repetitions. Notes remain in source order. Names, dates,
-amounts, negations, and action/decision labels remain as written. Different facts
-or action types are never combined. This is local text cleanup, not summarization,
-spelling correction, or AI rewriting.
+Explicit `For me:`, `My task:`, `Task:`, and `TODO:` labels place a point under your
+tasks; `Action:`/`Follow-up:` place it under action items. Existing section headings
+are respected rather than overridden by wording suggestions. Simple clear wording such as “I will send…” or “Matt will find…”
+may suggest a follow-up section, with a visible review note. Questions, uncertain
+wording, and unassigned context normally stay in meeting topics. Placements use
+local rules, not AI, and can be wrong; review them. Owners, commitments, dates,
+amounts, and wording are never invented or extracted into new tasks.
 
-Edit the result and choose **Copy recap for Wrike**, then format it within Wrike.
-Clipboard failure selects the recap for manual copying. No Wrike connection,
-server endpoint, API key, AI model download, or external note processing is needed.
-Copy before closing/reloading: notes remain session-only. Limits: 100,000
-characters / 5,000 lines. Source edits invalidate the previous recap.
+Edit each item, change its section, remove it, or add a new one. Moving items keeps
+source order within sections. Repeated notes are optionally consolidated within
+the same section, so separate personal tasks and others' actions are not merged.
+Checkbox status is preserved as `Completed:` or `To do:` text.
+
+**Copy section** copies only that section's item lines for pasting into your
+existing Wrike section. **Copy full recap for Wrike** includes the nonempty section
+headings. Both use plain lines without bullets and no meeting title. Empty sections
+are not copied. A collapsible combined preview reflects your reviewed item edits.
+Clipboard failure selects the requested text for manual copying. No Wrike posting
+or task creation happens automatically.
+
+Changing the source or repeat option disables copying but retains the current draft
+for reference. **Rebuild recap** replaces that draft, including manual edits; the UI
+explains this. Reverting the source restores copy access to the existing draft.
+Notes and draft edits stay in the current browser tab only. Copy before closing or
+reloading. Limits: 100,000 source characters, 5,000 source lines, 500 review items.
+There is no AI service, model download, backend, account, or external note processing.
 
 ## Slide format advisor
 Describe the message you want the audience to understand or decide, then select

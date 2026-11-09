@@ -100,7 +100,7 @@ area grouping and bubble workbook values/headers/ranges.
 
 ## Focused tool architecture
 Keep exactly the authorized tools: Chart Creator, A/B Test Analyzer, Excel
-De-duper, Note Organizer, Slide Format Advisor, and Percentage Calculator. Do not restore dashboards,
+De-duper, Meeting Recap Builder, Slide Format Advisor, and Percentage Calculator. Do not restore dashboards,
 project management, utility categories, other calculators, visual tools, or deck building.
 Each tool stays mounted while switching accessible tabs. tools.css styles new
 tools; the existing styles.css owns chart/A/B/shared design tokens.
@@ -112,11 +112,17 @@ not row pairs. Skip blank main-list entries and export only the kept main column
 Keep this separate from ordinary within-column de-duping.
 Export only cleaned-sheet values and number formats; explain formula flattening
 and excluded sheets/styles in UI. Do not overwrite source files.
-notes-core.js cleans notes locally without rewriting or summarizing facts. Recaps
-are plain lines in source order with no titles, section headings, or list markers.
-Retain names, numbers, dates, negations, and action labels. notes.js owns editable
-recaps and clipboard fallback. Do not add AI, model downloads, or a note backend. slide-formats.js ranks layout suggestions from
-brief themes and shows wireframes; describe its rule-based limits accurately.
+notes-core.js owns local recap drafting and section serialization. notes.js owns
+item editing/moving/adding/removing, copy controls, and clipboard fallback. Use the
+three authorized headings: Meeting notes/topics, What's Needed from Me | Tasks to
+Create, and Action Items. Draft placements are suggestions from labels/headings
+and conservative wording rules, never AI or inferred owners/dates. Keep user review
+and reassignment available. Per-section copies omit headings; full copies include
+nonempty section headings, with plain unbulleted lines and no meeting title.
+Source changes disable stale copies while retaining reviewed edits until an explicit
+rebuild. Preserve names, amounts, dates, negations, and checkbox status. Keep all
+processing session-only; no model downloads or backend. slide-formats.js ranks
+layout suggestions from brief themes and shows wireframes; describe its limits.
 Use textContent for user content, never HTML interpolation or eval. Do not send
 notes to Wrike; only copy the user's reviewed recap for manual pasting.
 
