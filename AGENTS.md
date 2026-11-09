@@ -145,3 +145,8 @@ Expose source-label toolbar controls and Alt/Option+Shift+M (For me),
 Alt/Option+Shift+A (Action item), scoped to editable note fields. In reviewed
 items, shortcuts move sections without rewriting text. Clear undo is session-only
 and expires when new source work begins.
+
+The current repository is thesolelab/queue-works and Pages path is /queue-works/.
+Keep local asset URLs relative so deployments work under a repository subpath.
+libraries.js owns shared lazy Excel/PowerPoint loading and integrity hashes;
+reuse it rather than adding per-tool script loaders.

@@ -5,7 +5,6 @@
     source = null,
     result = null,
     revision = 0,
-    libraryPromise,
     sourceFilename = 'data';
   function status(text, error = false) {
     $('status').textContent = text;
@@ -16,35 +15,6 @@
     result = null;
     $('result').hidden = true;
     $('download').disabled = true;
-  }
-  function library() {
-    if (window.XLSX) return Promise.resolve(window.XLSX);
-    if (libraryPromise) return libraryPromise;
-    libraryPromise = new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
-      script.integrity = 'sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT';
-      script.crossOrigin = 'anonymous';
-      const timer = setTimeout(failed, 30000);
-      function failed() {
-        clearTimeout(timer);
-        script.remove();
-        libraryPromise = null;
-        reject(
-          new Error(
-            'Unable to load the Excel tool. Check your connection and choose the file again.'
-          )
-        );
-      }
-      script.onload = () => {
-        clearTimeout(timer);
-        if (window.XLSX) resolve(window.XLSX);
-        else failed();
-      };
-      script.onerror = failed;
-      document.head.append(script);
-    });
-    return libraryPromise;
   }
   function option(parent, value, text) {
     const node = document.createElement('option');
@@ -114,7 +84,7 @@
           throw new Error('Choose an XLSX, XLS, or CSV file.');
         if (file.size > 10 * 1024 * 1024) throw new Error('Choose a file under 10 MB.');
         status('Reading your file in this browser…');
-        const X = await library(),
+        const X = await window.ToolLibraries.load('excel'),
           bytes = await file.arrayBuffer();
         if (request !== revision) return;
         const next = X.read(bytes, { type: 'array', cellNF: true, raw: true });

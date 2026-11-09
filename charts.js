@@ -7,7 +7,6 @@
   const NS = 'http://www.w3.org/2000/svg';
   let table = null, workbook = null, revision = 0, current = null, exporting = false;
   let editorRows = [], dirty = false;
-  const libraries = new Map();
   const colorOverrides = new Map();
   let seriesBindings = [], sliceBindings = [], sliceSignature = '';
 
@@ -411,28 +410,6 @@
     } catch (error) { fail(error); }
   }
 
-  function library(name) {
-    if (libraries.has(name)) return libraries.get(name);
-    const sources = {
-      excel: ['https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js', 'sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT'],
-      powerpoint: ['https://cdn.jsdelivr.net/npm/pptxgenjs@4.0.1/dist/pptxgen.bundle.js', 'sha384-qb0Xhi7LLYpvW1HCK6oMrmDLSY9sy7vwm6ZlV6KjtrlL9yg30+YN4neTwnmX+Kp8']
-    };
-    const promise = new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = sources[name][0]; script.integrity = sources[name][1]; script.crossOrigin = 'anonymous';
-      const timeout = setTimeout(() => failed(), 30000);
-      function failed() {
-        clearTimeout(timeout); script.remove(); libraries.delete(name);
-        reject(new Error('Unable to load the ' + name + ' tool. Check your connection and try again.'));
-      }
-      script.onload = () => { clearTimeout(timeout); resolve(); };
-      script.onerror = failed;
-      document.head.appendChild(script);
-    });
-    libraries.set(name, promise);
-    return promise;
-  }
-
   function useSheet() {
     table = null;
     const worksheet = workbook.Sheets[$('sheet').value];
@@ -461,7 +438,7 @@
         if (request !== revision) return;
         $('data').value = text; useTable(D.parseDelimited(text));
       } else if (/\.xlsx?$/i.test(file.name)) {
-        await library('excel');
+        await window.ToolLibraries.load('excel');
         const bytes = await file.arrayBuffer();
         if (request !== revision) return;
         workbook = window.XLSX.read(bytes, { type: 'array', cellDates: true });
@@ -660,7 +637,7 @@
     const snapshot = current;
     exporting = true; buttons(true); $('status').textContent = 'Preparing editable PowerPoint…';
     try {
-      await library('powerpoint');
+      await window.ToolLibraries.load('powerpoint');
       const pptx = new window.PptxGenJS();
       pptx.layout = 'LAYOUT_WIDE'; pptx.author = 'Queue Works'; pptx.subject = 'Editable chart and source data'; pptx.title = snapshot.title;
       addNativeChart(pptx, pptx.addSlide(), snapshot);
