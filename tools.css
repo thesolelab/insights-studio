@@ -104,3 +104,8 @@
 .recap-editor-toolbar button {display:flex;align-items:center;gap:10px}
 .recap-editor-toolbar kbd {padding:3px 6px;border:1px solid var(--border);border-radius:5px;color:var(--text-muted);font:11px var(--font-body);white-space:nowrap}
 .notes-panel .dedupe-actions {flex-wrap:wrap}
+
+.ab-colors { max-width: none; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); }
+.ab-export-options .builder-label { max-width: 420px; }
+.ab-export-options { margin: 12px 0 18px; }
+.ab-export-options select { max-width: 100%; }

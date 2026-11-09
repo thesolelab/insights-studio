@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — A/B image export appearance
+- Customize the chart background, axis labels/title, and annotation text alongside
+  Control A and Variant B colors, without changing statistical results.
+- Choose solid or transparent PNG exports; SVG retains the selected solid
+  background and both formats include resolved colors.
+
+
 ## Unreleased — Repository diagnostics
 - Align repository and live-site documentation with queue-works.
 - Share lazy Excel/PowerPoint loading across tools; validate loaded APIs,
