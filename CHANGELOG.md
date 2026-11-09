@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Recap reset and shortcuts
+- Clear source notes and the reviewed recap without reloading other tools.
+- Offer Undo clear until new source work begins.
+- Label source lines or move reviewed items with Ctrl/Cmd+Shift+1 (For me)
+  and Ctrl/Cmd+Shift+2 (Action item); include visible toolbar controls.
+
 ## Unreleased — Blank recap input and external guidance
 - Remove sample-note placeholder text from the Meeting Recap Builder.
 - Show usage steps and optional labeling guidance above the empty notes field.

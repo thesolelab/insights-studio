@@ -100,3 +100,7 @@
 .recap-instructions ol {padding-left:20px;margin:0;color:var(--text-muted);font-size:13px;line-height:1.8}
 .recap-instructions strong {color:var(--text);font-weight:600}
 .recap-instructions .note {font-size:12px;margin-bottom:0}
+.recap-editor-toolbar {display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 10px}
+.recap-editor-toolbar button {display:flex;align-items:center;gap:10px}
+.recap-editor-toolbar kbd {padding:3px 6px;border:1px solid var(--border);border-radius:5px;color:var(--text-muted);font:11px var(--font-body);white-space:nowrap}
+.notes-panel .dedupe-actions {flex-wrap:wrap}
