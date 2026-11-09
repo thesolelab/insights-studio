@@ -82,13 +82,14 @@
       }
       source = { sheet, range, rows, name: $('sheet').value };
       $('column').replaceChildren();
-      rows[0].forEach((header, i) =>
-        option(
-          $('column'),
-          i,
-          X.utils.encode_col(range.s.c + i) + ' — ' + (header || '(no header)')
-        )
-      );
+      $('exclusion').replaceChildren();
+      rows[0].forEach((header, i) => {
+        const label = X.utils.encode_col(range.s.c + i) + ' — ' + (header || '(no header)');
+        option($('column'), i, label);
+        option($('exclusion'), i, label);
+      });
+      $('exclusion').value = String(columnCount > 1 ? 1 : 0);
+      updateMode();
       $('options').hidden = false;
       $('source-info').textContent =
         `${rowCount.toLocaleString()} rows · ${columnCount} columns · First used row (${range.s.r + 1}) is the header`;
@@ -128,8 +129,34 @@
       if (request === revision) status(error.message, true);
     }
   });
+  function exclusionMode() {
+    return $('mode').value === 'exclude';
+  }
+  function updateMode() {
+    const exclude = exclusionMode();
+    $('column-label').textContent = exclude
+      ? 'Main list column (keep these unless excluded)'
+      : 'Column to de-dupe';
+    $('exclusion-label').hidden = !exclude;
+    $('blanks-label').hidden = exclude;
+    $('mode-help').textContent = exclude
+      ? 'Compare every main-list value against the entire exclusion column, regardless of row. Export only the main-list column, in its original order. Blank main-list cells are skipped; repeated unmatched values remain. Matching is exact after the case/space options below.'
+      : 'Keep the first row for each matching value. Export all original columns.';
+    $('submit').textContent = exclude ? 'Preview exclusions' : 'Preview de-dupe';
+    $('download').textContent = exclude ? 'Download cleaned list' : 'Download cleaned Excel';
+    $('input-label').textContent = exclude ? 'Main list entries' : 'Original rows';
+    $('removed-label').textContent = exclude ? 'Excluded matches' : 'Duplicates removed';
+    $('export-help').textContent = exclude
+      ? 'First 30 remaining entries. Download includes the full cleaned main-list column only; the exclusion column is not exported.'
+      : 'Showing the first 30 rows. Downloads include all kept rows and original columns.';
+  }
+  $('mode').addEventListener('change', () => {
+    invalidate();
+    updateMode();
+    status('Mode changed. Preview again before downloading.');
+  });
   $('sheet').addEventListener('change', loadSheet);
-  for (const id of ['column', 'trim', 'ignore-case', 'blanks'])
+  for (const id of ['column', 'exclusion', 'trim', 'ignore-case', 'blanks'])
     $(id).addEventListener('change', () => {
       invalidate();
       status('Settings changed. Preview again before downloading.');
@@ -140,7 +167,10 @@
       head = document.createElement('thead'),
       body = document.createElement('tbody'),
       tr = document.createElement('tr');
-    for (const text of ['Excel row', ...source.rows[0]]) {
+    const visibleColumns = exclusionMode()
+      ? [Number($('column').value)]
+      : source.rows[0].map((_, i) => i);
+    for (const text of ['Excel row', ...visibleColumns.map((i) => source.rows[0][i])]) {
       const cell = document.createElement('th');
       cell.scope = 'col';
       cell.textContent = text;
@@ -149,14 +179,19 @@
     if (removed) {
       const cell = document.createElement('th');
       cell.scope = 'col';
-      cell.textContent = 'First match (Excel row)';
+      cell.textContent = exclusionMode()
+        ? 'Match in exclusion column (Excel row)'
+        : 'First match (Excel row)';
       tr.append(cell);
     }
     head.append(tr);
     for (const item of indices.slice(0, 30)) {
       const index = removed ? item.index : item,
         row = document.createElement('tr');
-      const values = [String(source.range.s.r + index + 1), ...source.rows[index]];
+      const values = [
+        String(source.range.s.r + index + 1),
+        ...visibleColumns.map((i) => source.rows[index][i]),
+      ];
       if (removed) values.push(String(source.range.s.r + item.firstIndex + 1));
       for (const text of values) {
         const cell = document.createElement('td');
@@ -173,20 +208,32 @@
     invalidate();
     try {
       if (!source) throw new Error('Choose a file and worksheet first.');
-      result = window.ExcelDedupe.deduplicate(source.rows, Number($('column').value), {
+      const options = {
         trim: $('trim').checked,
         ignoreCase: $('ignore-case').checked,
         blank: $('blanks').value,
-      });
+      };
+      result = exclusionMode()
+        ? window.ExcelDedupe.excludeMatches(
+            source.rows,
+            Number($('column').value),
+            Number($('exclusion').value),
+            options
+          )
+        : window.ExcelDedupe.deduplicate(source.rows, Number($('column').value), options);
       $('input-count').textContent = result.inputCount.toLocaleString();
       $('removed-count').textContent = result.removed.length.toLocaleString();
       $('kept-count').textContent = result.kept.length.toLocaleString();
       table($('preview'), result.kept);
       table($('removed'), result.removed, true);
       $('removed-details').hidden = result.removed.length === 0;
-      $('summary').textContent = result.removed.length
-        ? `Keep the first row for each match in “${source.rows[0][Number($('column').value)] || $('column').selectedOptions[0].textContent}”. ${result.duplicateKeys.toLocaleString()} repeated values found.`
-        : 'No duplicate values found with these settings. All rows will be kept.';
+      if (exclusionMode()) {
+        $('summary').textContent =
+          `${result.removed.length.toLocaleString()} entries matched the exclusion list and were removed. ${result.kept.length.toLocaleString()} entries remain. ${result.skippedBlanks.toLocaleString()} blank main-list cells skipped. Original spelling and order are retained.`;
+      } else
+        $('summary').textContent = result.removed.length
+          ? `Keep the first row for each match in “${source.rows[0][Number($('column').value)] || $('column').selectedOptions[0].textContent}”. ${result.duplicateKeys.toLocaleString()} repeated values found.`
+          : 'No duplicate values found with these settings. All rows will be kept.';
       $('result').hidden = false;
       $('download').disabled = false;
       status('Preview ready. Download the cleaned worksheet when you are ready.');
@@ -201,18 +248,21 @@
       const X = window.XLSX,
         cleaned = {},
         indices = [0, ...result.kept];
+      const columns = exclusionMode()
+        ? [source.range.s.c + Number($('column').value)]
+        : source.rows[0].map((_, i) => source.range.s.c + i);
       indices.forEach((index, newRow) => {
-        for (let c = source.range.s.c; c <= source.range.e.c; c++) {
+        columns.forEach((c, newColumn) => {
           const original = source.sheet[X.utils.encode_cell({ r: source.range.s.r + index, c })];
-          if (!original || original.v === undefined || original.t === 'z') continue;
+          if (!original || original.v === undefined || original.t === 'z') return;
           const cell = { t: original.t, v: original.v };
           if (original.z) cell.z = original.z;
-          cleaned[X.utils.encode_cell({ r: newRow, c: c - source.range.s.c })] = cell;
-        }
+          cleaned[X.utils.encode_cell({ r: newRow, c: newColumn })] = cell;
+        });
       });
       cleaned['!ref'] = X.utils.encode_range({
         s: { r: 0, c: 0 },
-        e: { r: indices.length - 1, c: source.rows[0].length - 1 },
+        e: { r: indices.length - 1, c: columns.length - 1 },
       });
       cleaned['!autofilter'] = { ref: cleaned['!ref'] };
       const output = X.utils.book_new();
@@ -220,7 +270,10 @@
       const name = ($('file').files[0]?.name || 'data')
         .replace(/\.[^.]+$/, '')
         .replace(/[^\w-]+/g, '-');
-      X.writeFile(output, (name || 'data') + '-deduped.xlsx');
+      X.writeFile(
+        output,
+        (name || 'data') + (exclusionMode() ? '-excluded.xlsx' : '-deduped.xlsx')
+      );
       status('Cleaned workbook downloaded. Your original file is unchanged.');
     } catch (error) {
       status('Download failed. ' + error.message, true);

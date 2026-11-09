@@ -56,3 +56,4 @@
 .slide-manual-copy {width:100%;margin:20px 0}
 @media(max-width:760px) {.slide-format-grid{grid-template-columns:1fr}.slide-format-card{padding:18px}}
 .notes-panel input[type=text],.notes-panel textarea {box-sizing:border-box;width:100%;padding:12px 14px;background:var(--surface-inset);border:1px solid var(--border-strong);border-radius:var(--radius);color:var(--text);font:400 14px var(--font-body);line-height:1.7}
+.dedupe-panel #dedupe-options > .builder-label {margin:16px 0}

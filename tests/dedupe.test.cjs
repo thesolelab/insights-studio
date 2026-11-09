@@ -47,3 +47,62 @@ test('invalid columns and oversized ranges fail explicitly', () => {
     /50,000/
   );
 });
+
+test('exclusion removes A values found anywhere in B, not only on the same row', () => {
+  const { excludeMatches } = require('../dedupe-core.js');
+  const rows = [
+    ['Targets', 'Exclude'],
+    ['Acme', 'Beta'],
+    ['Beta', 'Other'],
+    ['Keep Co', 'Acme'],
+    ['Keep Co', ''],
+    ['', 'Keep Outside Main'],
+  ];
+  const before = JSON.stringify(rows),
+    result = excludeMatches(rows, 0, 1);
+  assert.deepEqual(result.kept, [3, 4]);
+  assert.deepEqual(result.removed, [
+    { index: 1, firstIndex: 3 },
+    { index: 2, firstIndex: 1 },
+  ]);
+  assert.equal(result.inputCount, 4);
+  assert.equal(result.skippedBlanks, 1);
+  assert.equal(JSON.stringify(rows), before);
+});
+test('exclusion honors case/space options, ignores blank exclusions, and supports column reversal', () => {
+  const { excludeMatches } = require('../dedupe-core.js');
+  const rows = [
+    ['A', 'B'],
+    [' ACME ', 'acme'],
+    ['Beta', ''],
+    ['', 'Beta'],
+  ];
+  assert.deepEqual(excludeMatches(rows, 0, 1).kept, []);
+  assert.deepEqual(excludeMatches(rows, 0, 1, { trim: false, ignoreCase: false }).kept, [1]);
+  assert.deepEqual(
+    excludeMatches(
+      [
+        ['A', 'B'],
+        ['x', 'keep'],
+        ['y', 'x'],
+      ],
+      1,
+      0
+    ).kept,
+    [1]
+  );
+  assert.throws(() => excludeMatches(rows, 0, 0), /different/);
+  assert.throws(() => excludeMatches(rows, 0, 3), /valid/);
+  assert.deepEqual(
+    excludeMatches(
+      [
+        ['A', 'B'],
+        ['001', '1'],
+        ['1', ''],
+      ],
+      0,
+      1
+    ).kept,
+    [1]
+  );
+});
