@@ -85,7 +85,7 @@
             'aria-label': M.sections[key] + ' note',
             'data-note-id': item.id,
             'aria-keyshortcuts':
-              'Control+Shift+1 Meta+Shift+1 Control+Shift+2 Meta+Shift+2',
+              'Alt+Shift+M Alt+Shift+A Control+Shift+1 Meta+Shift+1 Control+Shift+2 Meta+Shift+2',
           });
         text.value = item.text;
         field.append(text);
@@ -237,15 +237,26 @@
   $('tag-mine').addEventListener('click', () => tagSource('mine'));
   $('tag-actions').addEventListener('click', () => tagSource('actions'));
   $('panel').addEventListener('keydown', (event) => {
-    if (
-      event.isComposing ||
-      event.altKey ||
-      !event.shiftKey ||
-      !(event.ctrlKey || event.metaKey)
-    )
-      return;
-    const section =
-      event.code === 'Digit1' ? 'mine' : event.code === 'Digit2' ? 'actions' : null;
+    if (event.isComposing || !event.shiftKey) return;
+    // Alt/Option+Shift avoids browser-reserved Ctrl/Cmd+Shift number shortcuts.
+    // Prefer physical codes for Option-modified keys; key is a fallback for
+    // keyboards and assistive input that do not supply a physical code.
+    const key = event.key?.toLowerCase();
+    const mnemonic = event.altKey && !event.ctrlKey && !event.metaKey;
+    const legacy = !event.altKey && (event.ctrlKey || event.metaKey);
+    const section = mnemonic
+      ? event.code === 'KeyM' || key === 'm'
+        ? 'mine'
+        : event.code === 'KeyA' || key === 'a'
+          ? 'actions'
+          : null
+      : legacy
+        ? event.code === 'Digit1' || key === '1' || key === '!'
+          ? 'mine'
+          : event.code === 'Digit2' || key === '2' || key === '@'
+            ? 'actions'
+            : null
+        : null;
     if (!section) return;
     const editor = event.target;
     if (

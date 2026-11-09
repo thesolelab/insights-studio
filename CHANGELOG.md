@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — Reliable recap shortcuts
+- Add Alt/Option+Shift+M (For me) and Alt/Option+Shift+A (Action item)
+  to avoid browser-reserved number shortcuts; retain the old combinations.
+- Accept key values when physical key codes are unavailable and show the new
+  shortcuts beside the editor.
+
+
 ## Unreleased — Recap reset and shortcuts
 - Clear source notes and the reviewed recap without reloading other tools.
 - Offer Undo clear until new source work begins.
