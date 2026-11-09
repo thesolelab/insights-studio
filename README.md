@@ -224,7 +224,11 @@ away from open work.
 Meeting Recap Builder: use **Clear / reset** to start another meeting without
 refreshing other tools. **Undo clear** restores the previous notes and reviewed
 draft until you type new notes, change the merge setting, or build another recap.
-While editing notes, press **Ctrl/Cmd + Shift + 1** for **For me**, or
-**Ctrl/Cmd + Shift + 2** for **Action item**. These label the current line or
+While editing notes, press **Alt/Option + Shift + M** for **For me**, or
+**Alt/Option + Shift + A** for **Action item**. These label the current line or
 selected lines; in a reviewed recap they move the current item instead.
 The toolbar buttons provide the same source-note labels without a keyboard.
+
+Original Ctrl/Cmd+Shift+1/2 shortcuts remain supported when the browser delivers
+them to the page; some browsers reserve those combinations. Shortcuts only run
+while editing source notes or a reviewed recap item.
