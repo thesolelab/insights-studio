@@ -24,6 +24,10 @@
   box-sizing: border-box;
 }
 
+/* Hide page chrome without disabling wheel, touch, or keyboard scrolling. */
+html { scrollbar-width: none; scroll-padding-top: 80px; }
+html::-webkit-scrollbar { display: none; }
+
 [hidden] { display: none !important; }
 .sr-only {
   position: absolute;
@@ -57,7 +61,7 @@
 .workspace-tabs [aria-selected="true"]::after {
   content: "";
   position: absolute;
-  inset: auto 0 -1px;
+  inset: auto 0 0;
   height: 3px;
   background: var(--accent);
 }

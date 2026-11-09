@@ -21,7 +21,8 @@
 .dedupe-table tbody tr:hover {background:var(--accent-tint)}
 .dedupe-table:focus-visible,.dedupe-panel :focus-visible {outline:2px solid var(--accent);outline-offset:3px}
 .primary:disabled {opacity:.45;cursor:default}
-.workspace-tabs {overflow-x:auto}
+.workspace-tabs {overflow-x:auto;overflow-y:hidden;position:sticky;top:0;z-index:5;background:var(--bg)}
+.workspace-tabs button:focus-visible {outline:2px solid var(--accent);outline-offset:-3px}
 .workspace-tabs button {white-space:nowrap;flex-shrink:0}
 @media(max-width:640px) {.dedupe-panel{padding:18px}.dedupe-stats{gap:8px}.dedupe-stats>div{padding:12px}.dedupe-stats strong{font-size:24px}.dedupe-stats span{font-size:10px}.workspace-tabs button{padding:14px 12px;font-size:12px}}
 
