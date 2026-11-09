@@ -61,8 +61,7 @@ Do not couple A/B data-color defaults to the interface accent token.
 - Support validated 3/6-digit HEX entry and wheel selection. Include keyboard
   hue, saturation, and brightness sliders, a labeled modal, and cancel/apply.
 - Invalid HEX values retain the last valid chart color; never interpolate
-  unvalidated input into styles. Colors remain in the current page session unless
-  kept in a deck chart snapshot during the current session.
+  unvalidated input into styles. Colors remain in the current page session.
 - Keep selected colors stable across tab switches and chart-style changes.
   Presets deliberately reset custom overrides.
 - Match preview, legend, SVG/PNG, and native PowerPoint colors. Serialize resolved
@@ -74,12 +73,11 @@ Do not couple A/B data-color defaults to the interface accent token.
 Keep A/B statistical formulas, validation, hypothesis behavior, and random valid
 startup samples intact. Changing colors must not change input data or results.
 
-Keep Chart Studio and A/B Test Analyzer in separate accessible tabs. Preserve
+Keep Chart Creator and A/B Test Analyzer in separate accessible tabs. Preserve
 both workspaces while switching. The default chart data input is an editable
 table; retain bulk paste, CSV/Excel import, worksheet selection, and stale-export
 protection. Never transmit or automatically persist input data. Utilities are
-session-only. Preserve old workspace storage and offer backup/recovery without
-restoring project-management controls.
+session-only. Do not erase existing local workspace storage.
 
 Support the 21-style chart picker and native editable PowerPoint exports with
 embedded data. Chart-family validation and stacking/export specifications belong
@@ -95,16 +93,19 @@ Load pinned Excel/PowerPoint libraries only when needed and keep integrity hashe
 in sync with intentional upgrades. Retain the native export fixes for percent
 area grouping and bubble workbook values/headers/ranges.
 
-## Utility architecture
-Organize the interface into Data, Presentations, Calculators, Text, and Visuals.
-Do not add projects, tasks, deadlines, decision logs, or document/PDF tools.
-utility-shell.js owns navigation, shared DOM helpers, and session handoffs.
-Each tool area has its own module; utility-core.js owns DOM-free algorithms.
-console-core.js retains data transformations and old-workspace validation for
-recovery. console.css contains shared shell/tool styles. percentage calculations
-and formatting belong in percentages.js; display and copy use one decimal place.
-Keep Chart Studio and A/B mounted while navigating. Deck snapshots must be
-copies, and native export repairs must target each chart's own XML/workbook.
-Load pinned third-party libraries on demand via utility-libs.js with integrity.
-Use textContent for user content, never HTML interpolation or eval. Clear stale
-outputs when source inputs change. Explain image background-removal limits in UI.
+## Focused tool architecture
+Keep exactly the authorized tools: Chart Creator, A/B Test Analyzer, Excel
+De-duper, Note Organizer, and Slide Format Advisor. Do not restore dashboards,
+project management, utility categories, calculators, visual tools, or deck building.
+Each tool stays mounted while switching accessible tabs. tools.css styles new
+tools; the existing styles.css owns chart/A/B/shared design tokens.
+Dedupe matching belongs in DOM-free dedupe-core.js, with workbook/UI logic in
+deduper.js. Preserve first-match rows and source order, expose case/space/blank
+matching clearly, and invalidate stale previews/downloads after changes.
+Export only cleaned-sheet values and number formats; explain formula flattening
+and excluded sheets/styles in UI. Do not overwrite source files.
+notes-core.js organizes notes without inventing facts. notes.js owns editable
+recaps and clipboard fallback. slide-formats.js ranks layout suggestions from
+brief themes and shows wireframes; describe its rule-based limits accurately.
+Use textContent for user content, never HTML interpolation or eval. Do not send
+notes to Wrike; only copy the user's reviewed recap for manual pasting.
