@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.0 — Project command center
+- Add project spaces, overview actions/notes, command search, and explicit local
+  saving with portable JSON backups and validated imports.
+- Add CSV/TSV workbench cleanup, calculated columns, keyed version comparisons,
+  left joins, safe CSV downloads, and replayable cleanup/calculation workflows.
+- Add scenario economics, decision tracking, note-to-action extraction, and
+  editable Markdown document templates.
+- Save and restore chart data, styles, axes, and colors within projects. Retain
+  native editable PowerPoint exports and separate Chart Studio/A/B tabs.
+- Add a responsive sidebar and wider command-center shell.
+
 ## Unreleased — Electric Mint accent
 - Use #04E2B7 for interface accents and #0EF3C5 for hover highlights, with subtle
   mint selection tints against the existing graphite/slate surfaces.
