@@ -94,3 +94,9 @@
 .recap-preview {margin:24px 0}
 @media(max-width:1050px) {.recap-grid{grid-template-columns:1fr}.recap-section{padding:16px}}
 @media(max-width:400px) {.recap-item-controls{flex-wrap:wrap}.recap-item-controls>label{flex-basis:100%}}
+
+.recap-instructions {max-width:1000px;margin:18px 0 24px;padding:16px 20px;background:var(--surface-inset);border:1px solid var(--border);border-radius:var(--radius)}
+.recap-instructions h3 {margin:0 0 10px;font-size:15px}
+.recap-instructions ol {padding-left:20px;margin:0;color:var(--text-muted);font-size:13px;line-height:1.8}
+.recap-instructions strong {color:var(--text);font-weight:600}
+.recap-instructions .note {font-size:12px;margin-bottom:0}

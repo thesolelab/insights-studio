@@ -112,6 +112,8 @@ not row pairs. Skip blank main-list entries and export only the kept main column
 Keep this separate from ordinary within-column de-duping.
 Export only cleaned-sheet values and number formats; explain formula flattening
 and excluded sheets/styles in UI. Do not overwrite source files.
+Keep the meeting-notes input empty on load, with no sample-note placeholder.
+Show usage instructions outside the text box.
 notes-core.js owns local recap drafting and section serialization. notes.js owns
 item editing/moving/adding/removing, copy controls, and clipboard fallback. Use the
 three authorized headings: Meeting notes/topics, What's Needed from Me | Tasks to

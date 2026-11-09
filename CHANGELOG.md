@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — Blank recap input and external guidance
+- Remove sample-note placeholder text from the Meeting Recap Builder.
+- Show usage steps and optional labeling guidance above the empty notes field.
+
 ## Unreleased — Meeting recap builder
 - Replace the note-cleaner UI with a three-section reviewed recap matching the
   meeting notes/topics, personal tasks, and action items template.
