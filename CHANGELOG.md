@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — Wordmark polish
+- Give the gradient wordmark end padding so the final s renders fully.
+- Match the badge and favicon W to the wordmark’s violet-to-teal gradient.
+- Remove the tagline from the site and current brand documentation.
+
 ## Unreleased — Queue Works rebrand
 - Rename the product to Queue Works, with QW monogram, branded favicon, and
   “From rough to ready.” tagline. Keep repository and hosting paths unchanged.
