@@ -62,7 +62,7 @@ Do not couple A/B data-color defaults to the interface accent token.
   hue, saturation, and brightness sliders, a labeled modal, and cancel/apply.
 - Invalid HEX values retain the last valid chart color; never interpolate
   unvalidated input into styles. Colors remain in the current page session unless
-  explicitly stored in a project chart snapshot.
+  kept in a deck chart snapshot during the current session.
 - Keep selected colors stable across tab switches and chart-style changes.
   Presets deliberately reset custom overrides.
 - Match preview, legend, SVG/PNG, and native PowerPoint colors. Serialize resolved
@@ -77,9 +77,9 @@ startup samples intact. Changing colors must not change input data or results.
 Keep Chart Studio and A/B Test Analyzer in separate accessible tabs. Preserve
 both workspaces while switching. The default chart data input is an editable
 table; retain bulk paste, CSV/Excel import, worksheet selection, and stale-export
-protection. Never transmit input data. Persist projects only through the explicit
-Save locally action; keep browser storage errors visible and support project-file
-backups. Do not automatically save chart or A/B inputs.
+protection. Never transmit or automatically persist input data. Utilities are
+session-only. Preserve old workspace storage and offer backup/recovery without
+restoring project-management controls.
 
 Support the 21-style chart picker and native editable PowerPoint exports with
 embedded data. Chart-family validation and stacking/export specifications belong
@@ -95,10 +95,16 @@ Load pinned Excel/PowerPoint libraries only when needed and keep integrity hashe
 in sync with intentional upgrades. Retain the native export fixes for percent
 area grouping and bubble workbook values/headers/ranges.
 
-## Command-center modules
-console-core.js owns DOM-free project validation, workbench transformations,
-scenario calculations, safe CSV downloads, and workflow replay. console.js owns
-project navigation and UI; console.css styles the shell. Keep Analyze mounted
-while switching tools. Project imports must validate before replacing any state,
-and datasets and chart snapshots are copies rather than live references.
-Use textContent for user content, never HTML interpolation or eval.
+## Utility architecture
+Organize the interface into Data, Presentations, Calculators, Text, and Visuals.
+Do not add projects, tasks, deadlines, decision logs, or document/PDF tools.
+utility-shell.js owns navigation, shared DOM helpers, and session handoffs.
+Each tool area has its own module; utility-core.js owns DOM-free algorithms.
+console-core.js retains data transformations and old-workspace validation for
+recovery. console.css contains shared shell/tool styles. percentage calculations
+and formatting belong in percentages.js; display and copy use one decimal place.
+Keep Chart Studio and A/B mounted while navigating. Deck snapshots must be
+copies, and native export repairs must target each chart's own XML/workbook.
+Load pinned third-party libraries on demand via utility-libs.js with integrity.
+Use textContent for user content, never HTML interpolation or eval. Clear stale
+outputs when source inputs change. Explain image background-removal limits in UI.

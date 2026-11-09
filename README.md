@@ -1,59 +1,93 @@
 # Stat Console
 
-A personal command center for projects, data, decisions, and editable PowerPoint charts.
+A browser-based toolkit for everyday work. Five areas organize working utilities;
+there are no projects, tasks, owners, deadlines, or decision logs.
 
-The interface uses graphite/slate surfaces with electric-mint accents
-(`#04E2B7`, with `#0EF3C5` hover highlights). Body text
-uses Inter; the Stat Console wordmark uses Outfit. Data colors are independent
-of the interface accent.
+The shell uses graphite/slate surfaces and electric mint (`#04E2B7`, hover
+`#0EF3C5`). Chart and image colors are independent of the interface. Inputs and
+outputs stay in your browser; download files before closing or reloading the tab.
 
-## Start using the command center
-1. Create a project, or select **Load example project** in Overview. Add notes,
-   actions, owners, and due dates. The overview highlights overdue actions and
-   decisions due for review.
-2. Open **Workbench** to paste or upload CSV/TSV. Clean whitespace and duplicate
-   rows, calculate columns, compare versions by a unique key, or left-join another
-   saved table. Original project datasets remain unchanged. Save a dataset copy
-   when the result is ready. Previews show 30 rows; downloads keep the full table.
-3. Select **Analyze table**, customize the chart, and **Save to project**. Open saved
-   charts in **Create** to edit them or export native PowerPoint slides. Chart
-   Studio also imports Excel; **To workbench** sends its applied table back.
-4. Use **Scenarios** for unit-economics comparisons (revenue, cost, profit, margin,
-   and break-even). Record the conclusion, reasoning, owner, and review date in
-   **Decisions**. Scenario inputs assume a constant price and cost per unit.
-5. **Create** produces editable project briefs, meeting agendas, and decision memos
-   from your records. Download the Markdown draft before navigating away. Lines
-   marked `TODO:` or `ACTION:` in project notes can become reviewed next actions.
-6. Save cleanup/calculated-column steps in Workbench and replay them in **Automate**
-   on another saved dataset. Review results before saving. Joins and comparisons
-   are manual operations and are not included in saved workflows.
+## Data
+- Paste CSV/TSV or import up to 20 CSV, TSV, XLS/XLSX, or JSON files (5 MB each).
+  Each nonempty Excel sheet becomes a session table. Save formula results in
+  Excel before importing. JSON accepts row arrays or records with identical keys.
+- Trim whitespace and remove blank/exact duplicate rows, find duplicate keys,
+  calculate columns, or pivot with sum, average, count, minimum, or maximum.
+- Combine matching tables by appending rows, compare versions by a unique key,
+  or left-join columns. Comparisons require identical headers. Joins retain every
+  left row; unmatched values stay blank and duplicate headers receive suffixes.
+- Keep session snapshots, convert/download CSV, TSV, JSON, or XLSX, send a table
+  to Chart Studio, or add an editable table slide to the deck.
+- Keep or download cleanup/calculated-column recipes and replay them on another
+  table. Recipes cannot execute scripts; joins and pivots are manual operations.
 
-Press **Ctrl/Cmd K** to find tools, projects, datasets, and saved charts.
+Tables support 10,000 rows, 100 columns, and 200,000 cells. Previews show 30 rows;
+exports retain all rows. Chart handoff explicitly offers the first 200 rows for
+larger tables. CSV/TSV downloads neutralize formula-like text. XLSX exports preserve
+cell contents as text, including leading zeros, rather than guessing column types.
 
-**Save locally** explicitly saves all projects on this browser. Changes after a
-manual save require another save. **Download project** creates a portable JSON
-backup of the active project; **Import project** adds a separate copy. Browser
-storage can be cleared or unavailable, and does not synchronize between devices.
-Project files and saved browser workspaces are limited to 5 MB. Workbench tables
-support 10,000 rows, 100 columns, and 200,000 cells. Charts retain their 200-row /
-6-series limits; larger tables offer an explicit **Analyze first 200 rows** action.
-CSV downloads escape text that could be interpreted as spreadsheet formulas.
+## Presentations
+Chart Studio retains all 21 chart styles, dual axes, custom colors, editable data,
+and native PowerPoint export. A/B Test Analyzer remains in its own tab.
 
-This version runs locally in the browser: it has no account system, integrations,
-scheduled jobs, or AI service. Briefs are templates based on entered records.
+**Add chart to deck** captures the applied chart data/settings as a native editable
+chart. Add table slides from Data or the deck table form (up to 15 data rows and
+8 columns), and image slides from Visuals. Reorder/remove slides and download one
+16:9 PowerPoint containing up to 30 slides. Charts and tables are editable; image
+and A/B distribution slides are images. Charts retain embedded data and the
+bubble-workbook, percentage-area, and slice-label export repairs in mixed decks.
+Deck snapshots stay unchanged if you subsequently edit the original chart.
 
-## Percentage calculator
-Open **Calculators** in the sidebar or command search for three standalone tools:
-- What is X% of Y?
-- X is what percent of Y?
-- Percentage increase/decrease from X to Y.
+## Calculators
+- Percentage of a number, one number as a percentage of another, and percentage
+  increase/decrease. **Display and Copy round to one decimal place**:
+  `36.25%` becomes `36.3%`. Editing inputs clears stale results. Percentage change
+  requires a positive starting value; zero totals receive explicit explanations.
+- Budget versus actual spend, ROI, target-margin pricing, break-even/unit economics,
+  compound-growth forecasts, demand sensitivity, and weighted decision scorecards.
+- Result tables can be downloaded as CSV or opened in Data for charting.
 
-Enter both values and select **Calculate** (or press Enter), then **Copy** the
-result. Decimal and negative numbers are supported; percentage change requires
-a positive starting value. Zero totals and undefined changes show an explanation.
-Editing an input clears its previous result. Inputs remain while navigating tools
-or switching projects, but reset on reload and are never stored in project files.
-Results display up to 12 significant digits; copied percentages include `%`.
+ROI uses total return including the original investment. Forecasts assume constant
+compound growth (up to 120 periods). Sensitivity varies demand from −20% to +20%
+with fixed price/cost assumptions. Weighted scores normalize nonnegative weights;
+use a consistent higher-is-better scoring scale. These are deterministic models,
+not predictions or an AI service.
+
+## Text
+- Paste plain text, strip common Markdown formatting, trim/collapse spaces,
+  extract unique list items, sort lines, or change case. Textareas accept plain
+  text from rich-text clipboard sources.
+- Compare text by line with labeled added/removed/unchanged rows and download a
+  diff. Limits: 1,500 lines and 1 million line pairs.
+- Convert CSV/TSV tables to Markdown, JSON, CSV, or tab-separated plain text;
+  convert Markdown tables back to CSV or send the table to Data.
+
+## Visuals
+- Resize PNG/JPEG/WebP, choose standard export sizes, compress JPEG/WebP, and
+  convert formats. Aspect ratio is locked by default; presets unlock it.
+- Remove a **solid-color background** by selected color and tolerance. This is
+  color-based removal, not AI subject segmentation; matching foreground colors
+  are removed too. Use PNG/WebP for transparency; JPEG uses white behind it.
+- Download an image or add PNG/JPEG to the deck. Image outputs must be regenerated
+  after changing settings. Source images are limited to 10 MB / 32 million pixels;
+  individual output dimensions are 1–8,192 px with at most 32 million pixels.
+- Batch fit up to 20 images into consistently sized PNG/JPEG canvases and download
+  a ZIP. Batch dimensions are 1–4,096 px, with at most 64 million total output pixels.
+  Images are centered without stretching;
+  letterboxing is transparent for PNG and white for JPEG.
+- Pick foreground/background colors with HEX or the color wheel and check WCAG
+  AA/AAA contrast. Normal-text AA requires 4.5:1; large-text AA requires 3:1.
+
+## Navigation and previous data
+Use the five sidebar areas, in-area tool shortcuts, or **Ctrl/Cmd K** command
+search. Switching areas preserves mounted forms and chart/A/B inputs.
+
+Previous project-management controls are removed. If an old locally saved
+workspace exists, **Download previous workspace** preserves a complete JSON
+backup, including notes/tasks. **Recover previous tables & charts** brings its
+datasets and chart snapshots into the session without changing the old storage.
+No new data is automatically saved. Download working tables, recipes, images,
+text outputs, and decks before closing the tab.
 
 ## Customize chart colors
 - Choose Signal, Arcade, or Spectrum in **Chart palette**, then customize each
@@ -66,7 +100,7 @@ Results display up to 12 significant digits; copied percentages include `%`.
   independently. Changing colors does not change test values or results.
 - Selected colors appear in the preview and SVG/PNG/PowerPoint exports. Invalid
   HEX input leaves the last valid color applied. Presets reset custom overrides.
-  Color settings are retained while switching tabs and styles, but reset on reload unless stored in a project chart snapshot.
+  Color settings are retained while switching tabs and styles, but reset on reload unless kept in a deck snapshot for the current session.
 
 ## Create a chart for PowerPoint
 1. Open the **Chart Studio** tab and edit the spreadsheet-style table directly.
@@ -111,29 +145,22 @@ Tables and chart previews scroll within their own containers on small screens.
 
 Use the **A/B Test Analyzer** tab for experiment inputs and results. Switching
 tabs preserves both workspaces during the current page session. Arrow keys,
-Home, and End navigate the tabs. Use **Save to project** followed by **Save locally** to retain applied chart snapshots across reloads. A/B inputs remain session-only.
+Home, and End navigate the tabs. Use **Add chart to deck** to keep an applied chart snapshot for the current session. Download the deck before closing the tab. A/B inputs remain session-only.
 
 Each page load starts with newly randomized sample visitor and conversion counts
 and calculates the sample results automatically. Replace these demo values with
 your experiment counts to run your own analysis. Sample data is not saved.
 
 ## Deploy on GitHub Pages
-1. Upload `index.html`, `styles.css`, `console.css`, `console-core.js`, `console.js`, `percentages.js`, `colors.js`, `app.js`, `tabs.js`, `chart-data.js`, `chart-modes.js`, and `charts.js` to the root of your `stat-console` repository.
-2. Open **Settings → Pages**.
-3. Under **Build and deployment**, select **Deploy from a branch**.
-4. Choose **main** and **/(root)**, then save.
-5. Wait for the Pages deployment to complete and open the published URL.
+Publish the repository root on GitHub Pages (Settings → Pages → main / root).
+Keep `index.html`, both CSS files, and all root JavaScript modules together.
+There is no build step, account, backend, or tracking.
 
-No build step, packages, backend, or tracking are required. Inter and Outfit are loaded from
-Google Fonts with a system-font fallback; the application still works if the font
-service is unavailable. Inputs are never included in font requests.
-
-Excel import loads SheetJS 0.20.3 from its official CDN on demand. PowerPoint
-export loads PptxGenJS 4.0.1 from jsDelivr on demand. Both script versions are
-pinned and checked with SHA-384 integrity hashes. These two features require a
-connection for their initial library download; pasted/CSV input, chart previews,
-and image exports work without these libraries. Data stays in your browser and
-is never sent to the library providers.
+Inter and Outfit load from Google Fonts with system fallbacks. Excel import/export
+loads SheetJS 0.20.3 on demand; PowerPoint loads PptxGenJS 4.0.1; image ZIP exports
+load JSZip 3.10.1 when it is not already present. All script URLs are pinned with
+SHA-384 integrity checks. Initial library/font downloads require a connection;
+input data is never sent to these providers. No document/PDF tools are included.
 
 ## Statistical methodology
 - Two-sided: uncorrected pooled two-proportion Z-test, `p = 2(1 − Φ(|z|))`.
@@ -145,11 +172,14 @@ is never sent to the library providers.
 - Repeated peeking, sample ratio mismatch, and unplanned hypothesis selection can compromise conclusions. Do not use significance alone as a launch decision.
 
 ## Developer checks
-With Node.js installed, run `node --test tests/*.test.cjs` to check random sample
-validity, CSV/table parsing, numeric formats, independent axis scales, chart
-families, stacking, export specifications, color conversion/validation, project
-imports, workbench operations, workflows, and scenario economics. No
-packages need to be installed. Use `node --check charts.js` for syntax validation.
+Run `node --test tests/*.test.cjs`. Tests cover existing chart/A/B behavior,
+percentage rounding, legacy project validation, data operations, text comparison
+and conversion, calculator models, and contrast. Use `node --check` on changed
+JavaScript files. Browser checks should cover cross-tool handoffs, native mixed
+PowerPoint decks, image pixels/ZIPs, clipboard fallback, and responsive layouts.
 
 ## Privacy
-All calculations run in the browser. Inputs are never transmitted by the application. Projects persist on this browser only when you select **Save locally**, and project downloads contain their entered data. **Forget saved copy** removes browser storage while keeping the open session; closing the page then clears the session. **GitHub Pages is publicly accessible**; use only sample or approved data while prototyping. Review your organization's policy before entering confidential data.
+Processing happens in this browser. New utility inputs are session-only and are
+not transmitted or persisted. Downloaded files contain your entered data. Old
+saved workspace data is used only for optional recovery or backup, and is never
+overwritten or deleted by the new utilities.
