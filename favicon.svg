@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Queue Works</title>
+  <rect width="64" height="64" rx="16" fill="#0f172a"/>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="29" y="40" text-anchor="middle" font-family="Arial,sans-serif" font-size="23" font-weight="700" letter-spacing="-2" fill="#f4f6fc">QW</text>
+  <circle cx="53" cy="42" r="3" fill="#2dd4bf"/>
+</svg>
