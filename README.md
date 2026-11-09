@@ -7,7 +7,7 @@ Five focused tools in one tabbed interface:
 - **A/B Test Analyzer** — compare experiment conversion rates with the existing
   two-proportion test and export the distribution chart.
 - **Excel De-duper** — remove duplicates within a column or exclude a second list.
-- **Note Organizer** — turn meeting notes into an editable bulleted Wrike recap.
+- **Note Organizer** — clean meeting notes into editable plain lines for Wrike.
 - **Slide Format Advisor** — describe your message and get five slide-layout ideas.
 
 The graphite/mint design, wide responsive layout, and custom chart colors remain.
@@ -55,18 +55,24 @@ or matching settings requires a new preview. If all entries are excluded, the
 export contains the header only.
 
 ## Note organizer
-Type or paste one note per line, optionally add a meeting title, and select
-**Organize notes**. Common bullets/numbering are cleaned up and repeated lines
-are consolidated. Explicit `Decision:`, `Action:`, `TODO:`, and `Question:` labels
-are grouped into Discussion, Decisions, Action items, and Open questions. Section
-headings also work. Names, dates, figures, and wording stay as written.
+Type or paste one note per line and select **Clean up notes**. The editable recap
+contains one note per line, with no meeting title, section headings, bullets, or
+numbering. Extra spaces/tabs and empty lines are cleaned up. Checkboxes become `Completed:`
+or `To do:` text so their status is retained. Explicit Markdown
+headings, standalone section labels, and labeled meeting titles are omitted.
+Unlabeled first lines remain because the tool cannot safely guess that they are titles.
 
-Turn grouping/repetition options off if desired. Edit the resulting recap and
-select **Copy recap for Wrike**, then paste it into your meeting recap. Clipboard
-failure selects the recap for manual copying. There is no Wrike connection or
-automatic posting. This is deterministic organization, not AI summarization.
-Notes are session-only: copy them before closing/reloading. Limits: 100,000
-characters / 5,000 lines. Source edits invalidate the generated recap.
+Repeated lines are consolidated by default, ignoring case and spacing; turn the
+option off to retain repetitions. Notes remain in source order. Names, dates,
+amounts, negations, and action/decision labels remain as written. Different facts
+or action types are never combined. This is local text cleanup, not summarization,
+spelling correction, or AI rewriting.
+
+Edit the result and choose **Copy recap for Wrike**, then format it within Wrike.
+Clipboard failure selects the recap for manual copying. No Wrike connection,
+server endpoint, API key, AI model download, or external note processing is needed.
+Copy before closing/reloading: notes remain session-only. Limits: 100,000
+characters / 5,000 lines. Source edits invalidate the previous recap.
 
 ## Slide format advisor
 Describe the message you want the audience to understand or decide, then select

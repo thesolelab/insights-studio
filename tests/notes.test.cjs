@@ -1,40 +1,53 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { organize } = require('../notes-core.js');
-test('recap groups explicit notes and preserves owners, dates and numbers', () => {
+test('cleanup produces plain ordered lines without a meeting title or section headings', () => {
   const result = organize(
-    'Launch moved to Thursday\nDecision: Keep $5,000 budget\nAction: Alex to send assets by May 2\nQuestion: Legal approval needed?',
-    { title: 'Team sync' }
+    '# Weekly sync\nMeeting: Team catch-up\nDiscussion:\n- Launch  moved to Thursday\nDecisions\n1. Decision: Keep $5,000 budget\nActions:\n• Action: Alex to send assets by May 2\nQuestions:\nQuestion: Legal approval needed?',
+    { title: 'Unused title', group: true }
   );
   assert.equal(
     result.text,
-    'Team sync\n\nDiscussion\n• Launch moved to Thursday\n\nDecisions\n• Keep $5,000 budget\n\nAction items\n• Alex to send assets by May 2\n\nOpen questions\n• Legal approval needed?'
+    'Launch moved to Thursday\nDecision: Keep $5,000 budget\nAction: Alex to send assets by May 2\nQuestion: Legal approval needed?'
   );
   assert.equal(result.count, 4);
 });
-test('repeated lines merge without inventing or merging different facts', () => {
+test('spacing and repetition are cleaned without merging different facts or action types', () => {
   const result = organize(
-    '- Budget $500\n• Budget $500\nBudget $600\nTODO: Send files\nAction: Send files'
+    '- Budget  $500\n• budget\t$500\nBudget $600\nAction: Send files\nDecision: Send files'
   );
-  assert.equal(result.count, 3);
-  assert.equal(result.removed, 2);
-  assert.match(result.text, /Budget \$500/);
-  assert.match(result.text, /Budget \$600/);
+  assert.equal(result.removed, 1);
+  assert.equal(result.count, 4);
+  assert.equal(result.text, 'Budget $500\nBudget $600\nAction: Send files\nDecision: Send files');
 });
-test('headings classify following lines and text remains literal', () => {
+test('cleanup preserves rushed wording, numbers, dates, negations, and literal text', () => {
   const result = organize(
-    'Decisions:\nKeep current plan\nActions:\nSam: review <script> by Friday\nQuestions:\nWho signs off?'
+    'do NOT launch yet\nsam wrking on 20% target by 11/12\nA <script> $5,000 -2.5'
   );
-  assert.match(result.text, /Decisions\n• Keep current plan/);
-  assert.match(result.text, /<script>/);
-});
-test('flat output retains encounter order and optional repetition', () => {
   assert.equal(
-    organize('One\nTwo\nOne', { group: false, merge: false }).text,
-    '• One\n• Two\n• One'
+    result.text,
+    'do NOT launch yet\nsam wrking on 20% target by 11/12\nA <script> $5,000 -2.5'
   );
 });
-test('empty and oversized notes fail explicitly', () => {
+test('blank lines are removed and checkbox meaning is retained without list formatting', () => {
+  assert.equal(
+    organize('- [x] One\r\n\r\n2. Two\nOne', { merge: false }).text,
+    'Completed: One\nTwo\nOne'
+  );
+});
+test('unchecked list items retain their action status as plain text', () => {
+  assert.equal(organize('- [ ] Review budget').text, 'To do: Review budget');
+});
+test('unlabeled first lines remain and substantive text containing section labels is preserved', () => {
+  assert.equal(
+    organize('Weekly customer update\nDiscussion: pricing needs review\nAction items are overdue')
+      .text,
+    'Weekly customer update\nDiscussion: pricing needs review\nAction items are overdue'
+  );
+});
+test('empty, headings-only, and oversized notes fail explicitly', () => {
   assert.throws(() => organize('  '), /notes first/);
+  assert.throws(() => organize('Discussion:\n# Team meeting\nActions:'), /at least one note/);
   assert.throws(() => organize('x'.repeat(100001)), /100,000/);
+  assert.throws(() => organize('x\n'.repeat(5001)), /5,000/);
 });

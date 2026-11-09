@@ -9,23 +9,21 @@
     $('result').hidden = true;
     $('copy').disabled = true;
     $('output').value = '';
-    status('Notes changed. Organize again to refresh the recap.');
+    status('Notes changed. Clean up again to refresh the recap.');
   }
-  for (const id of ['source', 'title', 'group', 'merge'])
+  for (const id of ['source', 'merge'])
     $(id).addEventListener('input', invalidate);
   $('form').addEventListener('submit', (event) => {
     event.preventDefault();
     try {
       const result = window.MeetingNotes.organize($('source').value, {
-        title: $('title').value,
-        group: $('group').checked,
         merge: $('merge').checked,
       });
       $('output').value = result.text;
       $('result').hidden = false;
       $('copy').disabled = false;
       status(
-        `${result.count} notes organized${result.removed ? ' · ' + result.removed + ' repeated lines removed' : ''}. Review and edit the recap before copying.`
+        `${result.count} ${result.count === 1 ? 'note' : 'notes'} cleaned${result.removed ? ' · ' + result.removed + ' repeated ' + (result.removed === 1 ? 'line' : 'lines') + ' removed' : ''}. Review and edit the recap before copying.`
       );
     } catch (error) {
       $('result').hidden = true;
