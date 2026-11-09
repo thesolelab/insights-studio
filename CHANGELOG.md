@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — Cleaner page navigation
+- Hide the page scrollbar while retaining wheel, touch, and keyboard scrolling.
+- Keep tool tabs visible while scrolling and remove the tab underline overflow
+  that created an unnecessary vertical scrollbar in the navigation strip.
+
 ## 0.4.0 — Focused work tools
 - Replace broad utility navigation with Chart Creator, A/B Test Analyzer, Excel
   De-duper, Note Organizer, and Slide Format Advisor tabs.
