@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — Repository diagnostics
+- Align repository and live-site documentation with queue-works.
+- Share lazy Excel/PowerPoint loading across tools; validate loaded APIs,
+  retain pinned integrity hashes, and retry failed or timed-out requests.
+- Add automated JavaScript, unit, and local-asset checks on pull requests.
+
+
 ## Unreleased — Reliable recap shortcuts
 - Add Alt/Option+Shift+M (For me) and Alt/Option+Shift+A (Action item)
   to avoid browser-reserved number shortcuts; retain the old combinations.

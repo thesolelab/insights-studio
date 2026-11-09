@@ -1,7 +1,10 @@
 # Queue Works
 
-Queue Works is the product name; the GitHub repository and hosting path remain
-`stat-console`.
+A browser-based toolkit for everyday work.
+
+Repository: https://github.com/thesolelab/queue-works
+
+Live site: https://thesolelab.github.io/queue-works/
 
 Six focused tools in one tabbed interface:
 
@@ -186,13 +189,15 @@ Publish the repository root on GitHub Pages (Settings → Pages → main / root)
 Keep `index.html`, `styles.css`, `tools.css`, `queue-works.css`, `favicon.svg`,
 `colors.js`, `app.js`, `tabs.js`,
 `chart-data.js`, `chart-modes.js`, `charts.js`, `dedupe-core.js`, `deduper.js`,
-`notes-core.js`, `notes.js`, `file-uploads.js`, `percentages.js`, and
+`notes-core.js`, `notes.js`, `file-uploads.js`, `libraries.js`, `percentages.js`, and
 `slide-formats.js` together. No build step,
 backend, account, or tracking is required.
 
 Inter and Outfit load from Google Fonts with system fallbacks. SheetJS 0.20.3
 loads for Excel input/output and PptxGenJS 4.0.1 for PowerPoint export, on demand,
-with pinned URLs and SHA-384 integrity checks. Initial library downloads require
+with pinned URLs and SHA-384 integrity checks. The shared `libraries.js` loader
+reuses one request across tools, verifies the required APIs, and allows retries
+after load errors/timeouts. Initial library downloads require
 a connection. User data is never sent to the library/font providers.
 
 ## Statistical methodology
@@ -205,6 +210,10 @@ a connection. User data is never sent to the library/font providers.
 - Repeated peeking, sample ratio mismatch, and unplanned hypothesis selection can compromise conclusions. Do not use significance alone as a launch decision.
 
 ## Developer checks
+GitHub Actions runs JavaScript syntax checks and Node tests on pushes and pull
+requests, without installing application dependencies. Tests also verify local
+assets resolve beneath `/queue-works/` and shared library loading/retry behavior.
+
 Run `node --test tests/*.test.cjs` for chart parsing/scales/families, colors, A/B
 samples, selected-column dedupe, note organization, and slide-format matching.
 Run `node --check` on changed JavaScript files. Browser checks cover downloaded
