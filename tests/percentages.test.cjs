@@ -23,6 +23,14 @@ test('invalid inputs never silently become zero or partially parsed numbers', ()
   for(const bad of ['', ' ', 'NaN','Infinity','1,000','12abc','0x10']) assert.throws(()=>P.calculate('of',bad,'100'),/number/);
   assert.throws(()=>P.calculate('of','1e309','1'),/finite/);
   assert.throws(()=>P.calculate('portion','1e308','1e-308'),/range/);
-  assert.equal(P.format(P.calculate('portion','1','3')),'33.3333333333');
-  assert.equal(P.format(P.calculate('of','-0','10')),'0');
+  assert.equal(P.format(P.calculate('portion','1','3')),'33.3');
+  assert.equal(P.format(P.calculate('of','-0','10')),'0.0');
+});
+
+test('display and copy formatting rounds decimal ties to one place', () => {
+  assert.equal(P.format(36.25),'36.3');
+  assert.equal(P.format(36.24),'36.2');
+  assert.equal(P.format(36.2),'36.2');
+  assert.equal(P.format(-36.25),'-36.3');
+  assert.equal(P.format(1.05),'1.1');
 });

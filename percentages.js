@@ -22,7 +22,13 @@
     if (!Number.isFinite(value)) throw new Error('These numbers produce a result outside the supported range.');
     return Object.is(value, -0) ? 0 : value;
   }
-  function format(value) { return Number(value.toPrecision(12)).toString(); }
+  function format(value) {
+    // Shift via exponent strings so decimal ties such as 36.25 round predictably.
+    const [mantissa, exponent = '0'] = Math.abs(value).toString().split('e');
+    const shifted = Number(mantissa + 'e' + (Number(exponent) + 1));
+    const rounded = Number.isFinite(shifted) ? Math.round(shifted) / 10 : Math.abs(value);
+    return (value < 0 && rounded !== 0 ? -rounded : rounded).toFixed(1);
+  }
   function mount(container) {
     function el(tag, text, attrs = {}) {
       const node = document.createElement(tag);
@@ -85,7 +91,7 @@
       });
       actions.append(calculateButton,result,copy);form.append(sentence,actions);card.append(form,status,help);container.append(card);
     }
-    container.append(el('p','Results display up to 12 significant digits. Percentage change uses a positive starting value; a negative result indicates a decrease.',{class:'note'}));
+    container.append(el('p','Results display and copy rounded to one decimal place. Percentage change uses a positive starting value; a negative result indicates a decrease.',{class:'note'}));
   }
   const api = {calculate,format,mount};
   if (typeof module === 'object' && module.exports) module.exports = api; else root.PercentageCalculator = api;

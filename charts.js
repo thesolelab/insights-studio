@@ -44,7 +44,7 @@
     });
   }
   function buttons(enabled) {
-    for (const name of ['svg', 'png', 'pptx', 'save-project', 'to-workbench']) $(name).disabled = !enabled || (name === 'pptx' && exporting);
+    for (const name of ['svg', 'png', 'pptx', 'add-deck', 'to-workbench']) $(name).disabled = !enabled || (name === 'pptx' && exporting);
   }
   function invalidate(message) {
     current = null;
@@ -586,6 +586,78 @@
     }
   }
 
+  async function repairNativeChart(zip, snapshot, chartNumber) {
+    // PptxGenJS 4.0.1 writes zero-valued bubble cells as blanks. Restore them
+    // in the embedded workbook so Edit Data preserves the source numbers.
+    for (const name of Object.keys(zip.files).filter(name => snapshot.mode === 'bubble' && name === `ppt/embeddings/Microsoft_Excel_Worksheet${chartNumber}.xlsx`)) {
+      const workbookZip = await window.JSZip.loadAsync(await zip.file(name).async('uint8array'));
+      const path = 'xl/worksheets/sheet1.xml';
+      const xml = new DOMParser().parseFromString(await workbookZip.file(path).async('string'), 'application/xml');
+      for (const row of xml.getElementsByTagName('row')) {
+        if (Number(row.getAttribute('r')) < 2) continue;
+        for (const value of row.getElementsByTagName('v')) if (value.textContent === '') value.textContent = '0';
+      }
+      workbookZip.file(path, new XMLSerializer().serializeToString(xml));
+      // Rebuild the table headers with XML escaping and the full data range.
+      // The bundled bubble writer truncates this range and leaves names raw.
+      const ns = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main';
+      const headers = [snapshot.category, ...snapshot.series.flatMap((series, i) => [series.name, `Bubble size ${i + 1}`])];
+      const used = new Set();
+      headers.forEach((header, i) => {
+        let unique = header, suffix = 2;
+        while (used.has(unique)) unique = header + ' ' + suffix++;
+        used.add(unique); headers[i] = unique;
+      });
+      const strings = document.implementation.createDocument(ns, 'sst');
+      strings.documentElement.setAttribute('count', headers.length);
+      strings.documentElement.setAttribute('uniqueCount', headers.length);
+      const definition = document.implementation.createDocument(ns, 'table');
+      const tableRoot = definition.documentElement;
+      for (const [key, value] of Object.entries({ id: 1, name: 'Table1', displayName: 'Table1', ref: `A1:${String.fromCharCode(64 + headers.length)}${snapshot.labels.length + 1}`, totalsRowShown: 0 })) tableRoot.setAttribute(key, value);
+      const columns = definition.createElementNS(ns, 'tableColumns');
+      columns.setAttribute('count', headers.length);
+      headers.forEach((header, i) => {
+        const item = strings.createElementNS(ns, 'si'), text = strings.createElementNS(ns, 't');
+        text.textContent = header; item.appendChild(text); strings.documentElement.appendChild(item);
+        const column = definition.createElementNS(ns, 'tableColumn');
+        column.setAttribute('id', i + 1); column.setAttribute('name', header); columns.appendChild(column);
+      });
+      tableRoot.appendChild(columns);
+      workbookZip.file('xl/sharedStrings.xml', new XMLSerializer().serializeToString(strings));
+      workbookZip.file('xl/tables/table1.xml', new XMLSerializer().serializeToString(definition));
+      zip.file(name, await workbookZip.generateAsync({ type: 'uint8array' }));
+    }
+    // The library accepts percentStacked area options but omits their XML
+    // grouping element. Add it while retaining the original editable data.
+    if (snapshot.mode === 'percent-area') {
+      for (const name of Object.keys(zip.files).filter(name => name === `ppt/charts/chart${chartNumber}.xml`)) {
+        const xml = new DOMParser().parseFromString(await zip.file(name).async('string'), 'application/xml');
+        const ns = 'http://schemas.openxmlformats.org/drawingml/2006/chart';
+        for (const area of xml.getElementsByTagNameNS(ns, 'areaChart')) {
+          const grouping = xml.createElementNS(ns, 'c:grouping');
+          grouping.setAttribute('val', 'percentStacked');
+          area.insertBefore(grouping, area.firstChild);
+        }
+        zip.file(name, new XMLSerializer().serializeToString(xml));
+      }
+    }
+    if (snapshot.definition.radial) {
+      for (const name of Object.keys(zip.files).filter(name => name === `ppt/charts/chart${chartNumber}.xml`)) {
+        const xml = new DOMParser().parseFromString(await zip.file(name).async('string'), 'application/xml');
+        const chartNs = 'http://schemas.openxmlformats.org/drawingml/2006/chart';
+        const drawingNs = 'http://schemas.openxmlformats.org/drawingml/2006/main';
+        for (const label of xml.getElementsByTagNameNS(chartNs, 'dLbl')) {
+          const index = Number(label.getElementsByTagNameNS(chartNs, 'idx')[0]?.getAttribute('val'));
+          const slice = snapshot.legend[index];
+          if (!slice) continue;
+          for (const color of label.getElementsByTagNameNS(drawingNs, 'srgbClr')) color.setAttribute('val', C.foreground(slice.color).slice(1));
+        }
+        zip.file(name, new XMLSerializer().serializeToString(xml));
+      }
+    }
+  }
+
+
   $('pptx').addEventListener('click', async () => {
     if (!current || exporting) return;
     const snapshot = current;
@@ -596,75 +668,8 @@
       pptx.layout = 'LAYOUT_WIDE'; pptx.author = 'Stat Console'; pptx.subject = 'Editable chart and source data'; pptx.title = snapshot.title;
       addNativeChart(pptx, pptx.addSlide(), snapshot);
       if (['bubble', 'percent-area'].includes(snapshot.mode) || snapshot.definition.radial) {
-        // PptxGenJS 4.0.1 writes zero-valued bubble cells as blanks. Restore them
-        // in the embedded workbook so Edit Data preserves the source numbers.
         const zip = await window.JSZip.loadAsync(await pptx.write({ outputType: 'blob' }));
-        for (const name of Object.keys(zip.files).filter(name => snapshot.mode === 'bubble' && name.startsWith('ppt/embeddings/') && name.endsWith('.xlsx'))) {
-          const workbookZip = await window.JSZip.loadAsync(await zip.file(name).async('uint8array'));
-          const path = 'xl/worksheets/sheet1.xml';
-          const xml = new DOMParser().parseFromString(await workbookZip.file(path).async('string'), 'application/xml');
-          for (const row of xml.getElementsByTagName('row')) {
-            if (Number(row.getAttribute('r')) < 2) continue;
-            for (const value of row.getElementsByTagName('v')) if (value.textContent === '') value.textContent = '0';
-          }
-          workbookZip.file(path, new XMLSerializer().serializeToString(xml));
-          // Rebuild the table headers with XML escaping and the full data range.
-          // The bundled bubble writer truncates this range and leaves names raw.
-          const ns = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main';
-          const headers = [snapshot.category, ...snapshot.series.flatMap((series, i) => [series.name, `Bubble size ${i + 1}`])];
-          const used = new Set();
-          headers.forEach((header, i) => {
-            let unique = header, suffix = 2;
-            while (used.has(unique)) unique = header + ' ' + suffix++;
-            used.add(unique); headers[i] = unique;
-          });
-          const strings = document.implementation.createDocument(ns, 'sst');
-          strings.documentElement.setAttribute('count', headers.length);
-          strings.documentElement.setAttribute('uniqueCount', headers.length);
-          const definition = document.implementation.createDocument(ns, 'table');
-          const tableRoot = definition.documentElement;
-          for (const [key, value] of Object.entries({ id: 1, name: 'Table1', displayName: 'Table1', ref: `A1:${String.fromCharCode(64 + headers.length)}${snapshot.labels.length + 1}`, totalsRowShown: 0 })) tableRoot.setAttribute(key, value);
-          const columns = definition.createElementNS(ns, 'tableColumns');
-          columns.setAttribute('count', headers.length);
-          headers.forEach((header, i) => {
-            const item = strings.createElementNS(ns, 'si'), text = strings.createElementNS(ns, 't');
-            text.textContent = header; item.appendChild(text); strings.documentElement.appendChild(item);
-            const column = definition.createElementNS(ns, 'tableColumn');
-            column.setAttribute('id', i + 1); column.setAttribute('name', header); columns.appendChild(column);
-          });
-          tableRoot.appendChild(columns);
-          workbookZip.file('xl/sharedStrings.xml', new XMLSerializer().serializeToString(strings));
-          workbookZip.file('xl/tables/table1.xml', new XMLSerializer().serializeToString(definition));
-          zip.file(name, await workbookZip.generateAsync({ type: 'uint8array' }));
-        }
-        // The library accepts percentStacked area options but omits their XML
-        // grouping element. Add it while retaining the original editable data.
-        if (snapshot.mode === 'percent-area') {
-          for (const name of Object.keys(zip.files).filter(name => /^ppt\/charts\/chart\d+\.xml$/.test(name))) {
-            const xml = new DOMParser().parseFromString(await zip.file(name).async('string'), 'application/xml');
-            const ns = 'http://schemas.openxmlformats.org/drawingml/2006/chart';
-            for (const area of xml.getElementsByTagNameNS(ns, 'areaChart')) {
-              const grouping = xml.createElementNS(ns, 'c:grouping');
-              grouping.setAttribute('val', 'percentStacked');
-              area.insertBefore(grouping, area.firstChild);
-            }
-            zip.file(name, new XMLSerializer().serializeToString(xml));
-          }
-        }
-        if (snapshot.definition.radial) {
-          for (const name of Object.keys(zip.files).filter(name => /^ppt\/charts\/chart\d+\.xml$/.test(name))) {
-            const xml = new DOMParser().parseFromString(await zip.file(name).async('string'), 'application/xml');
-            const chartNs = 'http://schemas.openxmlformats.org/drawingml/2006/chart';
-            const drawingNs = 'http://schemas.openxmlformats.org/drawingml/2006/main';
-            for (const label of xml.getElementsByTagNameNS(chartNs, 'dLbl')) {
-              const index = Number(label.getElementsByTagNameNS(chartNs, 'idx')[0]?.getAttribute('val'));
-              const slice = snapshot.legend[index];
-              if (!slice) continue;
-              for (const color of label.getElementsByTagNameNS(drawingNs, 'srgbClr')) color.setAttribute('val', C.foreground(slice.color).slice(1));
-            }
-            zip.file(name, new XMLSerializer().serializeToString(xml));
-          }
-        }
+        await repairNativeChart(zip, snapshot, 1);
         save(await zip.generateAsync({ type: 'blob' }), filename(snapshot, 'pptx'));
       } else await pptx.writeFile({ fileName: filename(snapshot, 'pptx') });
       $('status').textContent = 'PowerPoint downloaded. Select the chart → Edit Data to change its values.';
@@ -675,8 +680,15 @@
     finally { exporting = false; buttons(Boolean(current)); }
   });
 
-  // Project snapshots store applied data and presentation settings, never executable code.
+  // Applied-data snapshots never include executable code.
   window.ChartStudio = {
+    capture() { this.snapshot(); return structuredClone(current); },
+    addNativeChart,
+    async deckBlob(pptx, charts) {
+      const zip = await window.JSZip.loadAsync(await pptx.write({ outputType: 'blob' }));
+      for (let i = 0; i < charts.length; i++) await repairNativeChart(zip, charts[i], i + 1);
+      return zip.generateAsync({ type: 'blob' });
+    },
     snapshot() {
       if (dirty || !current || !table) throw new Error('Update a valid chart before saving or sending data.');
       return {

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.0 — Everyday utility console
+- Replace project management with Data, Presentations, Calculators, Text, and Visuals.
+- Add file combination, duplicate finding, pivots, format conversion, and recipes.
+- Assemble editable charts/tables and images into a mixed PowerPoint deck.
+- Add budget, ROI, pricing, break-even, forecast, sensitivity, and weighted calculators.
+- Add text cleanup/comparison/conversion, image resize/compression/background-color
+  removal, batch ZIP exports, and color contrast tools.
+- Round percentage displays and copied results to one decimal place.
+- Preserve old local workspace backups and recover tables/charts without project UI.
+- No document or PDF tools. New inputs remain session-only.
+
 ## Unreleased — Percentage calculator
 - Add standalone percentage-of, proportion, and increase/decrease calculators
   with copyable results, keyboard submission, and explicit zero-base validation.

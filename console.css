@@ -78,3 +78,28 @@
 .percentage-feedback {min-height:22px;font-size:13px;color:var(--text);margin:12px 0 0}
 .percentage-card>.note {line-height:1.7;margin-bottom:0}
 @media(max-width:640px) {.percentage-card{padding:18px}.percentage-form{gap:18px}.percentage-input{width:105px}.percentage-sentence{gap:10px}.percentage-actions{gap:10px;width:100%}.percentage-result{min-width:100px;flex:1}.percentage-actions .primary{padding:12px;font-size:12px}.percentage-copy{font-size:12px}}
+.utility-heading {margin:28px 0 22px}
+.utility-heading h2 {font-size:30px;margin:0 0 10px}
+.utility-heading>.note {font-size:15px;line-height:1.6}
+.console-sidebar>.note {line-height:1.7;margin:0 0 10px;font-size:12px}
+.console-sidebar nav {margin-bottom:16px}
+.console-form button:disabled,.console-actions button:disabled {opacity:.45;cursor:default;transform:none}
+.text-diff {max-height:500px;overflow:auto;border:1px solid var(--border);border-radius:var(--radius);margin:16px 0}
+.text-diff:empty {display:none}
+.text-diff>div {display:grid;grid-template-columns:105px minmax(0,1fr);gap:14px;padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;line-height:1.6}
+.text-diff strong {font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted)}
+.text-diff span {white-space:pre-wrap;overflow-wrap:anywhere}
+.text-diff .diff-added {background:var(--accent-tint)}
+.diff-added strong {color:var(--accent)}
+.diff-removed span {text-decoration:line-through;color:var(--text-muted)}
+.visual-preview {max-height:420px;overflow:auto;background:var(--surface-inset);border:1px solid var(--border);border-radius:var(--radius);margin:20px 0;text-align:center}
+.visual-preview canvas {display:block;max-width:100%;max-height:400px;width:auto;height:auto;margin:auto;object-fit:contain}
+.contrast-preview {padding:30px;margin:20px 0;border:1px solid var(--border-strong);border-radius:var(--radius);font-size:24px;font-weight:600}
+.console-main .console-panel input[type=file] {max-width:100%;font-size:12px}
+.console-main .console-panel .color-control {max-width:100%}
+@media(max-width:640px) {.text-diff>div{grid-template-columns:80px minmax(0,1fr);gap:8px}.utility-heading h2{font-size:26px}.console-actions button{max-width:100%}.utility-heading>.note{font-size:13px}}
+
+.utility-jumps {display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px}
+.utility-jumps button {background:var(--surface-inset);color:var(--text-muted);border:1px solid var(--border);border-radius:var(--radius);padding:9px 12px;cursor:pointer;font:inherit;font-size:12px}
+.utility-jumps button:hover {color:var(--accent);border-color:var(--accent)}
+.utility-jumps button:focus-visible {outline:2px solid var(--accent);outline-offset:3px}
