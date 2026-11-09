@@ -1,93 +1,65 @@
 # Stat Console
 
-A browser-based toolkit for everyday work. Five areas organize working utilities;
-there are no projects, tasks, owners, deadlines, or decision logs.
+Five focused tools in one tabbed interface:
 
-The shell uses graphite/slate surfaces and electric mint (`#04E2B7`, hover
-`#0EF3C5`). Chart and image colors are independent of the interface. Inputs and
-outputs stay in your browser; download files before closing or reloading the tab.
+- **Chart Creator** — turn Excel/CSV or pasted data into customizable charts and
+  export SVG, PNG, or a native editable PowerPoint slide.
+- **A/B Test Analyzer** — compare experiment conversion rates with the existing
+  two-proportion test and export the distribution chart.
+- **Excel De-duper** — remove duplicate rows based on the column you choose.
+- **Note Organizer** — turn meeting notes into an editable bulleted Wrike recap.
+- **Slide Format Advisor** — describe your message and get five slide-layout ideas.
 
-## Data
-- Paste CSV/TSV or import up to 20 CSV, TSV, XLS/XLSX, or JSON files (5 MB each).
-  Each nonempty Excel sheet becomes a session table. Save formula results in
-  Excel before importing. JSON accepts row arrays or records with identical keys.
-- Trim whitespace and remove blank/exact duplicate rows, find duplicate keys,
-  calculate columns, or pivot with sum, average, count, minimum, or maximum.
-- Combine matching tables by appending rows, compare versions by a unique key,
-  or left-join columns. Comparisons require identical headers. Joins retain every
-  left row; unmatched values stay blank and duplicate headers receive suffixes.
-- Keep session snapshots, convert/download CSV, TSV, JSON, or XLSX, send a table
-  to Chart Studio, or add an editable table slide to the deck.
-- Keep or download cleanup/calculated-column recipes and replay them on another
-  table. Recipes cannot execute scripts; joins and pivots are manual operations.
+The graphite/mint design, wide responsive layout, and custom chart colors remain.
+The previous dashboards, project management, broad utility categories, calculators,
+visual tools, and multi-slide deck builder are removed. Inputs remain mounted
+while switching tabs; Arrow keys, Home, and End navigate the tabs.
 
-Tables support 10,000 rows, 100 columns, and 200,000 cells. Previews show 30 rows;
-exports retain all rows. Chart handoff explicitly offers the first 200 rows for
-larger tables. CSV/TSV downloads neutralize formula-like text. XLSX exports preserve
-cell contents as text, including leading zeros, rather than guessing column types.
+## Excel de-duper
+1. Upload XLSX, XLS, or CSV (up to 10 MB).
+2. Choose the worksheet and the column to check. The first used row is the header.
+   Columns are identified by letter and header, so repeated/blank headers work.
+3. Select **Preview de-dupe**. The first row for each matching column value is
+   retained, including all its original columns. Review counts, cleaned rows, and
+   rows being removed with their original Excel row numbers.
+4. Download a new `-deduped.xlsx` workbook. Your original file is unchanged.
 
-## Presentations
-Chart Studio retains all 21 chart styles, dual axes, custom colors, editable data,
-and native PowerPoint export. A/B Test Analyzer remains in its own tab.
+Default matching ignores case and surrounding spaces, while keeping all rows
+with blank key values. **Matching options** lets you change these choices. Key
+matching uses the cells' displayed values, so `001` and `1` remain distinct when
+formatted differently. Limits: 50,000 data rows, 200 columns, 1 million cells.
+Changing the worksheet or settings invalidates the preview and download.
 
-**Add chart to deck** captures the applied chart data/settings as a native editable
-chart. Add table slides from Data or the deck table form (up to 15 data rows and
-8 columns), and image slides from Visuals. Reorder/remove slides and download one
-16:9 PowerPoint containing up to 30 slides. Charts and tables are editable; image
-and A/B distribution slides are images. Charts retain embedded data and the
-bubble-workbook, percentage-area, and slice-label export repairs in mixed decks.
-Deck snapshots stay unchanged if you subsequently edit the original chart.
+The download contains only the selected cleaned worksheet. Cell values and number
+formats (including dates, currencies, and leading-zero formats) are retained.
+Formulas become their cached values; save/recalculate in Excel first. Formulas
+without saved values receive an error. Other sheets, macros, and layout styling
+are not copied. This prevents row deletion from leaving broken formula references.
 
-## Calculators
-- Percentage of a number, one number as a percentage of another, and percentage
-  increase/decrease. **Display and Copy round to one decimal place**:
-  `36.25%` becomes `36.3%`. Editing inputs clears stale results. Percentage change
-  requires a positive starting value; zero totals receive explicit explanations.
-- Budget versus actual spend, ROI, target-margin pricing, break-even/unit economics,
-  compound-growth forecasts, demand sensitivity, and weighted decision scorecards.
-- Result tables can be downloaded as CSV or opened in Data for charting.
+## Note organizer
+Type or paste one note per line, optionally add a meeting title, and select
+**Organize notes**. Common bullets/numbering are cleaned up and repeated lines
+are consolidated. Explicit `Decision:`, `Action:`, `TODO:`, and `Question:` labels
+are grouped into Discussion, Decisions, Action items, and Open questions. Section
+headings also work. Names, dates, figures, and wording stay as written.
 
-ROI uses total return including the original investment. Forecasts assume constant
-compound growth (up to 120 periods). Sensitivity varies demand from −20% to +20%
-with fixed price/cost assumptions. Weighted scores normalize nonnegative weights;
-use a consistent higher-is-better scoring scale. These are deterministic models,
-not predictions or an AI service.
+Turn grouping/repetition options off if desired. Edit the resulting recap and
+select **Copy recap for Wrike**, then paste it into your meeting recap. Clipboard
+failure selects the recap for manual copying. There is no Wrike connection or
+automatic posting. This is deterministic organization, not AI summarization.
+Notes are session-only: copy them before closing/reloading. Limits: 100,000
+characters / 5,000 lines. Source edits invalidate the generated recap.
 
-## Text
-- Paste plain text, strip common Markdown formatting, trim/collapse spaces,
-  extract unique list items, sort lines, or change case. Textareas accept plain
-  text from rich-text clipboard sources.
-- Compare text by line with labeled added/removed/unchanged rows and download a
-  diff. Limits: 1,500 lines and 1 million line pairs.
-- Convert CSV/TSV tables to Markdown, JSON, CSV, or tab-separated plain text;
-  convert Markdown tables back to CSV or send the table to Data.
+## Slide format advisor
+Describe the message you want the audience to understand or decide, then select
+**Recommend slide formats**. Five ranked layout cards explain when each format
+works, show a wireframe, and list the slide structure. Copy a chosen outline to
+use when building the slide in PowerPoint.
 
-## Visuals
-- Resize PNG/JPEG/WebP, choose standard export sizes, compress JPEG/WebP, and
-  convert formats. Aspect ratio is locked by default; presets unlock it.
-- Remove a **solid-color background** by selected color and tolerance. This is
-  color-based removal, not AI subject segmentation; matching foreground colors
-  are removed too. Use PNG/WebP for transparency; JPEG uses white behind it.
-- Download an image or add PNG/JPEG to the deck. Image outputs must be regenerated
-  after changing settings. Source images are limited to 10 MB / 32 million pixels;
-  individual output dimensions are 1–8,192 px with at most 32 million pixels.
-- Batch fit up to 20 images into consistently sized PNG/JPEG canvases and download
-  a ZIP. Batch dimensions are 1–4,096 px, with at most 64 million total output pixels.
-  Images are centered without stretching;
-  letterboxing is transparent for PNG and white for JPEG.
-- Pick foreground/background colors with HEX or the color wheel and check WCAG
-  AA/AAA contrast. Normal-text AA requires 4.5:1; large-text AA requires 3:1.
-
-## Navigation and previous data
-Use the five sidebar areas, in-area tool shortcuts, or **Ctrl/Cmd K** command
-search. Switching areas preserves mounted forms and chart/A/B inputs.
-
-Previous project-management controls are removed. If an old locally saved
-workspace exists, **Download previous workspace** preserves a complete JSON
-backup, including notes/tasks. **Recover previous tables & charts** brings its
-datasets and chart snapshots into the session without changing the old storage.
-No new data is automatically saved. Download working tables, recipes, images,
-text outputs, and decks before closing the tab.
+Suggestions match themes such as comparisons, trends, change, processes, metrics,
+causes, and decisions. General briefs receive flexible fallback formats. This is
+a rule-based layout guide, not an AI content generator; it does not invent slide
+facts or create a deck. Limits: 15–5,000 characters per brief.
 
 ## Customize chart colors
 - Choose Signal, Arcade, or Spectrum in **Chart palette**, then customize each
@@ -100,10 +72,10 @@ text outputs, and decks before closing the tab.
   independently. Changing colors does not change test values or results.
 - Selected colors appear in the preview and SVG/PNG/PowerPoint exports. Invalid
   HEX input leaves the last valid color applied. Presets reset custom overrides.
-  Color settings are retained while switching tabs and styles, but reset on reload unless kept in a deck snapshot for the current session.
+  Color settings are retained while switching tabs and styles, but reset on reload.
 
 ## Create a chart for PowerPoint
-1. Open the **Chart Studio** tab and edit the spreadsheet-style table directly.
+1. Open the **Chart Creator** tab and edit the spreadsheet-style table directly.
    Add or remove rows and series as needed. Paste a full table with headers into
    any cell, expand **Paste a table or CSV**, or upload CSV, TSV,
    XLSX, or XLS data. Include column headers in the first row. For Excel files,
@@ -145,7 +117,7 @@ Tables and chart previews scroll within their own containers on small screens.
 
 Use the **A/B Test Analyzer** tab for experiment inputs and results. Switching
 tabs preserves both workspaces during the current page session. Arrow keys,
-Home, and End navigate the tabs. Use **Add chart to deck** to keep an applied chart snapshot for the current session. Download the deck before closing the tab. A/B inputs remain session-only.
+Home, and End navigate the tabs. Both tools retain their inputs while switching tabs, but reset on reload.
 
 Each page load starts with newly randomized sample visitor and conversion counts
 and calculates the sample results automatically. Replace these demo values with
@@ -153,14 +125,15 @@ your experiment counts to run your own analysis. Sample data is not saved.
 
 ## Deploy on GitHub Pages
 Publish the repository root on GitHub Pages (Settings → Pages → main / root).
-Keep `index.html`, both CSS files, and all root JavaScript modules together.
-There is no build step, account, backend, or tracking.
+Keep `index.html`, `styles.css`, `tools.css`, `colors.js`, `app.js`, `tabs.js`,
+`chart-data.js`, `chart-modes.js`, `charts.js`, `dedupe-core.js`, `deduper.js`,
+`notes-core.js`, `notes.js`, and `slide-formats.js` together. No build step,
+backend, account, or tracking is required.
 
-Inter and Outfit load from Google Fonts with system fallbacks. Excel import/export
-loads SheetJS 0.20.3 on demand; PowerPoint loads PptxGenJS 4.0.1; image ZIP exports
-load JSZip 3.10.1 when it is not already present. All script URLs are pinned with
-SHA-384 integrity checks. Initial library/font downloads require a connection;
-input data is never sent to these providers. No document/PDF tools are included.
+Inter and Outfit load from Google Fonts with system fallbacks. SheetJS 0.20.3
+loads for Excel input/output and PptxGenJS 4.0.1 for PowerPoint export, on demand,
+with pinned URLs and SHA-384 integrity checks. Initial library downloads require
+a connection. User data is never sent to the library/font providers.
 
 ## Statistical methodology
 - Two-sided: uncorrected pooled two-proportion Z-test, `p = 2(1 − Φ(|z|))`.
@@ -172,14 +145,13 @@ input data is never sent to these providers. No document/PDF tools are included.
 - Repeated peeking, sample ratio mismatch, and unplanned hypothesis selection can compromise conclusions. Do not use significance alone as a launch decision.
 
 ## Developer checks
-Run `node --test tests/*.test.cjs`. Tests cover existing chart/A/B behavior,
-percentage rounding, legacy project validation, data operations, text comparison
-and conversion, calculator models, and contrast. Use `node --check` on changed
-JavaScript files. Browser checks should cover cross-tool handoffs, native mixed
-PowerPoint decks, image pixels/ZIPs, clipboard fallback, and responsive layouts.
+Run `node --test tests/*.test.cjs` for chart parsing/scales/families, colors, A/B
+samples, selected-column dedupe, note organization, and slide-format matching.
+Run `node --check` on changed JavaScript files. Browser checks cover downloaded
+XLSX values/formats, clipboard success/fallback, preserved tab state, native
+PowerPoint exports, and desktop/mobile layouts.
 
 ## Privacy
-Processing happens in this browser. New utility inputs are session-only and are
-not transmitted or persisted. Downloaded files contain your entered data. Old
-saved workspace data is used only for optional recovery or backup, and is never
-overwritten or deleted by the new utilities.
+All processing runs in the browser. Inputs are not transmitted or automatically
+saved. Downloaded/copied outputs contain entered data. Old local workspace
+storage is left untouched, although its management UI is no longer included.

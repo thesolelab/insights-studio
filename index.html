@@ -5,13 +5,13 @@
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
   <meta content="#11151B" name="theme-color"/>
   <title>
-   Stat Console | Everyday Work Utilities
+   Stat Console | Charts, A/B Tests, Excel &amp; Notes
   </title>
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Outfit:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
   <link href="styles.css" rel="stylesheet"/>
-  <link href="console.css" rel="stylesheet"/>
+  <link href="tools.css" rel="stylesheet"/>
  </head>
  <body>
   <main class="shell">
@@ -31,15 +31,18 @@
      </span>
     </div>
    </header>
-   <div class="workspace-tabs" role="tablist" aria-label="Workspace">
-    <button id="studio-tab" type="button" role="tab" aria-selected="true" aria-controls="studio-panel">Chart Studio</button>
+   <div class="workspace-tabs" role="tablist" aria-label="Tools">
+    <button id="studio-tab" type="button" role="tab" aria-selected="true" aria-controls="studio-panel">Chart Creator</button>
     <button id="analyzer-tab" type="button" role="tab" aria-selected="false" aria-controls="analyzer-panel" tabindex="-1">A/B Test Analyzer</button>
+    <button id="dedupe-tab" type="button" role="tab" aria-selected="false" aria-controls="dedupe-panel" tabindex="-1">Excel De-duper</button>
+    <button id="notes-tab" type="button" role="tab" aria-selected="false" aria-controls="notes-panel" tabindex="-1">Note Organizer</button>
+    <button id="formats-tab" type="button" role="tab" aria-selected="false" aria-controls="formats-panel" tabindex="-1">Slide Format Advisor</button>
    </div>
    <div id="studio-panel" role="tabpanel" aria-labelledby="studio-tab" tabindex="0">
    <section class="panel chart-studio-panel" aria-labelledby="builder-heading">
     <div class="section-head">
      <div>
-      <h2 id="builder-heading">Chart studio</h2>
+      <h2 id="builder-heading">Chart creator</h2>
       <p>Turn a table into a chart, then download an editable PowerPoint slide.</p>
      </div>
      <span class="pill">Editable charts</span>
@@ -105,8 +108,6 @@ Jun,42500,3.8%</textarea>
       <button id="builder-svg" type="button" disabled>Export SVG</button>
       <button id="builder-png" type="button" disabled>Export PNG</button>
       <button id="builder-pptx" type="button" disabled>Export PowerPoint</button>
-      <button id="builder-add-deck" type="button" disabled>Add chart to deck</button>
-      <button id="builder-to-workbench" type="button" disabled>Send to Data</button>
      </div>
     </div>
     <p id="builder-status" class="note" role="status"></p>
@@ -277,12 +278,89 @@ Jun,42500,3.8%</textarea>
     </details>
    </section>
    </div>
+   <div id="dedupe-panel" role="tabpanel" aria-labelledby="dedupe-tab" tabindex="0" hidden>
+    <section class="panel dedupe-panel" aria-labelledby="dedupe-heading">
+     <h2 id="dedupe-heading">Excel de-duper</h2>
+     <p class="note">Choose a file, worksheet, and column. Keep the first row for each matching value and download the cleaned worksheet.</p>
+     <label class="builder-label" for="dedupe-file">Excel or CSV file
+      <input id="dedupe-file" type="file" accept=".xlsx,.xls,.csv" aria-describedby="dedupe-file-help"/>
+     </label>
+     <p class="note" id="dedupe-file-help">Files stay in your browser. Up to 10 MB, 50,000 data rows, 200 columns, and 1 million cells. The first used row is treated as headers.</p>
+     <div id="dedupe-setup" hidden>
+      <label class="builder-label" for="dedupe-sheet">Worksheet<select id="dedupe-sheet"></select></label>
+      <p class="note" id="dedupe-source-info"></p>
+     </div>
+     <form id="dedupe-form">
+      <div id="dedupe-options" hidden>
+       <label class="builder-label" for="dedupe-column">Column to de-dupe<select id="dedupe-column"></select></label>
+       <details class="dedupe-advanced">
+        <summary>Matching options</summary>
+        <label><input id="dedupe-ignore-case" type="checkbox" checked/> Ignore uppercase/lowercase differences</label>
+        <label><input id="dedupe-trim" type="checkbox" checked/> Ignore spaces at the start and end</label>
+        <label class="builder-label" for="dedupe-blanks">Blank cells<select id="dedupe-blanks"><option value="keep">Keep all rows with blank values</option><option value="dedupe">Treat blank values as duplicates</option></select></label>
+       </details>
+       <div class="dedupe-actions"><button class="primary" type="submit">Preview de-dupe</button></div>
+      </div>
+     </form>
+     <p id="dedupe-status" role="status" class="note"></p>
+     <div id="dedupe-result" hidden>
+      <div class="dedupe-stats">
+       <div><span>Original rows</span><strong id="dedupe-input-count"></strong></div>
+       <div><span>Duplicates removed</span><strong id="dedupe-removed-count"></strong></div>
+       <div><span>Rows kept</span><strong id="dedupe-kept-count"></strong></div>
+      </div>
+      <p id="dedupe-summary" class="note"></p>
+      <h3>Cleaned preview</h3>
+      <p class="note">Showing the first 30 rows. Downloads include all kept rows and original columns.</p>
+      <div id="dedupe-preview" class="dedupe-table" role="region" aria-label="Cleaned worksheet preview" tabindex="0"></div>
+      <details id="dedupe-removed-details">
+       <summary>Rows being removed</summary>
+       <p class="note">First 30 removed rows, with the original row number and first matching row.</p>
+       <div id="dedupe-removed" class="dedupe-table" role="region" aria-label="Removed rows preview" tabindex="0"></div>
+      </details>
+      <p class="note">Downloads a new workbook with only this cleaned worksheet. Cell values and number formats are kept; formulas become their saved values. Other sheets and layout styling are not included.</p>
+      <div class="dedupe-actions"><button id="dedupe-download" class="primary" type="button" disabled>Download cleaned Excel</button></div>
+     </div>
+    </section>
+   </div>
+   <div id="notes-panel" role="tabpanel" aria-labelledby="notes-tab" tabindex="0" hidden>
+    <section class="panel notes-panel" aria-labelledby="notes-heading">
+     <h2 id="notes-heading">Note organizer</h2>
+     <p class="note">Turn rough meeting notes into a bulleted recap to paste into Wrike. This organizes and removes repeated lines; it keeps your wording rather than generating an AI summary. Notes stay in this tab—copy your recap before closing or reloading.</p>
+     <form id="notes-form">
+      <label class="builder-label" for="notes-title">Meeting title (optional)<input id="notes-title" type="text" maxlength="200" placeholder="Weekly team sync"/></label>
+      <label class="builder-label" for="notes-source">Your notes<textarea id="notes-source" rows="12" maxlength="100000" placeholder="Campaign launch moved to Thursday&#10;Decision: Keep the current budget&#10;Action: Alex to send revised assets by Tuesday&#10;Question: Do we need legal approval?" aria-describedby="notes-help"></textarea></label>
+      <p id="notes-help" class="note">Use one note per line. Labels such as Decision:, Action:, TODO:, and Question: help group the recap. Names, dates, and numbers stay as written.</p>
+      <div class="notes-options"><label><input id="notes-group" type="checkbox" checked/> Group discussion, decisions, actions, and questions</label><label><input id="notes-merge" type="checkbox" checked/> Remove repeated lines</label></div>
+      <div class="dedupe-actions"><button class="primary" type="submit">Organize notes</button></div>
+     </form>
+     <p id="notes-status" class="note" role="status"></p>
+     <div id="notes-result" hidden>
+      <label class="builder-label" for="notes-output">Editable meeting recap<textarea id="notes-output" rows="14"></textarea></label>
+      <div class="dedupe-actions"><button id="notes-copy" class="primary" type="button" disabled>Copy recap for Wrike</button></div>
+     </div>
+    </section>
+   </div>
+   <div id="formats-panel" role="tabpanel" aria-labelledby="formats-tab" tabindex="0" hidden>
+    <section class="panel notes-panel" aria-labelledby="formats-heading">
+     <h2 id="formats-heading">Slide format advisor</h2>
+     <p class="note">Describe what you want to convey. Get five slide layouts with visual outlines and guidance on how to use them.</p>
+     <form id="slide-form">
+      <label class="builder-label" for="slide-brief">What should your audience understand or decide?<textarea id="slide-brief" rows="5" maxlength="5000" placeholder="I want leadership to compare three vendors and approve the one with the best balance of cost and reliability."></textarea></label>
+      <p class="note">Suggestions match themes in your brief, such as comparisons, trends, decisions, or timelines. This is a layout guide, not an AI content generator.</p>
+      <div class="dedupe-actions"><button class="primary" type="submit">Recommend slide formats</button></div>
+     </form>
+     <p id="slide-status" class="note" role="status"></p>
+     <div id="slide-results" class="slide-format-grid"></div>
+     <textarea id="slide-manual-copy" class="slide-manual-copy" rows="8" aria-label="Slide outline to copy manually" hidden></textarea>
+    </section>
+   </div>
    <footer>
     STAT CONSOLE
     <span>
      ·
     </span>
-    Everyday work utilities
+    Charts · A/B tests · Excel · Notes
     <span>
      ·
     </span>
@@ -290,7 +368,7 @@ Jun,42500,3.8%</textarea>
     <span>
      ·
     </span>
-    v0.3.0
+    v0.4.0
    </footer>
   </main>
   <script src="colors.js"></script>
@@ -300,16 +378,10 @@ Jun,42500,3.8%</textarea>
   <script src="chart-data.js"></script>
   <script src="chart-modes.js"></script>
   <script src="charts.js"></script>
-  <script src="console-core.js"></script>
-  <script src="percentages.js"></script>
-  <script src="utility-core.js"></script>
-  <script src="utility-libs.js"></script>
-  <script src="data-tools.js"></script>
-  <script src="presentation-tools.js"></script>
-  <script src="decision-tools.js"></script>
-  <script src="text-tools.js"></script>
-  <script src="visual-tools.js"></script>
-  <script src="utility-shell.js"></script>
+  <script src="dedupe-core.js"></script>
+  <script src="deduper.js"></script>
+  <script src="notes-core.js"></script>
+  <script src="notes.js"></script>
+  <script src="slide-formats.js"></script>
  </body>
 </html>
-

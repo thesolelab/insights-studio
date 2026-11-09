@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0 — Focused work tools
+- Replace broad utility navigation with Chart Creator, A/B Test Analyzer, Excel
+  De-duper, Note Organizer, and Slide Format Advisor tabs.
+- De-dupe Excel/CSV by a selected worksheet column, preview removed rows, and
+  download kept values/number formats with explicit case/space/blank options.
+- Organize meeting notes into editable recap bullets for manual Wrike pasting.
+- Recommend five slide layouts with wireframes and copyable outlines from a brief.
+- Remove obsolete dashboards, calculators, visual/text workbenches, and deck building.
+- Preserve chart styles, A/B statistics, and native single-slide export repairs.
+
 ## 0.3.0 — Everyday utility console
 - Replace project management with Data, Presentations, Calculators, Text, and Visuals.
 - Add file combination, duplicate finding, pivots, format conversion, and recipes.

@@ -44,7 +44,7 @@
     });
   }
   function buttons(enabled) {
-    for (const name of ['svg', 'png', 'pptx', 'add-deck', 'to-workbench']) $(name).disabled = !enabled || (name === 'pptx' && exporting);
+    for (const name of ['svg', 'png', 'pptx']) $(name).disabled = !enabled || (name === 'pptx' && exporting);
   }
   function invalidate(message) {
     current = null;
@@ -679,65 +679,6 @@
     }
     finally { exporting = false; buttons(Boolean(current)); }
   });
-
-  // Applied-data snapshots never include executable code.
-  window.ChartStudio = {
-    capture() { this.snapshot(); return structuredClone(current); },
-    addNativeChart,
-    async deckBlob(pptx, charts) {
-      const zip = await window.JSZip.loadAsync(await pptx.write({ outputType: 'blob' }));
-      for (let i = 0; i < charts.length; i++) await repairNativeChart(zip, charts[i], i + 1);
-      return zip.generateAsync({ type: 'blob' });
-    },
-    snapshot() {
-      if (dirty || !current || !table) throw new Error('Update a valid chart before saving or sending data.');
-      return {
-        rows: [table.headers.slice(), ...table.rows.map(row => row.slice())],
-        title: $('title').value.trim() || 'Untitled chart',
-        settings: Object.fromEntries(['mode','category','size','left-format','right-format','palette'].map(key => [key,$(key).value])),
-        dual: $('dual').checked,
-        colors: [...colorOverrides],
-        series: [...$('series').children].map(row => ({ column: row.dataset.column, included: row.querySelector('input').checked, type: row.querySelector('.series-type').value, axis: row.querySelector('.series-axis').value }))
-      };
-    },
-    loadRows(rows, title) {
-      const next = D.normalizeTable(rows);
-      table = null; revision++; colorOverrides.clear(); sliceSignature = '';
-      $('mode').value = 'column'; $('title').value = String(title || 'Untitled chart');
-      $('data').value = D.serializeTable(rows); useTable(next);
-      $('data-source').textContent = 'Project data · editable';
-      if (!current) throw new Error($('error').textContent);
-    },
-    restore(snapshot) {
-      if (!snapshot || !snapshot.settings || !Array.isArray(snapshot.series) || !Array.isArray(snapshot.colors)) throw new Error('Invalid chart snapshot.');
-      const next = D.normalizeTable(snapshot.rows);
-      for (const key of ['mode','left-format','right-format','palette']) {
-        if (![...$(key).options].some(option => option.value === snapshot.settings[key])) throw new Error('Unsupported chart setting: ' + key);
-      }
-      if (!next.headers[Number(snapshot.settings.category)]) throw new Error('Invalid category column.');
-      const colors = snapshot.colors.map(pair => {
-        if (!Array.isArray(pair) || typeof pair[0] !== 'string' || !C.normalize(pair[1])) throw new Error('Invalid chart color.');
-        return [pair[0], C.normalize(pair[1])];
-      });
-      table = null; revision++; colorOverrides.clear(); colors.forEach(([key,value]) => colorOverrides.set(key,value)); sliceSignature = '';
-      $('mode').value = snapshot.settings.mode; $('palette').value = snapshot.settings.palette;
-      $('title').value = String(snapshot.title || 'Untitled chart'); $('dual').checked = Boolean(snapshot.dual);
-      $('data').value = D.serializeTable(snapshot.rows); useTable(next);
-      $('category').value = snapshot.settings.category; seriesControls();
-      $('size').value = snapshot.settings.size;
-      for (const row of $('series').children) {
-        const saved = snapshot.series.find(item => item.column === row.dataset.column);
-        if (!saved) continue;
-        row.querySelector('input').checked = Boolean(saved.included);
-        row.querySelector('.series-type').value = saved.type === 'line' ? 'line' : 'bar';
-        row.querySelector('.series-axis').value = saved.axis === 'right' ? 'right' : 'left';
-      }
-      $('left-format').value = snapshot.settings['left-format']; $('right-format').value = snapshot.settings['right-format'];
-      modeControls(); sliceSignature = ''; render();
-      if (!current) throw new Error($('error').textContent);
-      $('data-source').textContent = 'Saved chart · editable';
-    }
-  };
 
   try {
     const startup = M.randomStartup();
