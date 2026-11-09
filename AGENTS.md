@@ -150,3 +150,9 @@ The current repository is thesolelab/queue-works and Pages path is /queue-works/
 Keep local asset URLs relative so deployments work under a repository subpath.
 libraries.js owns shared lazy Excel/PowerPoint loading and integrity hashes;
 reuse it rather than adding per-tool script loaders.
+
+A/B appearance controls are chart-only: background, axis labels/title, and
+annotation text colors must match preview and exports without changing UI tokens
+or statistical data. PNG can omit its background rect for transparency; SVG
+retains the chosen solid background. Never remove the preview background when
+serializing a transparent export.

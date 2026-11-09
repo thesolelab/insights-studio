@@ -129,8 +129,12 @@ runs locally without an account, model download, or AI service.
 - A swatch opens the color wheel. Hue, saturation, and brightness sliders provide
   keyboard access; HEX input accepts 3 or 6 digits. Select **Apply color** to
   commit a wheel selection, or Cancel/Escape to keep the previous color.
-- In **A/B Test Analyzer**, expand **Chart colors** to set Control A and Variant B
-  independently. Changing colors does not change test values or results.
+- In **A/B Test Analyzer**, expand **Chart colors & export appearance** to set Control A and Variant B
+  independently, plus the background, axis labels/title, and chart annotation text.
+  These chart-only colors apply to the preview and SVG/PNG exports without changing
+  the interface or test values. Select **PNG background**: Solid uses your chosen
+  chart background; Transparent lets the slide show through. SVG retains the solid
+  background. Choose text colors that contrast with the target slide.
 - Selected colors appear in the preview and SVG/PNG/PowerPoint exports. Invalid
   HEX input leaves the last valid color applied. Presets reset custom overrides.
   Color settings are retained while switching tabs and styles, but reset on reload.

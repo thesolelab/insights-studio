@@ -245,9 +245,16 @@ Jun,42500,3.8%</textarea>
      </div>
     </div>
     <details class="ab-color-settings">
-     <summary>Chart colors</summary>
+     <summary>Chart colors &amp; export appearance</summary>
+     <p class="note">Match your slide template with custom curve, background, axis-label/title, and chart-text colors. These affect the chart preview and image exports only.</p>
      <div id="ab-colors" class="ab-colors"></div>
     </details>
+    <div class="ab-export-options">
+     <label class="builder-label" for="ab-png-background">PNG background
+      <select id="ab-png-background"><option value="solid">Solid — use chart background color</option><option value="transparent">Transparent — use slide background</option></select>
+     </label>
+     <p class="note">SVG keeps the chart background color. For transparent PNGs, choose text colors that contrast with your slide.</p>
+    </div>
     <div aria-label="Conversion rate chart" class="chart-wrap" role="region" tabindex="0">
      <svg aria-label="Normal approximation sampling distributions for control and variant" id="distribution" role="img" viewbox="0 0 1100 510" xmlns="http://www.w3.org/2000/svg">
      </svg>
