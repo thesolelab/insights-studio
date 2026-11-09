@@ -107,8 +107,10 @@ not row pairs. Skip blank main-list entries and export only the kept main column
 Keep this separate from ordinary within-column de-duping.
 Export only cleaned-sheet values and number formats; explain formula flattening
 and excluded sheets/styles in UI. Do not overwrite source files.
-notes-core.js organizes notes without inventing facts. notes.js owns editable
-recaps and clipboard fallback. slide-formats.js ranks layout suggestions from
+notes-core.js cleans notes locally without rewriting or summarizing facts. Recaps
+are plain lines in source order with no titles, section headings, or list markers.
+Retain names, numbers, dates, negations, and action labels. notes.js owns editable
+recaps and clipboard fallback. Do not add AI, model downloads, or a note backend. slide-formats.js ranks layout suggestions from
 brief themes and shows wireframes; describe its rule-based limits accurately.
 Use textContent for user content, never HTML interpolation or eval. Do not send
 notes to Wrike; only copy the user's reviewed recap for manual pasting.

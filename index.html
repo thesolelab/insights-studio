@@ -329,13 +329,12 @@ Jun,42500,3.8%</textarea>
    <div id="notes-panel" role="tabpanel" aria-labelledby="notes-tab" tabindex="0" hidden>
     <section class="panel notes-panel" aria-labelledby="notes-heading">
      <h2 id="notes-heading">Note organizer</h2>
-     <p class="note">Turn rough meeting notes into a bulleted recap to paste into Wrike. This organizes and removes repeated lines; it keeps your wording rather than generating an AI summary. Notes stay in this tab—copy your recap before closing or reloading.</p>
+     <p class="note">Clean up meeting notes into plain lines you can format in Wrike. Extra spacing, list markers, standalone headings, and repeated lines are removed. Your wording and details stay intact. Notes stay in this tab—copy your recap before closing or reloading.</p>
      <form id="notes-form">
-      <label class="builder-label" for="notes-title">Meeting title (optional)<input id="notes-title" type="text" maxlength="200" placeholder="Weekly team sync"/></label>
       <label class="builder-label" for="notes-source">Your notes<textarea id="notes-source" rows="12" maxlength="100000" placeholder="Campaign launch moved to Thursday&#10;Decision: Keep the current budget&#10;Action: Alex to send revised assets by Tuesday&#10;Question: Do we need legal approval?" aria-describedby="notes-help"></textarea></label>
-      <p id="notes-help" class="note">Use one note per line. Labels such as Decision:, Action:, TODO:, and Question: help group the recap. Names, dates, and numbers stay as written.</p>
-      <div class="notes-options"><label><input id="notes-group" type="checkbox" checked/> Group discussion, decisions, actions, and questions</label><label><input id="notes-merge" type="checkbox" checked/> Remove repeated lines</label></div>
-      <div class="dedupe-actions"><button class="primary" type="submit">Organize notes</button></div>
+      <p id="notes-help" class="note">Use one note per line. Names, dates, amounts, and action labels stay as written. The recap has no title, section headings, or bullets. Cleanup does not summarize or rewrite your notes.</p>
+      <div class="notes-options"><label><input id="notes-merge" type="checkbox" checked/> Remove repeated lines</label></div>
+      <div class="dedupe-actions"><button class="primary" type="submit">Clean up notes</button></div>
      </form>
      <p id="notes-status" class="note" role="status"></p>
      <div id="notes-result" hidden>

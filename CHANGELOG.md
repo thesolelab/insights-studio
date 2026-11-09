@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Plain-text meeting recaps
+- Remove meeting title/group controls and output headings/list markers.
+- Clean spacing, empty lines, explicit headings, and repeated notes while
+  preserving source order, wording, names, dates, numbers, and action labels.
+- Keep recap editing and copying local; no AI or backend integration.
+
 ## Unreleased — Main-list exclusions
 - Add an Excel mode to remove main-list entries found anywhere in an exclusion
   column, with case/space options, preview counts, and matching row references.
