@@ -62,7 +62,9 @@ or matching settings requires a new preview. If all entries are excluded, the
 export contains the header only.
 
 ## Meeting recap builder
-Paste one point per line and select **Build recap**. Review the draft in the three
+The input starts empty, with step-by-step instructions above it rather than sample
+notes or placeholder text inside. Paste one point per line and select **Build recap**.
+Review the draft in the three
 sections matching your meeting template:
 - Meeting notes/topics
 - What's Needed from Me | Tasks to Create
