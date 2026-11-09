@@ -102,6 +102,9 @@ tools; the existing styles.css owns chart/A/B/shared design tokens.
 Dedupe matching belongs in DOM-free dedupe-core.js, with workbook/UI logic in
 deduper.js. Preserve first-match rows and source order, expose case/space/blank
 matching clearly, and invalidate stale previews/downloads after changes.
+Exclusion mode compares the entire exclusion column against the main-list column,
+not row pairs. Skip blank main-list entries and export only the kept main column.
+Keep this separate from ordinary within-column de-duping.
 Export only cleaned-sheet values and number formats; explain formula flattening
 and excluded sheets/styles in UI. Do not overwrite source files.
 notes-core.js organizes notes without inventing facts. notes.js owns editable

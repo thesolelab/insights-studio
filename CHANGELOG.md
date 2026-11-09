@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Main-list exclusions
+- Add an Excel mode to remove main-list entries found anywhere in an exclusion
+  column, with case/space options, preview counts, and matching row references.
+- Export only the remaining main-list column; preserve order, values, and formats.
+- Retain ordinary within-column de-duping and invalidate results after mode/column edits.
+
 ## Unreleased — Cleaner page navigation
 - Hide the page scrollbar while retaining wheel, touch, and keyboard scrolling.
 - Keep tool tabs visible while scrolling and remove the tab underline overflow

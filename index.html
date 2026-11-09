@@ -281,7 +281,7 @@ Jun,42500,3.8%</textarea>
    <div id="dedupe-panel" role="tabpanel" aria-labelledby="dedupe-tab" tabindex="0" hidden>
     <section class="panel dedupe-panel" aria-labelledby="dedupe-heading">
      <h2 id="dedupe-heading">Excel de-duper</h2>
-     <p class="note">Choose a file, worksheet, and column. Keep the first row for each matching value and download the cleaned worksheet.</p>
+     <p class="note">Remove duplicates within a column, or exclude companies in your main list that appear in another column.</p>
      <label class="builder-label" for="dedupe-file">Excel or CSV file
       <input id="dedupe-file" type="file" accept=".xlsx,.xls,.csv" aria-describedby="dedupe-file-help"/>
      </label>
@@ -292,26 +292,29 @@ Jun,42500,3.8%</textarea>
      </div>
      <form id="dedupe-form">
       <div id="dedupe-options" hidden>
-       <label class="builder-label" for="dedupe-column">Column to de-dupe<select id="dedupe-column"></select></label>
+       <label class="builder-label" for="dedupe-mode">What do you want to do?<select id="dedupe-mode"><option value="dedupe">Remove duplicates within one column</option><option value="exclude">Exclude matches from another column</option></select></label>
+       <label class="builder-label" for="dedupe-column"><span id="dedupe-column-label">Column to de-dupe</span><select id="dedupe-column"></select></label>
+       <label id="dedupe-exclusion-label" class="builder-label" for="dedupe-exclusion" hidden>Exclusion list column<select id="dedupe-exclusion"></select></label>
+       <p id="dedupe-mode-help" class="note">Keep the first row for each matching value.</p>
        <details class="dedupe-advanced">
         <summary>Matching options</summary>
         <label><input id="dedupe-ignore-case" type="checkbox" checked/> Ignore uppercase/lowercase differences</label>
         <label><input id="dedupe-trim" type="checkbox" checked/> Ignore spaces at the start and end</label>
-        <label class="builder-label" for="dedupe-blanks">Blank cells<select id="dedupe-blanks"><option value="keep">Keep all rows with blank values</option><option value="dedupe">Treat blank values as duplicates</option></select></label>
+        <label id="dedupe-blanks-label" class="builder-label" for="dedupe-blanks">Blank cells<select id="dedupe-blanks"><option value="keep">Keep all rows with blank values</option><option value="dedupe">Treat blank values as duplicates</option></select></label>
        </details>
-       <div class="dedupe-actions"><button class="primary" type="submit">Preview de-dupe</button></div>
+       <div class="dedupe-actions"><button id="dedupe-submit" class="primary" type="submit">Preview de-dupe</button></div>
       </div>
      </form>
      <p id="dedupe-status" role="status" class="note"></p>
      <div id="dedupe-result" hidden>
       <div class="dedupe-stats">
-       <div><span>Original rows</span><strong id="dedupe-input-count"></strong></div>
-       <div><span>Duplicates removed</span><strong id="dedupe-removed-count"></strong></div>
+       <div><span id="dedupe-input-label">Original rows</span><strong id="dedupe-input-count"></strong></div>
+       <div><span id="dedupe-removed-label">Duplicates removed</span><strong id="dedupe-removed-count"></strong></div>
        <div><span>Rows kept</span><strong id="dedupe-kept-count"></strong></div>
       </div>
       <p id="dedupe-summary" class="note"></p>
       <h3>Cleaned preview</h3>
-      <p class="note">Showing the first 30 rows. Downloads include all kept rows and original columns.</p>
+      <p class="note"><span id="dedupe-export-help">Showing the first 30 rows. Downloads include all kept rows and original columns.</span></p>
       <div id="dedupe-preview" class="dedupe-table" role="region" aria-label="Cleaned worksheet preview" tabindex="0"></div>
       <details id="dedupe-removed-details">
        <summary>Rows being removed</summary>

@@ -6,7 +6,7 @@ Five focused tools in one tabbed interface:
   export SVG, PNG, or a native editable PowerPoint slide.
 - **A/B Test Analyzer** — compare experiment conversion rates with the existing
   two-proportion test and export the distribution chart.
-- **Excel De-duper** — remove duplicate rows based on the column you choose.
+- **Excel De-duper** — remove duplicates within a column or exclude a second list.
 - **Note Organizer** — turn meeting notes into an editable bulleted Wrike recap.
 - **Slide Format Advisor** — describe your message and get five slide-layout ideas.
 
@@ -35,6 +35,24 @@ formats (including dates, currencies, and leading-zero formats) are retained.
 Formulas become their cached values; save/recalculate in Excel first. Formulas
 without saved values receive an error. Other sheets, macros, and layout styling
 are not copied. This prevents row deletion from leaving broken formula references.
+
+### Exclude companies already on another list
+Choose **Exclude matches from another column**, set the **Main list column**
+(e.g. A = target accounts), and set the **Exclusion list column** (e.g. B = existing
+accounts). Preview the exclusions, then download the cleaned list.
+
+Each nonblank main-list value is compared against **every** nonblank value in the
+exclusion column, regardless of row position. Matching uses the same case/space
+options as de-duping. This is exact text matching, not fuzzy company-name matching.
+Blank main-list entries are skipped. Repeated unmatched main-list values remain;
+this mode performs exclusion, not additional within-list de-duplication.
+
+The `-excluded.xlsx` export contains only the kept main-list column and its header,
+with original spelling, order, values, and number formats. It never includes the
+exclusion column. Preview counts refer to nonblank main-list entries, and removed
+entries identify the matching exclusion row. Changing either column, the mode,
+or matching settings requires a new preview. If all entries are excluded, the
+export contains the header only.
 
 ## Note organizer
 Type or paste one note per line, optionally add a meeting title, and select
