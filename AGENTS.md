@@ -29,8 +29,8 @@ These instructions apply throughout this repository.
 
 # Design System: Queue Works, Ambient Electric Violet
 
-Use Queue Works as the product name, QW as its monogram, and “From rough to ready.” as its tagline. Keep repository
-names and hosting paths unless the owner explicitly requests a move.
+Use Queue Works as the product name and QW as its monogram. Do not add a tagline.
+Keep repository names and hosting paths unless the owner explicitly requests a move.
 
 ## Visual direction
 Use a soft, modern SaaS toolkit with a restrained gaming influence. Apply the
@@ -52,7 +52,9 @@ workspace; no repeating grid texture. Keep the five tools and their behavior.
 - Preserve wide/fluid workspaces up to 1,920px and contained mobile scrolling.
 - Keep top tool tabs sticky and the version in the footer. The page scrollbar
   remains visually hidden while wheel, touch, and keyboard scrolling work.
-- Use the branded QW favicon and “From rough to ready.” tagline.
+- Use the branded QW favicon. The W in both monograms uses the wordmark’s
+  violet-to-teal gradient; keep the Q white and the dot teal. Leave padding for
+  gradient text glyphs so the final letter is not clipped.
 
 ## Chart colors
 Interface accent and data colors are independent. colors.js owns Signal, Arcade,

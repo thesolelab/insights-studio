@@ -1,7 +1,5 @@
 # Queue Works
 
-*From rough to ready.*
-
 Queue Works is the product name; the GitHub repository and hosting path remain
 `stat-console`.
 
