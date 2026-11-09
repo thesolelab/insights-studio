@@ -139,3 +139,9 @@ Percentage Calculator uses percentages.js for DOM-free math plus its own UI. Kee
 percentage-of, proportion, and increase/decrease calculations separate. Display
 and copy round to one decimal (36.25% → 36.3%). Clear stale outputs on edits,
 handle zero bases explicitly, and preserve inputs while switching tools.
+
+Keep recap reset scoped to notes and draft only. Preserve other tool state.
+Expose source-label toolbar controls and Ctrl/Cmd+Shift+1 (For me),
+Ctrl/Cmd+Shift+2 (Action item), scoped to editable note fields. In reviewed
+items, shortcuts move sections without rewriting text. Clear undo is session-only
+and expires when new source work begins.

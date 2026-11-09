@@ -7,7 +7,8 @@
     builtMerge = true,
     sourceDirty = false,
     manualId = 0,
-    version = 0;
+    version = 0,
+    resetSnapshot = null;
   const sections = new Map();
   function el(tag, text, attrs = {}) {
     const node = document.createElement(tag);
@@ -29,12 +30,19 @@
     $('output').value = M.recapText(items);
     $('copy').disabled = sourceDirty || !$('output').value;
     for (const [key, section] of sections) {
-      const count = items.filter((item) => item.section === key && item.text.trim()).length;
+      const count = items.filter(
+        (item) => item.section === key && item.text.trim()
+      ).length;
       section.count.textContent = String(count);
       section.copy.disabled = sourceDirty || count === 0;
     }
   }
+  function discardUndo() {
+    resetSnapshot = null;
+    $('undo').hidden = true;
+  }
   function sourceChanged() {
+    discardUndo();
     sourceDirty = $('source').value !== builtSource || $('merge').checked !== builtMerge;
     sync();
     status(
@@ -52,7 +60,8 @@
     const request = version;
     try {
       await navigator.clipboard.writeText(text);
-      if (request === version) status('Copied. Paste into the matching Wrike recap section.');
+      if (request === version)
+        status('Copied. Paste into the matching Wrike recap section.');
     } catch (error) {
       if (request !== version) return;
       $('manual-copy').value = text;
@@ -74,6 +83,9 @@
             id: item.id + '-text',
             rows: '2',
             'aria-label': M.sections[key] + ' note',
+            'data-note-id': item.id,
+            'aria-keyshortcuts':
+              'Control+Shift+1 Meta+Shift+1 Control+Shift+2 Meta+Shift+2',
           });
         text.value = item.text;
         field.append(text);
@@ -84,7 +96,10 @@
             'aria-label',
             'Section for ' + (item.text.slice(0, 70) || 'new note')
           );
-          remove.setAttribute('aria-label', 'Remove ' + (item.text.slice(0, 70) || 'new note'));
+          remove.setAttribute(
+            'aria-label',
+            'Remove ' + (item.text.slice(0, 70) || 'new note')
+          );
           sync();
         });
         const label = el('label', 'Section', { class: 'builder-label' }),
@@ -118,7 +133,9 @@
         card.append(controls);
         if (item.suggested)
           card.append(
-            el('p', 'Suggested placement — please review.', { class: 'note recap-suggestion' })
+            el('p', 'Suggested placement — please review.', {
+              class: 'note recap-suggestion',
+            })
           );
         section.list.append(card);
       }
@@ -133,13 +150,21 @@
       }),
       header = el('div', null, { class: 'recap-section-heading' }),
       heading = el('h3', title, { id: 'recap-' + key + '-heading' }),
-      count = el('span', '0', { class: 'pill', 'aria-label': title + ' item count' });
+      count = el('span', '0', {
+        class: 'pill',
+        'aria-label': title + ' item count',
+      });
     header.append(heading, count);
     section.append(header);
-    const empty = el('p', 'No items here yet. Move an item here or add one.', { class: 'note' }),
+    const empty = el('p', 'No items here yet. Move an item here or add one.', {
+        class: 'note',
+      }),
       list = el('div', null, { class: 'recap-items' }),
       controls = el('div', null, { class: 'recap-section-actions' }),
-      add = el('button', '+ Add item', { type: 'button', class: 'recap-secondary' }),
+      add = el('button', '+ Add item', {
+        type: 'button',
+        class: 'recap-secondary',
+      }),
       copyButton = el('button', 'Copy section', {
         type: 'button',
         class: 'recap-secondary',
@@ -150,7 +175,12 @@
         status('Use at most 500 recap items.', true);
         return;
       }
-      const item = { id: 'manual-' + ++manualId, text: '', section: key, suggested: false };
+      const item = {
+        id: 'manual-' + ++manualId,
+        text: '',
+        section: key,
+        suggested: false,
+      };
       items.push(item);
       draw(item.id, 'text');
     });
@@ -163,7 +193,10 @@
   $('form').addEventListener('submit', (event) => {
     event.preventDefault();
     try {
-      const draft = M.buildRecap($('source').value, { merge: $('merge').checked });
+      const draft = M.buildRecap($('source').value, {
+        merge: $('merge').checked,
+      });
+      discardUndo();
       items = draft.items;
       builtSource = $('source').value;
       builtMerge = $('merge').checked;
@@ -178,6 +211,113 @@
     } catch (error) {
       status(error.message, true);
     }
+  });
+  function tagSource(section) {
+    const input = $('source');
+    const tagged = M.tagNoteLines(
+      input.value,
+      input.selectionStart,
+      input.selectionEnd,
+      section
+    );
+    if (tagged.text.length > input.maxLength) {
+      status('The label would exceed the notes character limit.', true);
+      return;
+    }
+    input.value = tagged.text;
+    input.focus();
+    input.setSelectionRange(tagged.start, tagged.end);
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    status(
+      section === 'mine'
+        ? 'Marked as For me. Build the recap to place it in your tasks.'
+        : 'Marked as Action. Build the recap to place it in Action Items.'
+    );
+  }
+  $('tag-mine').addEventListener('click', () => tagSource('mine'));
+  $('tag-actions').addEventListener('click', () => tagSource('actions'));
+  $('panel').addEventListener('keydown', (event) => {
+    if (
+      event.isComposing ||
+      event.altKey ||
+      !event.shiftKey ||
+      !(event.ctrlKey || event.metaKey)
+    )
+      return;
+    const section =
+      event.code === 'Digit1' ? 'mine' : event.code === 'Digit2' ? 'actions' : null;
+    if (!section) return;
+    const editor = event.target;
+    if (
+      editor !== $('source') &&
+      !(editor.tagName === 'TEXTAREA' && editor.dataset.noteId)
+    )
+      return;
+    event.preventDefault();
+    if (event.repeat) return;
+    if (editor === $('source')) {
+      tagSource(section);
+      return;
+    }
+    const item = items.find((item) => item.id === editor.dataset.noteId);
+    if (!item) return;
+    const start = editor.selectionStart,
+      end = editor.selectionEnd;
+    item.section = section;
+    item.suggested = false;
+    draw(item.id, 'text');
+    const moved = document.getElementById(item.id + '-text');
+    moved.setSelectionRange(start, end);
+    status('Moved item to ' + M.sections[section] + '.');
+  });
+  $('reset').addEventListener('click', () => {
+    if ($('source').value || items.length) {
+      resetSnapshot = {
+        source: $('source').value,
+        merge: $('merge').checked,
+        items: items.map((item) => ({ ...item })),
+        builtSource,
+        builtMerge,
+        sourceDirty,
+        manualId,
+        visible: !$('result').hidden,
+        preview: $('preview').open,
+      };
+      $('undo').hidden = false;
+    }
+    $('form').reset();
+    items = [];
+    builtSource = '';
+    builtMerge = true;
+    sourceDirty = false;
+    manualId = 0;
+    $('result').hidden = true;
+    $('preview').open = false;
+    $('build').textContent = 'Build recap';
+    draw();
+    $('source').focus();
+    status(
+      'Notes and recap cleared. You can start a new meeting' +
+        (resetSnapshot ? ' or undo the clear.' : '.')
+    );
+  });
+  $('undo').addEventListener('click', () => {
+    if (!resetSnapshot) return;
+    const previous = resetSnapshot;
+    $('source').value = previous.source;
+    $('merge').checked = previous.merge;
+    items = previous.items;
+    builtSource = previous.builtSource;
+    builtMerge = previous.builtMerge;
+    sourceDirty = previous.sourceDirty;
+    manualId = previous.manualId;
+    $('result').hidden = !previous.visible;
+    $('preview').open = previous.preview;
+    $('build').textContent = previous.visible ? 'Rebuild recap' : 'Build recap';
+    discardUndo();
+    draw();
+    $('source').focus();
+    status('Previous notes and reviewed recap restored.');
   });
   $('copy').addEventListener('click', () => copy(M.recapText(items)));
 })();

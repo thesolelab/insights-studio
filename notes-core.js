@@ -15,7 +15,9 @@
       if (/^\s{0,3}#{1,6}\s+/.test(raw)) continue;
       let value = raw.trim().replace(/^(?:[-*+•▪◦]|\d+[.)])\s+/, '');
       value = value
-        .replace(/^\[([ xX]?)\]\s+/, (_, mark) => (/x/i.test(mark) ? 'Completed: ' : 'To do: '))
+        .replace(/^\[([ xX]?)\]\s+/, (_, mark) =>
+          /x/i.test(mark) ? 'Completed: ' : 'To do: '
+        )
         .replace(/\s+/g, ' ')
         .trim();
       if (!value) continue;
@@ -25,7 +27,8 @@
         )
       )
         continue;
-      if (/^(?:meeting(?: title)?|title|discussion title)\s*[:—–]\s*.+$/i.test(value)) continue;
+      if (/^(?:meeting(?: title)?|title|discussion title)\s*[:—–]\s*.+$/i.test(value))
+        continue;
       const key = value.toLowerCase();
       if (options.merge !== false && seen.has(key)) {
         removed++;
@@ -47,7 +50,11 @@
       .toLowerCase()
       .replace(/[^\p{L}\p{N}]+/gu, ' ')
       .trim();
-    if (['meeting notes topics', 'meeting notes', 'topics', 'discussion', 'notes'].includes(key))
+    if (
+      ['meeting notes topics', 'meeting notes', 'topics', 'discussion', 'notes'].includes(
+        key
+      )
+    )
       return 'topics';
     if (
       [
@@ -63,7 +70,8 @@
       ].includes(key)
     )
       return 'mine';
-    if (['action items', 'actions', 'follow ups', 'follow up'].includes(key)) return 'actions';
+    if (['action items', 'actions', 'follow ups', 'follow up'].includes(key))
+      return 'actions';
     return null;
   }
   function buildRecap(text, options = {}) {
@@ -79,9 +87,14 @@
       removed = 0;
     const verbs =
       '(?:send|share|create|add|check|confirm|follow up|review|schedule|prepare|update|ask|find|contact|draft|book|provide|set up|deliver|investigate|research|complete|submit)';
-    const personal = new RegExp('^I\\s+(?:will|need to|have to|must)\\s+' + verbs + '\\b', 'i');
+    const personal = new RegExp(
+      '^I\\s+(?:will|need to|have to|must)\\s+' + verbs + '\\b',
+      'i'
+    );
     const assigned = new RegExp(
-      "^[A-Z][\\p{L}'’-]+(?: [A-Z][\\p{L}'’-]+){0,2} (?:will|to|agreed to) " + verbs + '\\b',
+      "^[A-Z][\\p{L}'’-]+(?: [A-Z][\\p{L}'’-]+){0,2} (?:will|to|agreed to) " +
+        verbs +
+        '\\b',
       'iu'
     );
     lines.forEach((raw, index) => {
@@ -97,7 +110,10 @@
         explicitSection = true;
         return;
       }
-      if (/^#{1,6}\s+/.test(value) || /^(?:meeting(?: title)?|title)\s*[:—–]\s*.+$/i.test(value))
+      if (
+        /^#{1,6}\s+/.test(value) ||
+        /^(?:meeting(?: title)?|title)\s*[:—–]\s*.+$/i.test(value)
+      )
         return;
       let section = current,
         suggested = false;
@@ -118,7 +134,10 @@
         if (personal.test(value)) {
           section = 'mine';
           suggested = true;
-        } else if (assigned.test(value) && !/^(?:I|We|Should|Could|Would|Will|Can)\b/.test(value)) {
+        } else if (
+          assigned.test(value) &&
+          !/^(?:I|We|Should|Could|Would|Will|Can)\b/.test(value)
+        ) {
           section = 'actions';
           suggested = true;
         }
@@ -132,17 +151,25 @@
         return;
       }
       seen.add(key);
-      items.push({ id: 'note-' + (index + 1), text: value, section, suggested });
-      if (items.length > 500) throw new Error('Use up to 500 notes per recap for review.');
+      items.push({
+        id: 'note-' + (index + 1),
+        text: value,
+        section,
+        suggested,
+      });
+      if (items.length > 500)
+        throw new Error('Use up to 500 notes per recap for review.');
     });
     if (!items.length) throw new Error('Add at least one note beneath the headings.');
     return { items, removed };
   }
   function sectionText(items, section) {
-    if (!Object.hasOwn(sections, section)) throw new Error('Choose a valid recap section.');
+    if (!Object.hasOwn(sections, section))
+      throw new Error('Choose a valid recap section.');
     return items
       .filter(
-        (item) => item.section === section && typeof item.text === 'string' && item.text.trim()
+        (item) =>
+          item.section === section && typeof item.text === 'string' && item.text.trim()
       )
       .map((item) => item.text.trim())
       .join('\n');
@@ -156,7 +183,59 @@
       .filter(Boolean)
       .join('\n\n');
   }
-  const api = { organize, sections, buildRecap, sectionText, recapText };
+  function tagNoteLines(text, start, end, section) {
+    if (typeof text !== 'string') throw new Error('Use plain-text notes.');
+    if (!['mine', 'actions'].includes(section))
+      throw new Error('Choose For me or Action.');
+    if (
+      !Number.isInteger(start) ||
+      !Number.isInteger(end) ||
+      start < 0 ||
+      end < start ||
+      end > text.length
+    )
+      throw new Error('Choose a valid note selection.');
+    const left = start === 0 ? 0 : text.lastIndexOf('\n', start - 1) + 1;
+    const effectiveEnd = end > start && text[end - 1] === '\n' ? end - 1 : end;
+    const found = text.indexOf('\n', effectiveEnd),
+      right = found < 0 ? text.length : found;
+    const old = text.slice(left, right),
+      lines = old.split('\n'),
+      prefix = section === 'mine' ? 'For me: ' : 'Action: ';
+    let caret = start;
+    const updated = lines
+      .map((line, index) => {
+        if (!line.trim() && lines.length > 1) return line;
+        const match = line.match(/^([ \t]*(?:(?:[-*+•▪◦]|\d+[.)])[ \t]+)?)([\s\S]*)$/);
+        const leading = match[1],
+          body = match[2];
+        const label = body.match(
+          /^(?:my task|task for me|need(?:ed)? from me|for me|todo|to-do|to do|task|action(?: item)?s?|follow[- ]?up)\s*:[ \t]*/i
+        );
+        const previousLabel = label ? label[0].length : 0;
+        if (index === 0 && start === end)
+          caret =
+            left +
+            leading.length +
+            prefix.length +
+            Math.max(0, start - left - leading.length - previousLabel);
+        return leading + prefix + body.slice(previousLabel);
+      })
+      .join('\n');
+    return {
+      text: text.slice(0, left) + updated + text.slice(right),
+      start: start === end ? caret : left,
+      end: start === end ? caret : left + updated.length,
+    };
+  }
+  const api = {
+    organize,
+    sections,
+    buildRecap,
+    sectionText,
+    recapText,
+    tagNoteLines,
+  };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.MeetingNotes = api;
 })(typeof window !== 'undefined' ? window : globalThis);

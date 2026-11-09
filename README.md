@@ -220,3 +220,11 @@ File upload areas support one file at a time, visible drag-over feedback, and
 native keyboard/touch file browsing. Dropped and browsed files use identical
 validation and import paths. Dropping files outside the areas does not navigate
 away from open work.
+
+Meeting Recap Builder: use **Clear / reset** to start another meeting without
+refreshing other tools. **Undo clear** restores the previous notes and reviewed
+draft until you type new notes, change the merge setting, or build another recap.
+While editing notes, press **Ctrl/Cmd + Shift + 1** for **For me**, or
+**Ctrl/Cmd + Shift + 2** for **Action item**. These label the current line or
+selected lines; in a reviewed recap they move the current item instead.
+The toolbar buttons provide the same source-note labels without a keyboard.
