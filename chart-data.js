@@ -3,7 +3,7 @@
   const MAX_ROWS = 200;
   const MAX_SERIES = 6;
 
-  function parseDelimited(text) {
+  function splitDelimited(text) {
     text = String(text).replace(/^\uFEFF/, '');
     if (!text.trim()) throw new Error('Paste a table or choose a data file first.');
     let inHeaderQuotes = false, hasTab = false;
@@ -41,8 +41,10 @@
     }
     if (quoted) throw new Error('A quoted cell is missing its closing quote.');
     if (row.length || cell || closed) { row.push(cell); rows.push(row); }
-    return normalizeTable(rows);
+    return rows;
   }
+
+  function parseDelimited(text) { return normalizeTable(splitDelimited(text)); }
 
   function numberCell(value) {
     let text = String(value).trim();
@@ -91,7 +93,7 @@
     return rows.map(row => row.map(value => '"' + String(value ?? '').replace(/"/g, '""') + '"').join(',')).join('\n');
   }
 
-  const api = { MAX_ROWS, MAX_SERIES, parseDelimited, normalizeTable, numberCell, axisScale, serializeTable };
+  const api = { MAX_ROWS, MAX_SERIES, splitDelimited, parseDelimited, normalizeTable, numberCell, axisScale, serializeTable };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.ChartData = api;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -9,6 +9,7 @@
       document.getElementById(item.getAttribute('aria-controls')).hidden = !selected;
     }
   }
+  window.AnalysisTabs = { activate(id) { const tab = tabs.find(item => item.id === id); if (tab) activate(tab); } };
   tabs.forEach((tab, index) => {
     tab.addEventListener('click', () => activate(tab));
     tab.addEventListener('keydown', event => {

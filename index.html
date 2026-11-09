@@ -5,12 +5,13 @@
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
   <meta content="#11151B" name="theme-color"/>
   <title>
-   Stat Console | Charts &amp; Analysis
+   Stat Console | Your Work Command Center
   </title>
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Outfit:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
   <link href="styles.css" rel="stylesheet"/>
+  <link href="console.css" rel="stylesheet"/>
  </head>
  <body>
   <main class="shell">
@@ -104,6 +105,8 @@ Jun,42500,3.8%</textarea>
       <button id="builder-svg" type="button" disabled>Export SVG</button>
       <button id="builder-png" type="button" disabled>Export PNG</button>
       <button id="builder-pptx" type="button" disabled>Export PowerPoint</button>
+      <button id="builder-save-project" type="button" disabled>Save to project</button>
+      <button id="builder-to-workbench" type="button" disabled>To workbench</button>
      </div>
     </div>
     <p id="builder-status" class="note" role="status"></p>
@@ -279,15 +282,15 @@ Jun,42500,3.8%</textarea>
     <span>
      ·
     </span>
-    Personal reporting workspace
+    Browser workspace
     <span>
      ·
     </span>
-    No data uploaded or saved
+    Explicit local saves
     <span>
      ·
     </span>
-    v0.1.1
+    v0.2.0
    </footer>
   </main>
   <script src="colors.js"></script>
@@ -297,6 +300,8 @@ Jun,42500,3.8%</textarea>
   <script src="chart-data.js"></script>
   <script src="chart-modes.js"></script>
   <script src="charts.js"></script>
+  <script src="console-core.js"></script>
+  <script src="console.js"></script>
  </body>
 </html>
 
