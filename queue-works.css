@@ -61,14 +61,11 @@ h2::before { width: 4px; flex-basis: 4px; height: 20px; border-radius: 3px; }
 }
 .primary:hover { transform: translateY(-2px); }
 .primary:active { transform: translateY(1px); }
-.export button, .slide-copy { border-radius: 9px; text-transform: none; letter-spacing: 0; }
+.export button { border-radius: 9px; text-transform: none; letter-spacing: 0; }
 .pill { border-radius: 7px; }
 .verdict { background: var(--secondary-tint); border-left-color: var(--secondary); }
 .dedupe-stats>div, .metric { background: var(--surface-inset); }
 .dedupe-stats strong { font-family: var(--font-display); }
-.slide-format-card:first-child { border-color: var(--accent); background: var(--accent-tint); }
-.slide-format-label { color: var(--secondary); }
-.wireframe-timeline .wireframe-block { border-bottom-color: var(--secondary); }
 footer { letter-spacing: 0.08em; padding-top: 12px; }
 @media(max-width:640px) {
   .shell { padding-top: 20px; }

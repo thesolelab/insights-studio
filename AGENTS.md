@@ -36,7 +36,7 @@ Keep repository names and hosting paths unless the owner explicitly requests a m
 Use a soft, modern SaaS toolkit with a restrained gaming influence. Apply the
 user's Ambient Electric Violet palette: midnight slate #0f172a, primary violet
 #8b5cf6, secondary teal #2dd4bf. Use subtle violet/teal radial glows behind the
-workspace; no repeating grid texture. Keep the six authorized tools and their behavior.
+workspace; no repeating grid texture. Keep the five authorized tools and their behavior.
 
 - Define interface colors in :root. Components use tokens from styles.css.
 - Surfaces: #172238; inset fields/chart canvases: #101b30.
@@ -100,7 +100,7 @@ area grouping and bubble workbook values/headers/ranges.
 
 ## Focused tool architecture
 Keep exactly the authorized tools: Chart Creator, A/B Test Analyzer, Excel
-De-duper, Meeting Recap Builder, Slide Format Advisor, and Percentage Calculator. Do not restore dashboards,
+De-duper, Meeting Recap Builder, and Percentage Calculator. Do not restore dashboards,
 project management, utility categories, other calculators, visual tools, or deck building.
 Each tool stays mounted while switching accessible tabs. tools.css styles new
 tools; the existing styles.css owns chart/A/B/shared design tokens.
@@ -123,8 +123,7 @@ and reassignment available. Per-section copies omit headings; full copies includ
 nonempty section headings, with plain unbulleted lines and no meeting title.
 Source changes disable stale copies while retaining reviewed edits until an explicit
 rebuild. Preserve names, amounts, dates, negations, and checkbox status. Keep all
-processing session-only; no model downloads or backend. slide-formats.js ranks
-layout suggestions from brief themes and shows wireframes; describe its limits.
+processing session-only; no model downloads or backend.
 Use textContent for user content, never HTML interpolation or eval. Do not send
 notes to Wrike; only copy the user's reviewed recap for manual pasting.
 
@@ -156,3 +155,7 @@ annotation text colors must match preview and exports without changing UI tokens
 or statistical data. PNG can omit its background rect for transparency; SVG
 retains the chosen solid background. Never remove the preview background when
 serializing a transparent export.
+
+Do not restore the removed Slide Format Advisor. Percentage Calculator Clear / reset
+clears all three forms, results, validation, and copy state, invalidates pending
+clipboard feedback, and leaves other tools untouched.

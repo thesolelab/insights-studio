@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Outfit:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
-  <meta name="description" content="Queue Works brings charts, A/B tests, spreadsheet cleanup, meeting notes, and slide guidance into one focused toolkit."/>
+  <meta name="description" content="Queue Works brings charts, A/B tests, spreadsheet cleanup, meeting notes, and percentage calculations into one focused toolkit."/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
   <link href="styles.css" rel="stylesheet"/>
   <link href="tools.css" rel="stylesheet"/>
@@ -34,7 +34,6 @@
     <button id="analyzer-tab" type="button" role="tab" aria-selected="false" aria-controls="analyzer-panel" tabindex="-1">A/B Test Analyzer</button>
     <button id="dedupe-tab" type="button" role="tab" aria-selected="false" aria-controls="dedupe-panel" tabindex="-1">Excel De-duper</button>
     <button id="notes-tab" type="button" role="tab" aria-selected="false" aria-controls="notes-panel" tabindex="-1">Meeting Recap Builder</button>
-    <button id="formats-tab" type="button" role="tab" aria-selected="false" aria-controls="formats-panel" tabindex="-1">Slide Format Advisor</button>
     <button id="percentage-tab" type="button" role="tab" aria-selected="false" aria-controls="percentage-panel" tabindex="-1">Percentage Calculator</button>
    </div>
    <div id="studio-panel" role="tabpanel" aria-labelledby="studio-tab" tabindex="0">
@@ -376,20 +375,6 @@ Jun,42500,3.8%</textarea>
      </div>
     </section>
    </div>
-   <div id="formats-panel" role="tabpanel" aria-labelledby="formats-tab" tabindex="0" hidden>
-    <section class="panel notes-panel" aria-labelledby="formats-heading">
-     <h2 id="formats-heading">Slide format advisor</h2>
-     <p class="note">Describe what you want to convey. Get five slide layouts with visual outlines and guidance on how to use them.</p>
-     <form id="slide-form">
-      <label class="builder-label" for="slide-brief">What should your audience understand or decide?<textarea id="slide-brief" rows="5" maxlength="5000" placeholder="I want leadership to compare three vendors and approve the one with the best balance of cost and reliability."></textarea></label>
-      <p class="note">Suggestions match themes in your brief, such as comparisons, trends, decisions, or timelines. This is a layout guide, not an AI content generator.</p>
-      <div class="dedupe-actions"><button class="primary" type="submit">Recommend slide formats</button></div>
-     </form>
-     <p id="slide-status" class="note" role="status"></p>
-     <div id="slide-results" class="slide-format-grid"></div>
-     <textarea id="slide-manual-copy" class="slide-manual-copy" rows="8" aria-label="Slide outline to copy manually" hidden></textarea>
-    </section>
-   </div>
    <div id="percentage-panel" role="tabpanel" aria-labelledby="percentage-tab" tabindex="0" hidden></div>
    <footer>
     QUEUE WORKS
@@ -420,7 +405,6 @@ Jun,42500,3.8%</textarea>
   <script src="deduper.js"></script>
   <script src="notes-core.js"></script>
   <script src="notes.js"></script>
-  <script src="slide-formats.js"></script>
   <script src="percentages.js"></script>
  </body>
 </html>
