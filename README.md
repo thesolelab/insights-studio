@@ -6,7 +6,7 @@ Repository: https://github.com/thesolelab/queue-works
 
 Live site: https://thesolelab.github.io/queue-works/
 
-Six focused tools in one tabbed interface:
+Five focused tools in one tabbed interface:
 
 - **Chart Creator** — turn Excel/CSV or pasted data into customizable charts and
   export SVG, PNG, or a native editable PowerPoint slide.
@@ -14,7 +14,6 @@ Six focused tools in one tabbed interface:
   two-proportion test and export the distribution chart.
 - **Excel De-duper** — remove duplicates within a column or exclude a second list.
 - **Meeting Recap Builder** — review notes, personal tasks, and action items for Wrike.
-- **Slide Format Advisor** — describe your message and get five slide-layout ideas.
 - **Percentage Calculator** — percentage-of, proportions, and increase/decrease.
 
 The Ambient Electric Violet design uses midnight slate (`#0f172a`), violet
@@ -100,24 +99,15 @@ Notes and draft edits stay in the current browser tab only. Copy before closing 
 reloading. Limits: 100,000 source characters, 5,000 source lines, 500 review items.
 There is no AI service, model download, backend, account, or external note processing.
 
-## Slide format advisor
-Describe the message you want the audience to understand or decide, then select
-**Recommend slide formats**. Five ranked layout cards explain when each format
-works, show a wireframe, and list the slide structure. Copy a chosen outline to
-use when building the slide in PowerPoint.
-
-Suggestions match themes such as comparisons, trends, change, processes, metrics,
-causes, and decisions. General briefs receive flexible fallback formats. This is
-a rule-based layout guide, not an AI content generator; it does not invent slide
-facts or create a deck. Limits: 15–5,000 characters per brief.
-
 ## Percentage calculator
 Use the Percentage Calculator tab for X% of Y, X as a percentage of Y, or
 percentage increase/decrease from X to Y. Each card has a Calculate button,
 keyboard submission, and a Copy button. Output and copied values round to one
 decimal place (`36.25%` → `36.3%`); percentage results include `%` when copied.
-Changing either input clears its stale result. Inputs remain across tab switches
-and reset on reload. Decimals and negative values are accepted, except that
+Changing either input clears its stale result. Inputs remain across tab switches.
+**Clear / reset** clears all three calculators, including results, validation
+messages, and copy state, without reloading other tools. Decimals and negative
+values are accepted, except that
 percentage-change starting values must be positive; zero denominators receive an
 explanation. Clipboard failures select the result for manual copying. All math
 runs locally without an account, model download, or AI service.
@@ -193,8 +183,8 @@ Publish the repository root on GitHub Pages (Settings → Pages → main / root)
 Keep `index.html`, `styles.css`, `tools.css`, `queue-works.css`, `favicon.svg`,
 `colors.js`, `app.js`, `tabs.js`,
 `chart-data.js`, `chart-modes.js`, `charts.js`, `dedupe-core.js`, `deduper.js`,
-`notes-core.js`, `notes.js`, `file-uploads.js`, `libraries.js`, `percentages.js`, and
-`slide-formats.js` together. No build step,
+`notes-core.js`, `notes.js`, `file-uploads.js`, `libraries.js`, and `percentages.js`
+together. No build step,
 backend, account, or tracking is required.
 
 Inter and Outfit load from Google Fonts with system fallbacks. SheetJS 0.20.3
@@ -219,7 +209,7 @@ requests, without installing application dependencies. Tests also verify local
 assets resolve beneath `/queue-works/` and shared library loading/retry behavior.
 
 Run `node --test tests/*.test.cjs` for chart parsing/scales/families, colors, A/B
-samples, selected-column dedupe, note organization, and slide-format matching.
+samples, selected-column dedupe, note organization, and percentage calculations.
 Run `node --check` on changed JavaScript files. Browser checks cover downloaded
 XLSX values/formats, clipboard success/fallback, preserved tab state, native
 PowerPoint exports, and desktop/mobile layouts.

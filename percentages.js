@@ -18,8 +18,13 @@
       value = (a / b) * 100;
     } else if (mode === 'change') {
       if (a === 0)
-        throw new Error('Percentage change is undefined when the starting value is zero.');
-      if (a < 0) throw new Error('Use a positive starting value for percentage increase/decrease.');
+        throw new Error(
+          'Percentage change is undefined when the starting value is zero.'
+        );
+      if (a < 0)
+        throw new Error(
+          'Use a positive starting value for percentage increase/decrease.'
+        );
       value = ((b - a) / a) * 100;
     } else throw new Error('Choose a supported calculation.');
     if (!Number.isFinite(value))
@@ -49,7 +54,21 @@
         { class: 'note' }
       )
     );
+    const resets = [];
+    const reset = el('button', 'Clear / reset', {
+      id: 'percentage-reset',
+      type: 'button',
+      class: 'recap-secondary',
+    });
+    const resetStatus = el('p', '', { class: 'note', role: 'status' });
+    intro.append(reset, resetStatus);
     container.append(intro);
+    container.addEventListener('input', () => {
+      resetStatus.textContent = '';
+    });
+    container.addEventListener('submit', () => {
+      resetStatus.textContent = '';
+    });
     const specs = [
       {
         id: 'of',
@@ -82,7 +101,8 @@
         first: 'Starting value',
         second: 'Ending value',
         example: 'Example: 200 to 250 = 25% increase',
-        formula: 'Result = (ending − starting) ÷ starting × 100. Starting value must be positive.',
+        formula:
+          'Result = (ending − starting) ÷ starting × 100. Starting value must be positive.',
       },
     ];
     for (const spec of specs) {
@@ -148,6 +168,10 @@
         a.node.removeAttribute('aria-invalid');
         b.node.removeAttribute('aria-invalid');
       }
+      resets.push(() => {
+        form.reset();
+        invalidate();
+      });
       a.node.addEventListener('input', invalidate);
       b.node.addEventListener('input', invalidate);
       form.addEventListener('submit', (event) => {
@@ -160,7 +184,8 @@
           result.textContent = copyValue;
           copy.disabled = false;
           if (spec.id === 'change')
-            status.textContent = value > 0 ? 'Increase' : value < 0 ? 'Decrease' : 'No change';
+            status.textContent =
+              value > 0 ? 'Increase' : value < 0 ? 'Decrease' : 'No change';
         } catch (error) {
           status.setAttribute('role', 'alert');
           status.textContent = error.message;
@@ -178,7 +203,8 @@
           if (version === generation) status.textContent = 'Copied ' + text;
         } catch (error) {
           if (version !== generation) return;
-          status.textContent = 'Copy unavailable. Select the result and copy it manually.';
+          status.textContent =
+            'Copy unavailable. Select the result and copy it manually.';
           const range = document.createRange();
           range.selectNodeContents(result);
           const selection = window.getSelection();
@@ -191,6 +217,11 @@
       card.append(form, status, help);
       container.append(card);
     }
+    reset.addEventListener('click', () => {
+      resets.forEach((clear) => clear());
+      resetStatus.textContent = 'All percentage calculator inputs and results cleared.';
+      container.querySelector('input').focus();
+    });
     container.append(
       el(
         'p',

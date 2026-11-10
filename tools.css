@@ -36,25 +36,6 @@
 .notes-panel :focus-visible {outline:2px solid var(--accent);outline-offset:3px}
 @media(max-width:640px) {.notes-panel{padding:18px}}
 
-.slide-format-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
-.slide-format-card {padding:22px;background:var(--surface-inset);border:1px solid var(--border);border-radius:var(--radius);min-width:0}
-.slide-format-card:first-child {border-color:var(--accent-text)}
-.slide-format-label {font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-text)}
-.slide-format-card h3 {font-size:18px;margin:12px 0}
-.slide-format-card p,.slide-format-card li {font-size:13px;color:var(--text-muted);line-height:1.7}
-.slide-format-card ul {padding-left:18px}
-.slide-copy {padding:10px 14px;border:1px solid var(--border-strong);background:transparent;border-radius:var(--radius);color:var(--text);font:inherit;font-size:13px;cursor:pointer}
-.slide-copy:hover {border-color:var(--accent-text);color:var(--accent-text)}
-.slide-wireframe {aspect-ratio:16/9;display:grid;gap:8px;padding:14px;border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--surface);margin:18px 0;font-size:11px;color:var(--text-muted);grid-template-rows:auto 1fr}
-.wireframe-title {grid-column:1/-1;color:var(--text);font-weight:700;padding-bottom:8px;border-bottom:1px solid var(--border)}
-.wireframe-block {display:flex;justify-content:center;align-items:center;border:1px dashed var(--border-strong);padding:8px;text-align:center;min-width:0}
-.wireframe-cards,.wireframe-timeline,.wireframe-matrix {grid-template-columns:repeat(3,minmax(0,1fr))}
-.wireframe-split {grid-template-columns:repeat(2,minmax(0,1fr))}
-.wireframe-chart {grid-template-columns:2fr 1fr}
-.wireframe-timeline .wireframe-block {border-bottom:3px solid var(--accent)}
-.wireframe-matrix {grid-template-rows:auto 1fr 1fr}
-.slide-manual-copy {width:100%;margin:20px 0}
-@media(max-width:760px) {.slide-format-grid{grid-template-columns:1fr}.slide-format-card{padding:18px}}
 .notes-panel input[type=text],.notes-panel textarea {box-sizing:border-box;width:100%;padding:12px 14px;background:var(--surface-inset);border:1px solid var(--border-strong);border-radius:var(--radius);color:var(--text);font:400 14px var(--font-body);line-height:1.7}
 .dedupe-panel #dedupe-options > .builder-label {margin:16px 0}
 

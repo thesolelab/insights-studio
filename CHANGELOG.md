@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Focused tools and percentage reset
+- Remove Slide Format Advisor, its script, styles, and obsolete tests.
+- Add Clear / reset to clear all three percentage calculators without reloading
+  or changing other tools. Clear results, errors, and copy state together.
+
+
 ## Unreleased — A/B image export appearance
 - Customize the chart background, axis labels/title, and annotation text alongside
   Control A and Variant B colors, without changing statistical results.
