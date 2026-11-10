@@ -6,14 +6,17 @@ Repository: https://github.com/thesolelab/queue-works
 
 Live site: https://thesolelab.github.io/queue-works/
 
-Five focused tools in one tabbed interface:
+Seven focused tools in one tabbed interface:
 
 - **Chart Creator** — turn Excel/CSV or pasted data into customizable charts and
   export SVG, PNG, or a native editable PowerPoint slide.
 - **A/B Test Analyzer** — compare experiment conversion rates with the existing
   two-proportion test and export the distribution chart.
-- **Excel De-duper** — remove duplicates within a column or exclude a second list.
+- **Excel De-duper** — remove duplicates, exclude a second list, or compare lists.
 - **Meeting Recap Builder** — review notes, personal tasks, and action items for Wrike.
+- **Slide Table Builder** — paste spreadsheet data, format it, and copy/export a
+  slide-ready visual or editable PowerPoint text boxes and shapes.
+- **UTM Builder** — generate, copy, and clear campaign tracking links.
 - **Percentage Calculator** — percentage-of, proportions, and increase/decrease.
 
 The Ambient Electric Violet design uses midnight slate (`#0f172a`), violet
@@ -62,6 +65,57 @@ exclusion column. Preview counts refer to nonblank main-list entries, and remove
 entries identify the matching exclusion row. Changing either column, the mode,
 or matching settings requires a new preview. If all entries are excluded, the
 export contains the header only.
+
+## List comparison
+Find **List comparison** below the existing Excel De-duper. Paste one entry per
+line into A and B, or upload a spreadsheet using the existing drop area, select a
+worksheet and two columns above, and choose **Use selected worksheet columns as
+A / B**. This copies a snapshot without the headers; later worksheet changes do
+not change the pasted lists until you bring them in again.
+
+Compare lists to see shared values, A-only, B-only, and a combined unique list.
+Blank lines and repeated matches are consolidated. Case/space options affect
+matching only; first spellings are preserved, shared values use A, and the combined
+list follows A then unmatched B. Results contain values only, not full source rows.
+Copy the selected result or download all four result sets as separate Excel sheets.
+Edits invalidate results. Clear lists leaves the uploaded workbook untouched.
+Limits: 50,000 lines and 1 million characters per list.
+
+## Slide-ready table builder
+Paste a full Excel/Sheets range (tabs) or CSV including headers, then **Build table**.
+Edit the resulting cells or paste a tab-separated range into any cell. Ranges
+start at the selected cell and can expand the table within the row/column limits.
+Format font size, padding, alignment, relative column
+widths, alternate row shading, borders, and six independently customizable colors.
+The first row is always the header. Values remain text, including leading zeros,
+percentages, currency, and literal HTML. Rebuilding from the source replaces cell
+edits. Clear table retains formatting choices, while clearing the source and outputs.
+
+**Copy table image** copies a PNG for pasting into PowerPoint. Download PNG/SVG
+if the clipboard is unavailable. **Export editable PowerPoint** creates one 16:9
+slide made from editable rectangles and text boxes, rather than a native PowerPoint
+table. It is a formatted visual, without spreadsheet formulas or table-specific
+editing commands. Arial is used for portable preview/export typography.
+
+Limits: headers + 1–30 data rows, 1–10 columns, 500 characters per cell, and 100,000
+pasted characters. A table must fit one slide; oversized or overly narrow layouts
+receive an error rather than clipped exports. Reduce font/padding, widen a column,
+shorten text, or split the source into smaller tables. Image preview and PowerPoint
+share wrapping, geometry, colors, and explicit text. Actual font rendering can vary
+between browsers and desktop PowerPoint.
+
+## UTM link builder
+Enter an HTTP/HTTPS destination URL and required source, medium, and campaign.
+Term and content are optional. Select **Generate link**, **Copy link**, or
+**Clear / reset**. Clear resets all fields and the generated link. Editing an input
+invalidates the old link. Clipboard failure selects the link for manual copying.
+
+Values are trimmed and URL-encoded; spelling/case are retained. Existing managed
+`utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, and `utm_content` parameters
+are replaced (blank optional values remove old tags). Other query parameters and
+anchors are preserved. URLs with embedded credentials or non-HTTP protocols are
+rejected. Limits: 8,192 URL characters and 1,000 per UTM field. Links are created
+locally, never visited, shortened, saved, or sent to an analytics service.
 
 ## Meeting recap builder
 The input starts empty, with step-by-step instructions above it rather than sample
@@ -184,7 +238,8 @@ Keep `index.html`, `styles.css`, `tools.css`, `queue-works.css`, `favicon.svg`,
 `colors.js`, `app.js`, `tabs.js`,
 `chart-data.js`, `chart-modes.js`, `charts.js`, `dedupe-core.js`, `deduper.js`,
 `notes-core.js`, `notes.js`, `file-uploads.js`, `libraries.js`, and `percentages.js`
-together. No build step,
+together with `productivity-core.js`, `list-comparison.js`, `table-core.js`,
+`slide-table.js`, and `utm.js`. No build step,
 backend, account, or tracking is required.
 
 Inter and Outfit load from Google Fonts with system fallbacks. SheetJS 0.20.3
@@ -209,7 +264,7 @@ requests, without installing application dependencies. Tests also verify local
 assets resolve beneath `/queue-works/` and shared library loading/retry behavior.
 
 Run `node --test tests/*.test.cjs` for chart parsing/scales/families, colors, A/B
-samples, selected-column dedupe, note organization, and percentage calculations.
+samples, selected-column dedupe, note organization, percentage calculations, list comparison, UTM links, and table layout.
 Run `node --check` on changed JavaScript files. Browser checks cover downloaded
 XLSX values/formats, clipboard success/fallback, preserved tab state, native
 PowerPoint exports, and desktop/mobile layouts.

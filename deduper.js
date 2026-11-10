@@ -35,7 +35,8 @@
       const range = X.utils.decode_range(sheet['!ref']),
         rowCount = range.e.r - range.s.r,
         columnCount = range.e.c - range.s.c + 1;
-      if (rowCount < 1) throw new Error('Include a header row and at least one data row.');
+      if (rowCount < 1)
+        throw new Error('Include a header row and at least one data row.');
       if (rowCount > 50000 || columnCount > 200 || (rowCount + 1) * columnCount > 1000000)
         throw new Error('Use up to 50,000 data rows, 200 columns, and 1 million cells.');
       const rows = [];
@@ -55,7 +56,8 @@
       $('column').replaceChildren();
       $('exclusion').replaceChildren();
       rows[0].forEach((header, i) => {
-        const label = X.utils.encode_col(range.s.c + i) + ' — ' + (header || '(no header)');
+        const label =
+          X.utils.encode_col(range.s.c + i) + ' — ' + (header || '(no header)');
         option($('column'), i, label);
         option($('exclusion'), i, label);
       });
@@ -111,13 +113,18 @@
     $('column-label').textContent = exclude
       ? 'Main list column (keep these unless excluded)'
       : 'Column to de-dupe';
-    $('exclusion-label').hidden = !exclude;
+    $('exclusion-label').hidden = false;
+    $('second-name').textContent = exclude
+      ? 'Exclusion list column'
+      : 'Second column (for list comparison below)';
     $('blanks-label').hidden = exclude;
     $('mode-help').textContent = exclude
       ? 'Compare every main-list value against the entire exclusion column, regardless of row. Export only the main-list column, in its original order. Blank main-list cells are skipped; repeated unmatched values remain. Matching is exact after the case/space options below.'
       : 'Keep the first row for each matching value. Export all original columns.';
     $('submit').textContent = exclude ? 'Preview exclusions' : 'Preview de-dupe';
-    $('download').textContent = exclude ? 'Download cleaned list' : 'Download cleaned Excel';
+    $('download').textContent = exclude
+      ? 'Download cleaned list'
+      : 'Download cleaned Excel';
     $('input-label').textContent = exclude ? 'Main list entries' : 'Original rows';
     $('removed-label').textContent = exclude ? 'Excluded matches' : 'Duplicates removed';
     $('export-help').textContent = exclude
@@ -216,6 +223,23 @@
       status(error.message, true);
     }
   });
+  document.getElementById('lists-use-columns').addEventListener('click', () => {
+    const feedback = document.getElementById('lists-status');
+    if (!source) {
+      feedback.textContent = 'Upload a spreadsheet and choose its worksheet above first.';
+      return;
+    }
+    const a = Number($('column').value),
+      b = Number($('exclusion').value);
+    if (a === b) {
+      feedback.textContent = 'Choose two different worksheet columns above.';
+      return;
+    }
+    window.ListComparison.setLists(
+      source.rows.slice(1).map((row) => row[a]),
+      source.rows.slice(1).map((row) => row[b])
+    );
+  });
   $('download').addEventListener('click', () => {
     if (!result || !source) return;
     try {
@@ -227,7 +251,8 @@
         : source.rows[0].map((_, i) => source.range.s.c + i);
       indices.forEach((index, newRow) => {
         columns.forEach((c, newColumn) => {
-          const original = source.sheet[X.utils.encode_cell({ r: source.range.s.r + index, c })];
+          const original =
+            source.sheet[X.utils.encode_cell({ r: source.range.s.r + index, c })];
           if (!original || original.v === undefined || original.t === 'z') return;
           const cell = { t: original.t, v: original.v };
           if (original.z) cell.z = original.z;
