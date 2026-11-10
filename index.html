@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Outfit:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
-  <meta name="description" content="Queue Works brings charts, A/B tests, spreadsheet cleanup, meeting notes, and percentage calculations into one focused toolkit."/>
+  <meta name="description" content="Queue Works brings charts, A/B tests, spreadsheet cleanup, meeting notes, slide tables, UTM links, and percentage calculations into one focused toolkit."/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
   <link href="styles.css" rel="stylesheet"/>
   <link href="tools.css" rel="stylesheet"/>
@@ -34,6 +34,8 @@
     <button id="analyzer-tab" type="button" role="tab" aria-selected="false" aria-controls="analyzer-panel" tabindex="-1">A/B Test Analyzer</button>
     <button id="dedupe-tab" type="button" role="tab" aria-selected="false" aria-controls="dedupe-panel" tabindex="-1">Excel De-duper</button>
     <button id="notes-tab" type="button" role="tab" aria-selected="false" aria-controls="notes-panel" tabindex="-1">Meeting Recap Builder</button>
+    <button id="table-tab" type="button" role="tab" aria-selected="false" aria-controls="table-panel" tabindex="-1">Slide Table Builder</button>
+    <button id="utm-tab" type="button" role="tab" aria-selected="false" aria-controls="utm-panel" tabindex="-1">UTM Builder</button>
     <button id="percentage-tab" type="button" role="tab" aria-selected="false" aria-controls="percentage-panel" tabindex="-1">Percentage Calculator</button>
    </div>
    <div id="studio-panel" role="tabpanel" aria-labelledby="studio-tab" tabindex="0">
@@ -291,7 +293,7 @@ Jun,42500,3.8%</textarea>
    <div id="dedupe-panel" role="tabpanel" aria-labelledby="dedupe-tab" tabindex="0" hidden>
     <section class="panel dedupe-panel" aria-labelledby="dedupe-heading">
      <h2 id="dedupe-heading">Excel de-duper</h2>
-     <p class="note">Remove duplicates within a column, or exclude companies in your main list that appear in another column.</p>
+     <p class="note">Remove duplicates within a column, exclude matches, or compare two lists using the section below.</p>
      <label class="file-drop-zone" for="dedupe-file" data-file-drop>
       <span class="file-drop-icon" aria-hidden="true">↑</span>
       <span class="file-drop-title">Drag and drop your spreadsheet here</span>
@@ -309,7 +311,7 @@ Jun,42500,3.8%</textarea>
       <div id="dedupe-options" hidden>
        <label class="builder-label" for="dedupe-mode">What do you want to do?<select id="dedupe-mode"><option value="dedupe">Remove duplicates within one column</option><option value="exclude">Exclude matches from another column</option></select></label>
        <label class="builder-label" for="dedupe-column"><span id="dedupe-column-label">Column to de-dupe</span><select id="dedupe-column"></select></label>
-       <label id="dedupe-exclusion-label" class="builder-label" for="dedupe-exclusion" hidden>Exclusion list column<select id="dedupe-exclusion"></select></label>
+       <label id="dedupe-exclusion-label" class="builder-label" for="dedupe-exclusion" hidden><span id="dedupe-second-name">Exclusion list column</span><select id="dedupe-exclusion"></select></label>
        <p id="dedupe-mode-help" class="note">Keep the first row for each matching value.</p>
        <details class="dedupe-advanced">
         <summary>Matching options</summary>
@@ -338,6 +340,24 @@ Jun,42500,3.8%</textarea>
       </details>
       <p class="note">Downloads a new workbook with only this cleaned worksheet. Cell values and number formats are kept; formulas become their saved values. Other sheets and layout styling are not included.</p>
       <div class="dedupe-actions"><button id="dedupe-download" class="primary" type="button" disabled>Download cleaned Excel</button></div>
+     </div>
+    </section>
+    <section class="panel utility-panel" aria-labelledby="lists-heading">
+     <h2 id="lists-heading">List comparison</h2>
+     <p class="note">Paste one entry per line, or upload a spreadsheet above, choose two columns, and bring them into lists A and B. Headers are excluded. Results are unique values, not full source rows.</p>
+     <button id="lists-use-columns" type="button" class="recap-secondary">Use selected worksheet columns as A / B</button>
+     <form id="lists-form">
+      <div class="utility-grid"><label class="builder-label">List A<textarea id="lists-a" rows="8" maxlength="1000000"></textarea></label><label class="builder-label">List B<textarea id="lists-b" rows="8" maxlength="1000000"></textarea></label></div>
+      <div class="notes-options"><label><input id="lists-case" type="checkbox" checked/> Ignore case</label><label><input id="lists-trim" type="checkbox" checked/> Ignore surrounding spaces</label></div>
+      <p class="note">Up to 50,000 entries per list. Blank lines are skipped. Shared values retain the first spelling in A; combined results follow A then unmatched B.</p>
+      <div class="dedupe-actions"><button class="primary" type="submit">Compare lists</button><button id="lists-clear" type="button" class="recap-secondary">Clear lists</button></div>
+     </form>
+     <p id="lists-status" class="note" role="status"></p>
+     <div id="lists-result" hidden>
+      <p id="lists-count" class="note"></p>
+      <label class="builder-label">Show results<select id="lists-view"><option value="both">In both lists</option><option value="onlyA">Only in A</option><option value="onlyB">Only in B</option><option value="combined">Combined unique list</option></select></label>
+      <label class="builder-label">Selected list<textarea id="lists-output" rows="8" readonly></textarea></label>
+      <div class="dedupe-actions"><button id="lists-copy" type="button" class="recap-secondary">Copy selected list</button><button id="lists-download" type="button" class="primary">Download all results — Excel</button></div>
      </div>
     </section>
    </div>
@@ -375,6 +395,45 @@ Jun,42500,3.8%</textarea>
      </div>
     </section>
    </div>
+   <div id="table-panel" role="tabpanel" aria-labelledby="table-tab" tabindex="0" hidden>
+    <section class="panel utility-panel" aria-labelledby="table-heading">
+     <h2 id="table-heading">Slide-ready table builder</h2>
+     <p class="note">Copy a full range from Excel or Sheets and paste below, including headers. Format your table here, then paste an image or download editable PowerPoint text boxes and shapes.</p>
+     <form id="table-form"><label class="builder-label">Paste table — tab-separated or CSV<textarea id="table-source" rows="7" maxlength="100000" placeholder="Paste your full table here"></textarea></label><p class="note">Headers + 1–30 data rows, up to 10 columns and 500 characters per cell. Rebuilding replaces edits made in the cells below. Tables must fit one 16:9 slide; reduce font/padding or split a larger table.</p><div class="dedupe-actions"><button type="submit" class="primary">Build table</button><button id="table-clear" type="button" class="recap-secondary">Clear table</button></div></form>
+     <p id="table-status" class="note" role="status"></p>
+     <div id="table-workspace" hidden>
+      <h3>Edit cells</h3><p class="note">Edit individual cells or paste a tab-separated spreadsheet range into a cell. The pasted range starts there and can extend the table within the limits above.</p><div id="table-grid" class="table-editor dedupe-table" role="region" aria-label="Editable table data" tabindex="0"></div>
+      <div id="table-settings" class="utility-grid table-settings">
+       <label class="builder-label">Font size (pt)<input id="table-font" type="number" min="10" max="28" value="16"/></label>
+       <label class="builder-label">Cell padding (pt)<input id="table-padding" type="number" min="4" max="20" value="8"/></label>
+       <label class="builder-label">Text alignment<select id="table-align"><option value="left">Left</option><option value="center">Center</option><option value="right">Right</option></select></label>
+       <label><input id="table-banded" type="checkbox" checked/> Alternate row shading</label><label><input id="table-borders" type="checkbox" checked/> Cell borders</label>
+      </div>
+      <details><summary>Column widths</summary><p class="note">Relative widths, from 1 to 10. Increase a column’s weight to give it more room.</p><div id="table-widths" class="utility-grid"></div></details>
+      <details><summary>Table colors</summary><div id="table-colors" class="table-colors"></div></details>
+      <h3>Slide preview</h3><div id="table-preview" class="table-preview" role="region" aria-label="Slide table preview" tabindex="0"></div>
+     </div>
+     <div class="dedupe-actions"><button id="table-copy" type="button" class="primary" disabled>Copy table image</button><button id="table-pptx" type="button" class="recap-secondary" disabled>Export editable PowerPoint</button><button id="table-png" type="button" class="recap-secondary" disabled>Download PNG</button><button id="table-svg" type="button" class="recap-secondary" disabled>Download SVG</button></div>
+     <p class="note">Images paste as a single visual. PowerPoint exports use separate editable shapes and text, not a native table. If your browser blocks image copying, download PNG instead. Data stays in this browser tab.</p>
+    </section>
+   </div>
+   <div id="utm-panel" role="tabpanel" aria-labelledby="utm-tab" tabindex="0" hidden>
+    <section class="panel utility-panel" aria-labelledby="utm-heading">
+     <h2 id="utm-heading">UTM link builder</h2><p class="note">Build a tracking link for work or personal use. Source, medium, and campaign are required; term and content are optional. Links are built locally and never opened or shortened.</p>
+     <form id="utm-form" novalidate>
+      <label class="builder-label">Destination URL<input id="utm-url" type="text" inputmode="url" maxlength="8192" placeholder="https://example.com/page" autocomplete="off"/></label>
+      <div class="utility-grid">
+       <label class="builder-label">Source (required)<input id="utm-source" type="text" maxlength="1000" placeholder="newsletter"/></label>
+       <label class="builder-label">Medium (required)<input id="utm-medium" type="text" maxlength="1000" placeholder="email"/></label>
+       <label class="builder-label">Campaign (required)<input id="utm-campaign" type="text" maxlength="1000" placeholder="spring_launch"/></label>
+       <label class="builder-label">Term (optional)<input id="utm-term" type="text" maxlength="1000"/></label>
+       <label class="builder-label">Content (optional)<input id="utm-content" type="text" maxlength="1000"/></label>
+      </div>
+      <div class="dedupe-actions"><button type="submit" class="primary">Generate link</button><button id="utm-clear" type="button" class="recap-secondary">Clear / reset</button></div>
+     </form>
+     <label class="builder-label">Generated link<textarea id="utm-output" rows="4" readonly></textarea></label><button id="utm-copy" type="button" class="recap-secondary" disabled>Copy link</button><p id="utm-status" class="note" role="status"></p>
+    </section>
+   </div>
    <div id="percentage-panel" role="tabpanel" aria-labelledby="percentage-tab" tabindex="0" hidden></div>
    <footer>
     QUEUE WORKS
@@ -402,9 +461,14 @@ Jun,42500,3.8%</textarea>
   <script src="libraries.js"></script>
   <script src="charts.js"></script>
   <script src="dedupe-core.js"></script>
+  <script src="productivity-core.js"></script>
+  <script src="list-comparison.js"></script>
   <script src="deduper.js"></script>
   <script src="notes-core.js"></script>
   <script src="notes.js"></script>
+  <script src="table-core.js"></script>
+  <script src="slide-table.js"></script>
+  <script src="utm.js"></script>
   <script src="percentages.js"></script>
  </body>
 </html>

@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — Lists, slide tables, and UTM links
+- Add unique list intersections, differences, and combined lists inside Excel
+  De-duper, with paste/worksheet input, copy, and four-sheet Excel export.
+- Add Slide Table Builder for pasted ranges, editable cells, brand formatting,
+  image copy/SVG/PNG, and editable PowerPoint text boxes and shapes.
+- Add UTM Builder with validated/encoded tracking links, copy, and clear/reset.
+- Preserve local-only processing, mounted tab state, and stale-output protection.
+
+
 ## Unreleased — Focused tools and percentage reset
 - Remove Slide Format Advisor, its script, styles, and obsolete tests.
 - Add Clear / reset to clear all three percentage calculators without reloading

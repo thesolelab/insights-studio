@@ -36,7 +36,7 @@ Keep repository names and hosting paths unless the owner explicitly requests a m
 Use a soft, modern SaaS toolkit with a restrained gaming influence. Apply the
 user's Ambient Electric Violet palette: midnight slate #0f172a, primary violet
 #8b5cf6, secondary teal #2dd4bf. Use subtle violet/teal radial glows behind the
-workspace; no repeating grid texture. Keep the five authorized tools and their behavior.
+workspace; no repeating grid texture. Keep the seven authorized tools and their behavior.
 
 - Define interface colors in :root. Components use tokens from styles.css.
 - Surfaces: #172238; inset fields/chart canvases: #101b30.
@@ -100,7 +100,8 @@ area grouping and bubble workbook values/headers/ranges.
 
 ## Focused tool architecture
 Keep exactly the authorized tools: Chart Creator, A/B Test Analyzer, Excel
-De-duper, Meeting Recap Builder, and Percentage Calculator. Do not restore dashboards,
+De-duper (including list comparison), Meeting Recap Builder, Slide Table Builder,
+UTM Builder, and Percentage Calculator. Do not restore dashboards,
 project management, utility categories, other calculators, visual tools, or deck building.
 Each tool stays mounted while switching accessible tabs. tools.css styles new
 tools; the existing styles.css owns chart/A/B/shared design tokens.
@@ -159,3 +160,17 @@ serializing a transparent export.
 Do not restore the removed Slide Format Advisor. Percentage Calculator Clear / reset
 clears all three forms, results, validation, and copy state, invalidates pending
 clipboard feedback, and leaves other tools untouched.
+
+productivity-core.js owns DOM-free list comparison and UTM URL building;
+list-comparison.js and utm.js own their UIs. List comparison lives inside the Excel
+tab, supports pasted lists and explicit snapshots of two uploaded worksheet columns,
+and exports unique value lists only. Preserve matching options, A-first ordering,
+original spelling, and stale-output protection. Export strings, never formulas.
+UTM links use the URL API, accept only HTTP/HTTPS without credentials, replace the
+five managed UTM fields, and preserve other query parameters and anchors. Provide
+generate/copy/clear without opening links or persisting inputs.
+table-core.js owns DOM-free table normalization/wrapping/layout; slide-table.js
+owns editing, formatting, and SVG/PNG/clipboard/editable PowerPoint exports. Keep
+PowerPoint exports as individual text boxes and shapes, not native tables. Match
+preview/export colors and geometry. Block oversized/narrow layouts and stale
+exports; never silently truncate data or overwrite it when formatting changes.
