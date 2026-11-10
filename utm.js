@@ -19,7 +19,7 @@
       $('output').value = window.Productivity.utmLink($('url').value, values);
       $('copy').disabled = false;
       $('status').textContent =
-        'Link ready. Existing UTM tags are replaced; other URL parameters and anchors are kept.';
+        'Lowercase link ready. Existing UTM tags are replaced; other URL parameters and anchors are kept.';
     } catch (error) {
       $('status').textContent = error.message;
     }

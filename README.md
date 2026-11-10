@@ -110,7 +110,8 @@ Term and content are optional. Select **Generate link**, **Copy link**, or
 **Clear / reset**. Clear resets all fields and the generated link. Editing an input
 invalidates the old link. Clipboard failure selects the link for manual copying.
 
-Values are trimmed and URL-encoded; spelling/case are retained. Existing managed
+Values are trimmed, lowercased, and URL-encoded. The entire generated/copied link
+is lowercase, including destination paths, query parameters, and anchors. Existing managed
 `utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, and `utm_content` parameters
 are replaced (blank optional values remove old tags). Other query parameters and
 anchors are preserved. URLs with embedded credentials or non-HTTP protocols are

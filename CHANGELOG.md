@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — Lowercase UTM output
+- Lowercase the complete generated and copied UTM link, including destination
+  paths, query parameters, anchors, and tracking values.
+
+
 ## Unreleased — Lists, slide tables, and UTM links
 - Add unique list intersections, differences, and combined lists inside Excel
   De-duper, with paste/worksheet input, copy, and four-sheet Excel export.

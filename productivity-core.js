@@ -35,14 +35,14 @@
       throw new Error('Use a URL of up to 8,192 characters.');
     let url;
     try {
-      url = new URL(base.trim());
+      url = new URL(base.trim().toLowerCase());
     } catch {
       throw new Error('Enter a complete URL beginning with https:// or http://.');
     }
     if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password)
       throw new Error('Use an HTTP/HTTPS URL without embedded credentials.');
     for (const field of ['source', 'medium', 'campaign', 'term', 'content']) {
-      const value = String(values[field] ?? '').trim();
+      const value = String(values[field] ?? '').trim().toLowerCase();
       if (value.length > 1000)
         throw new Error('Use up to 1,000 characters per UTM field.');
       if (['source', 'medium', 'campaign'].includes(field) && !value)
@@ -50,7 +50,7 @@
       url.searchParams.delete('utm_' + field);
       if (value) url.searchParams.set('utm_' + field, value);
     }
-    return url.href;
+    return url.href.toLowerCase();
   }
   const api = { compareLists, utmLink };
   if (typeof module === 'object' && module.exports) module.exports = api;

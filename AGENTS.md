@@ -167,7 +167,8 @@ tab, supports pasted lists and explicit snapshots of two uploaded worksheet colu
 and exports unique value lists only. Preserve matching options, A-first ordering,
 original spelling, and stale-output protection. Export strings, never formulas.
 UTM links use the URL API, accept only HTTP/HTTPS without credentials, replace the
-five managed UTM fields, and preserve other query parameters and anchors. Provide
+five managed UTM fields, and retain other query parameters and anchors in lowercase.
+The entire generated/copied link must be lowercase, including the destination URL. Provide
 generate/copy/clear without opening links or persisting inputs.
 table-core.js owns DOM-free table normalization/wrapping/layout; slide-table.js
 owns editing, formatting, and SVG/PNG/clipboard/editable PowerPoint exports. Keep

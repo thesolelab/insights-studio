@@ -33,10 +33,10 @@ test('UTM builder encodes values, replaces repeated managed fields, retains unre
   const u = new URL(link);
   assert.equal(u.hash, '#part');
   assert.equal(u.searchParams.get('keep'), '1');
-  assert.deepEqual(u.searchParams.getAll('utm_source'), ['Newsletter & partners']);
-  assert.equal(u.searchParams.get('utm_term'), 'C++');
+  assert.deepEqual(u.searchParams.getAll('utm_source'), ['newsletter & partners']);
+  assert.equal(u.searchParams.get('utm_term'), 'c++');
   assert.equal(u.searchParams.has('utm_content'), false);
-  assert.equal(u.searchParams.get('utm_campaign'), 'Spring / 2027');
+  assert.equal(u.searchParams.get('utm_campaign'), 'spring / 2027');
 });
 test('UTM validation rejects unsafe URLs and missing campaign fields', () => {
   for (const base of [
@@ -95,4 +95,18 @@ test('table layout wraps content, uses proportional column widths and refuses sl
       ),
     /narrow/
   );
+});
+
+test('the complete UTM output is lowercase, including URL components and encoded values', () => {
+  const link = utmLink('HTTPS://EXAMPLE.COM/Launch?Ref=PARTNER&UTM_SOURCE=OLD#Details', {
+    source: 'NEWSLETTER', medium: 'EMAIL', campaign: 'SPRING LAUNCH', term: 'ÉTÉ', content: 'HERO',
+  });
+  assert.equal(link, link.toLowerCase());
+  const url = new URL(link);
+  assert.equal(url.pathname, '/launch');
+  assert.equal(url.hash, '#details');
+  assert.equal(url.searchParams.get('ref'), 'partner');
+  assert.deepEqual(url.searchParams.getAll('utm_source'), ['newsletter']);
+  assert.equal(url.searchParams.get('utm_campaign'), 'spring launch');
+  assert.equal(url.searchParams.get('utm_term'), 'été');
 });
