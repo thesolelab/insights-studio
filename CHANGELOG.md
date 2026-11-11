@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Homepage visual refinement
+- Replace the flat, clipped ribbon with luminous violet/teal artwork.
+- Allocate separate responsive space for text and the full image.
+- Refine spacing and cards; wrap navigation labels instead of clipping them.
+
+
 ## Unreleased — Daily homepage
 - Add a default Home panel with daily motivation and seven tool launch cards.
 - Rotate curated original messages by local date, refreshing at midnight/return.
