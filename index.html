@@ -30,7 +30,8 @@
     </div>
    </header>
    <div class="workspace-tabs" role="tablist" aria-label="Tools">
-    <button id="studio-tab" type="button" role="tab" aria-selected="true" aria-controls="studio-panel">Chart Creator</button>
+    <button id="home-tab" type="button" role="tab" aria-selected="true" aria-controls="home-panel">Home</button>
+    <button id="studio-tab" type="button" role="tab" aria-selected="false" aria-controls="studio-panel" tabindex="-1">Chart Creator</button>
     <button id="analyzer-tab" type="button" role="tab" aria-selected="false" aria-controls="analyzer-panel" tabindex="-1">A/B Test Analyzer</button>
     <button id="dedupe-tab" type="button" role="tab" aria-selected="false" aria-controls="dedupe-panel" tabindex="-1">Excel De-duper</button>
     <button id="notes-tab" type="button" role="tab" aria-selected="false" aria-controls="notes-panel" tabindex="-1">Meeting Recap Builder</button>
@@ -38,7 +39,36 @@
     <button id="utm-tab" type="button" role="tab" aria-selected="false" aria-controls="utm-panel" tabindex="-1">UTM Builder</button>
     <button id="percentage-tab" type="button" role="tab" aria-selected="false" aria-controls="percentage-panel" tabindex="-1">Percentage Calculator</button>
    </div>
-   <div id="studio-panel" role="tabpanel" aria-labelledby="studio-tab" tabindex="0">
+   <div id="home-panel" class="home-panel" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+    <section class="home-hero" aria-labelledby="home-message">
+     <div class="home-meta"><time id="home-date"></time><span>Your daily spark</span></div>
+     <h2 id="home-message">Make room for the work that matters.</h2>
+     <p id="home-detail">One useful step is enough to build momentum.</p>
+     <svg class="home-ribbon" viewBox="0 0 800 340" aria-hidden="true" focusable="false">
+      <defs>
+       <linearGradient id="home-ribbon-fill" x1="0" x2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity="0"/><stop offset=".45" stop-color="var(--accent)" stop-opacity=".55"/><stop offset="1" stop-color="var(--secondary)" stop-opacity=".7"/></linearGradient>
+       <linearGradient id="home-ribbon-edge" x1="0" x2="1"><stop offset="0" stop-color="var(--accent-text)" stop-opacity="0"/><stop offset=".45" stop-color="var(--accent-text)"/><stop offset="1" stop-color="var(--secondary)"/></linearGradient>
+      </defs>
+      <path d="M0 270C170 320 170 45 340 140S590 320 800 30L800 160C600 40 540 320 350 205S170 340 0 270Z" fill="url(#home-ribbon-fill)"/>
+      <path d="M0 270C170 320 170 45 340 140S590 320 800 30M0 270C170 340 170 90 350 205S600 40 800 160" fill="none" stroke="url(#home-ribbon-edge)" stroke-width="1.5"/>
+      <path d="M110 290C270 340 300 95 470 200S690 210 800 135L800 205C630 95 590 300 450 240S280 360 110 290Z" fill="url(#home-ribbon-fill)" opacity=".45"/>
+     </svg>
+    </section>
+    <section class="home-tools" aria-labelledby="home-tools-heading">
+     <h2 id="home-tools-heading">What are you working on?</h2>
+     <p class="home-tools-intro">Pick a tool and get straight to it.</p>
+     <div class="home-tool-grid">
+      <button type="button" class="home-tool-card" data-open-tool="studio-tab"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 21h18M5 17v-5h3v5M11 17V7h3v10M17 17V3h3v14"/></svg><span class="home-tool-copy"><strong>Chart Creator</strong><span>Turn data into presentation-ready charts.</span></span><span class="home-tool-arrow" aria-hidden="true">→</span></button>
+      <button type="button" class="home-tool-card home-tool-teal" data-open-tool="analyzer-tab"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 3h6M10 3v6l-6 10a1 1 0 0 0 1 2h14a1 1 0 0 0 1-2L14 9V3M8 14h8"/></svg><span class="home-tool-copy"><strong>A/B Test Analyzer</strong><span>Compare results with confidence.</span></span><span class="home-tool-arrow" aria-hidden="true">→</span></button>
+      <button type="button" class="home-tool-card" data-open-tool="dedupe-tab"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M10 3v18"/></svg><span class="home-tool-copy"><strong>Excel & Lists</strong><span>Clean, exclude, and compare lists.</span></span><span class="home-tool-arrow" aria-hidden="true">→</span></button>
+      <button type="button" class="home-tool-card home-tool-teal" data-open-tool="notes-tab"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span class="home-tool-copy"><strong>Meeting Recap Builder</strong><span>Organize notes into a clear recap.</span></span><span class="home-tool-arrow" aria-hidden="true">→</span></button>
+      <button type="button" class="home-tool-card" data-open-tool="table-tab"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 4h18M5 4v12h14V4M12 16v5M8 21l4-5 4 5"/></svg><span class="home-tool-copy"><strong>Slide Table Builder</strong><span>Make spreadsheet data slide-ready.</span></span><span class="home-tool-arrow" aria-hidden="true">→</span></button>
+      <button type="button" class="home-tool-card home-tool-teal" data-open-tool="utm-tab"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l2-2"/></svg><span class="home-tool-copy"><strong>UTM Builder</strong><span>Build and copy campaign links.</span></span><span class="home-tool-arrow" aria-hidden="true">→</span></button>
+      <button type="button" class="home-tool-card" data-open-tool="percentage-tab"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 20L19 4"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/></svg><span class="home-tool-copy"><strong>Percentage Calculator</strong><span>Quick answers without the mental math.</span></span><span class="home-tool-arrow" aria-hidden="true">→</span></button>
+     </div>
+    </section>
+   </div>
+   <div id="studio-panel" role="tabpanel" aria-labelledby="studio-tab" tabindex="0" hidden>
    <section class="panel chart-studio-panel" aria-labelledby="builder-heading">
     <div class="section-head">
      <div>
@@ -455,6 +485,8 @@ Jun,42500,3.8%</textarea>
   <script src="app.js">
   </script>
   <script src="tabs.js"></script>
+  <script src="home-core.js"></script>
+  <script src="home.js"></script>
   <script src="chart-data.js"></script>
   <script src="chart-modes.js"></script>
   <script src="file-uploads.js"></script>

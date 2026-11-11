@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — Daily homepage
+- Add a default Home panel with daily motivation and seven tool launch cards.
+- Rotate curated original messages by local date, refreshing at midnight/return.
+- Keep inputs mounted across Home/tool navigation and support keyboard focus.
+- Match the approved violet/teal mockup with responsive cards and quiet ribbons.
+
+
 ## Unreleased — Visible oversized table preview
 - Keep oversized tables visible and explain slide-fit issues beside the preview.
 - Add Fit to slide to find smaller readable font/padding settings.
