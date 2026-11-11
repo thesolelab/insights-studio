@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — Funnel & Adoption
+- Add the eighth homepage card and a dedicated funnel/adoption workspace.
+- Calculate sequential conversion/drop-off and adoption point/relative changes.
+- Copy factual recaps and presentation visuals; export SVG/PNG and editable
+  PowerPoint shapes with custom colors. Preserve inputs and block stale outputs.
+
+
 ## Unreleased — Consistent page dimensions
 - Share Home’s width, gutters, header sizing, and navigation across all tools.
 - Keep a viewport minimum height with natural scrolling for longer tools.

@@ -7,7 +7,7 @@ Repository: https://github.com/thesolelab/simple-worx
 
 Live site: https://thesolelab.github.io/simple-worx/
 
-Seven focused tools in one tabbed interface:
+Eight focused tools in one tabbed interface:
 
 - **Chart Creator** — turn Excel/CSV or pasted data into customizable charts and
   export SVG, PNG, or a native editable PowerPoint slide.
@@ -19,6 +19,8 @@ Seven focused tools in one tabbed interface:
   slide-ready visual or editable PowerPoint text boxes and shapes.
 - **UTM Builder** — generate, copy, and clear campaign tracking links.
 - **Percentage Calculator** — percentage-of, proportions, and increase/decrease.
+- **Funnel & Adoption** — analyze ordered user counts or compare feature adoption,
+  with factual recaps and presentation visuals.
 
 The Ambient Electric Violet design uses midnight slate (`#0f172a`), violet
 (`#8b5cf6`), and secondary teal (`#2dd4bf`) with soft ambient glows, rounded panels,
@@ -28,7 +30,7 @@ visual tools, and multi-slide deck builder are removed. Inputs remain mounted
 while switching tabs; Arrow keys, Home, and End navigate the tabs.
 
 ## Home and your daily spark
-The site opens on Home with a motivational message, the local date, and seven tool
+The site opens on Home with a motivational message, the local date, and eight tool
 cards. Select a card to open its workspace, or use the top tabs. Home is a launchpad;
 all tools remain mounted, so going Home and back retains current inputs and drafts.
 Home and every tool share the same page width/gutters, header/logo, and navigation
@@ -47,6 +49,40 @@ behind live text and controls rather than inside a standalone illustration box.
 The artwork is decorative and visible only on Home. Navigation wraps on smaller
 screens rather than
 hiding labels beyond a horizontal scroll area.
+
+## Funnel & adoption calculator
+Open **Funnel & Adoption** from Home or the top navigation. Start with your own
+counts or explicitly select **Load example**. Input changes hide old results and
+exports until you calculate again. Clear / reset clears the inputs and results;
+visual color choices are retained. Work remains mounted when switching tabs.
+
+**Sequential funnel:** paste two columns of step names and user counts (tabs or
+CSV), optionally headed `Step / Users`. Use 2–8 ordered steps, labels up to 80
+characters, and non-negative whole counts up to 1 trillion. Grouped counts such as
+`12,000` are accepted (quote grouped numbers in CSV). The first count must be
+positive and later counts cannot exceed the preceding step. Zero later counts are
+valid; rates after a zero denominator show N/A rather than infinity.
+
+Results include conversion from the previous step, conversion from the first step,
+users lost and drop-off rate, overall completion, and the largest numerical loss.
+Tied largest losses are identified; unchanged counts do not invent a loss. Use
+nested audience counts from the same reporting window/counting unit, not unrelated
+event totals. The tool cannot verify user journeys from aggregate counts.
+
+**Adoption comparison:** enter eligible and adopted user counts for two labeled
+periods. Results show each adoption rate, percentage-point change, and relative
+change. For example, 24% to 30% is +6 percentage points and +25% relative growth.
+Each period uses its own eligibility denominator. A 0% baseline makes relative
+change undefined and is shown as N/A; adopted counts cannot exceed eligibility.
+Use comparable definitions/windows and review changes in the eligible population.
+
+Copy a plain factual recap or a visual image. Customize bar/highlight/background/
+text colors with the existing HEX/wheel controls and download standalone SVG/PNG.
+**Export PowerPoint** creates editable text and bar shapes on one slide; values do
+not recalculate inside PowerPoint. Long labels wrap and the visual scales to fit
+one slide; very long labels or eight-step funnels can produce smaller slide text.
+If clipboard access is blocked, copy the selected recap manually or download PNG.
+No Pendo/Adobe connection, AI, external processing, or significance testing is used.
 
 ## Excel de-duper
 1. Drag and drop XLSX, XLS, or CSV into the upload area, or choose **browse files**
@@ -264,7 +300,7 @@ Keep `index.html`, `styles.css`, `tools.css`, `simple-worx.css`, `favicon.svg`,
 `chart-data.js`, `chart-modes.js`, `charts.js`, `dedupe-core.js`, `deduper.js`,
 `notes-core.js`, `notes.js`, `file-uploads.js`, `libraries.js`, and `percentages.js`
 together with `productivity-core.js`, `list-comparison.js`, `table-core.js`,
-`slide-table.js`, and `utm.js`. No build step,
+`slide-table.js`, `utm.js`, `funnel-core.js`, and `funnel.js`. No build step,
 backend, account, or tracking is required.
 
 Inter and Outfit load from Google Fonts with system fallbacks. SheetJS 0.20.3

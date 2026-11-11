@@ -166,8 +166,12 @@ body.home-active {background:var(--home-bg);isolation:isolate}
 .home-meta span {border-left:1px solid var(--text-muted);padding-left:24px}
 @media(max-width:700px){.home-meta span{padding-left:12px}}
 
-/* One page shell for Home and all seven tools; content may grow naturally. */
+/* One page shell for Home and all eight tools; content may grow naturally. */
 .shell > [role="tabpanel"] {flex:1 0 auto;min-width:0}
 .shell > [role="tabpanel"]:not(.home-panel) {padding-top:24px}
 .shell > [role="tabpanel"]:not(.home-panel) > :first-child {margin-top:0}
 .shell > footer {flex-shrink:0;margin-top:24px}
+
+/* Nine navigation tabs stay aligned across every workspace. */
+@media(min-width:1101px) and (max-width:1700px){.workspace-tabs{column-gap:8px}.workspace-tabs button{font-size:16px;padding:7px 12px}}
+@media(max-width:600px){.workspace-tabs #home-tab{grid-column:1/-1}}
