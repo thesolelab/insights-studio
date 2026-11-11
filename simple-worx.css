@@ -1,4 +1,4 @@
-/* Queue Works: ambient electric violet, with teal as a secondary highlight. */
+/* Simple Worx: ambient electric violet, with teal as a secondary highlight. */
 body {
   background:
     radial-gradient(ellipse at 8% 0%, var(--accent-glow), transparent 48%),
@@ -33,7 +33,7 @@ h1 .brand-gradient { margin-inline-start: 0.08em; }
   font-size: 24px;
   box-shadow: var(--panel-shadow);
 }
-.mark .mark-q { color: var(--text); }
+.mark .mark-s { color: var(--text); }
 .mark .mark-dot { color: var(--secondary); }
 .workspace-tabs {
   padding: 6px; gap: 5px; top: 10px;

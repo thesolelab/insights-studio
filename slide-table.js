@@ -299,7 +299,7 @@
     if (current)
       save(
         new Blob([sourceSVG()], { type: 'image/svg+xml;charset=utf-8' }),
-        'queue-works-table.svg'
+        'simple-worx-table.svg'
       );
   });
   for (const key of ['png', 'copy'])
@@ -318,7 +318,7 @@
           await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
           if (request === version)
             status('Table image copied. Paste it into PowerPoint.');
-        } else save(blob, 'queue-works-table.png');
+        } else save(blob, 'simple-worx-table.png');
       } catch (error) {
         if (request === version)
           status(
@@ -337,7 +337,7 @@
       if (request !== version) return;
       const pptx = new window.PptxGenJS();
       pptx.layout = 'LAYOUT_WIDE';
-      pptx.author = 'Queue Works';
+      pptx.author = 'Simple Worx';
       pptx.title = 'Slide-ready table';
       const slide = pptx.addSlide();
       const inches = (pixels) => pixels / (model.scale * 72);
@@ -384,7 +384,7 @@
       });
       const blob = await pptx.write({ outputType: 'blob' });
       if (request !== version) return;
-      save(blob, 'queue-works-table.pptx');
+      save(blob, 'simple-worx-table.pptx');
       status(
         'Editable PowerPoint downloaded. Cells are separate editable text boxes and shapes.'
       );

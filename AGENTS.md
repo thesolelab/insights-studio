@@ -27,9 +27,9 @@ These instructions apply throughout this repository.
 - In the pull request, describe what changed, why it changed, and how it was checked. Mention any remaining limitations.
 - Share the pull request link and explain the next step for the owner.
 
-# Design System: Queue Works, Ambient Electric Violet
+# Design System: Simple Worx, Ambient Electric Violet
 
-Use Queue Works as the product name and QW as its monogram. Do not add a tagline.
+Use Simple Worx as the product name and SW as its monogram. Do not add a tagline.
 Keep repository names and hosting paths unless the owner explicitly requests a move.
 
 ## Visual direction
@@ -47,13 +47,13 @@ workspace; no repeating grid texture. Keep the seven authorized tools and their 
 - Use Inter for body text and chart labels; Outfit for wordmark and display text.
 - Use rounded 12px panels, clear input boundaries, quiet depth, and restrained
   hover movement. Respect reduced motion and forced colors; keep focus visible.
-- queue-works.css owns the branded shell refinements; styles.css owns tokens
+- simple-worx.css owns the branded shell refinements; styles.css owns tokens
   and shared components, tools.css owns tool-specific layout.
 - Preserve wide/fluid workspaces up to 1,920px and contained mobile scrolling.
 - Keep top tool tabs sticky and the version in the footer. The page scrollbar
   remains visually hidden while wheel, touch, and keyboard scrolling work.
-- Use the branded QW favicon. The W in both monograms uses the wordmark’s
-  violet-to-teal gradient; keep the Q white and the dot teal. Leave padding for
+- Use the branded SW favicon. The W in both monograms uses the wordmark’s
+  violet-to-teal gradient; keep the S white and the dot teal. Leave padding for
   gradient text glyphs so the final letter is not clipped.
 
 ## Chart colors

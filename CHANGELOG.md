@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Simple Worx rebrand
+- Rename the product to Simple Worx, with an SW monogram and updated favicon.
+- Update page metadata, footer, export filenames, and PowerPoint author metadata.
+- Keep the existing palette, tools, repository name, and hosting URL.
+
+
 ## Unreleased — Lowercase UTM output
 - Lowercase the complete generated and copied UTM link, including destination
   paths, query parameters, anchors, and tracking values.

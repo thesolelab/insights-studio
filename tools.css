@@ -39,7 +39,7 @@
 .notes-panel input[type=text],.notes-panel textarea {box-sizing:border-box;width:100%;padding:12px 14px;background:var(--surface-inset);border:1px solid var(--border-strong);border-radius:var(--radius);color:var(--text);font:400 14px var(--font-body);line-height:1.7}
 .dedupe-panel #dedupe-options > .builder-label {margin:16px 0}
 
-/* Queue Works percentage calculator. */
+/* Simple Worx percentage calculator. */
 .percentage-intro {margin:24px 0}
 .percentage-intro h2 {font-size:24px;margin-bottom:10px}
 .percentage-card {padding:24px;margin-bottom:18px}

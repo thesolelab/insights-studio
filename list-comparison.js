@@ -91,7 +91,7 @@
           X.utils.aoa_to_sheet([[name], ...snapshot[key].map((v) => [v])]),
           name
         );
-      X.writeFile(book, 'queue-works-list-comparison.xlsx');
+      X.writeFile(book, 'simple-worx-list-comparison.xlsx');
     } catch (error) {
       if (request === version) $('status').textContent = error.message;
     }

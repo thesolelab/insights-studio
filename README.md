@@ -1,6 +1,7 @@
-# Queue Works
+# Simple Worx
 
-A browser-based toolkit for everyday work.
+A browser-based toolkit for everyday work. The product is Simple Worx; the
+repository and hosting path remain `queue-works`.
 
 Repository: https://github.com/thesolelab/queue-works
 
@@ -235,7 +236,7 @@ your experiment counts to run your own analysis. Sample data is not saved.
 
 ## Deploy on GitHub Pages
 Publish the repository root on GitHub Pages (Settings → Pages → main / root).
-Keep `index.html`, `styles.css`, `tools.css`, `queue-works.css`, `favicon.svg`,
+Keep `index.html`, `styles.css`, `tools.css`, `simple-worx.css`, `favicon.svg`,
 `colors.js`, `app.js`, `tabs.js`,
 `chart-data.js`, `chart-modes.js`, `charts.js`, `dedupe-core.js`, `deduper.js`,
 `notes-core.js`, `notes.js`, `file-uploads.js`, `libraries.js`, and `percentages.js`
