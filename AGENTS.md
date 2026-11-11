@@ -36,7 +36,7 @@ Keep repository names and hosting paths unless the owner explicitly requests a m
 Use a soft, modern SaaS toolkit with a restrained gaming influence. Apply the
 user's Ambient Electric Violet palette: midnight slate #0f172a, primary violet
 #8b5cf6, secondary teal #2dd4bf. Use subtle violet/teal radial glows behind the
-workspace; no repeating grid texture. Keep the seven authorized tools and their behavior.
+workspace; no repeating grid texture. Keep the eight authorized tools and their behavior.
 
 - Define interface colors in :root. Components use tokens from styles.css.
 - Surfaces: #172238; inset fields/chart canvases: #101b30.
@@ -101,7 +101,7 @@ area grouping and bubble workbook values/headers/ranges.
 ## Focused tool architecture
 Keep exactly the authorized tools: Chart Creator, A/B Test Analyzer, Excel
 De-duper (including list comparison), Meeting Recap Builder, Slide Table Builder,
-UTM Builder, and Percentage Calculator. Do not restore dashboards,
+UTM Builder, Percentage Calculator, and Funnel & Adoption. Do not restore dashboards,
 project management, utility categories, other calculators, visual tools, or deck building.
 Each tool stays mounted while switching accessible tabs. tools.css styles new
 tools; the existing styles.css owns chart/A/B/shared design tokens.
@@ -180,13 +180,13 @@ Oversized slide tables must remain visible in a scrollable preview with nearby
 fit feedback. Fit to slide may reduce font/padding only, within readable bounds;
 never truncate rows or enable exports for overflowing layouts.
 
-Home is the default accessible panel, with seven launch cards for the seven tools.
+Home is the default accessible panel, with eight launch cards for the eight tools.
 Keep workspaces mounted and preserve their inputs when returning Home. Cards must
 activate the matching tab and transfer focus to the workspace. home-core.js owns
 the curated local-date daily message selection; home.js owns rendering and midnight/
 visibility refresh. Messages must remain stable through the day and reloads,
 without AI, external requests, or persistence. Keep decor noninteractive and honor
-reduced motion and forced colors. Home adds navigation, not an eighth utility.
+reduced motion and forced colors. Home adds navigation, not an additional utility.
 
 Use assets/home-atmosphere.webp as one continuous, home-only backdrop, matching
 the approved mockup: a broad violet ribbon crossing teal that opens into the
@@ -200,3 +200,12 @@ header/logo/badge sizes, and navigation spacing at each breakpoint. Do not scope
 those dimensions to home-active. Start tab/card navigation at the top while
 retaining keyboard focus and tool inputs. Use viewport minimum height rather
 than fixed tool heights, so long forms/charts still scroll without clipping.
+
+funnel-core.js owns DOM-free funnel/adoption math; funnel.js owns its form, factual
+recap, SVG/PNG/clipboard, and editable PowerPoint-shape exports. Require sequential
+non-increasing funnel counts, handle zero denominators as N/A, identify numerical
+loss ties, and distinguish adoption percentage points from relative growth. Use
+independent eligible populations per period. Never infer causes, user journeys,
+statistical significance, or owners from aggregate counts. Keep all processing
+local, inputs mounted, and stale results/exports invalidated after source changes.
+Match visual/export colors and geometry; PowerPoint shapes do not recalculate.

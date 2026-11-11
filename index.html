@@ -39,6 +39,7 @@
     <button id="table-tab" type="button" role="tab" aria-selected="false" aria-controls="table-panel" tabindex="-1">Slide Tables</button>
     <button id="utm-tab" type="button" role="tab" aria-selected="false" aria-controls="utm-panel" tabindex="-1">UTM Builder</button>
     <button id="percentage-tab" type="button" role="tab" aria-selected="false" aria-controls="percentage-panel" tabindex="-1">Percentages</button>
+    <button id="funnel-tab" type="button" role="tab" aria-selected="false" aria-controls="funnel-panel" tabindex="-1">Funnel &amp; Adoption</button>
    </div>
    <div id="home-panel" class="home-panel" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
     <section class="home-hero" aria-labelledby="home-message">
@@ -59,6 +60,7 @@
       <button type="button" class="home-tool-card" data-open-tool="table-tab"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 4h18M5 4v12h14V4M12 16v5M8 21l4-5 4 5"/></svg><span class="home-tool-copy"><strong>Slide Table Builder</strong><span>Make spreadsheet data slide-ready.</span></span><span class="home-tool-arrow" aria-hidden="true">→</span></button>
       <button type="button" class="home-tool-card home-tool-teal" data-open-tool="utm-tab"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l2-2"/></svg><span class="home-tool-copy"><strong>UTM Builder</strong><span>Build and copy campaign links.</span></span><span class="home-tool-arrow" aria-hidden="true">→</span></button>
       <button type="button" class="home-tool-card" data-open-tool="percentage-tab"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 20L19 4"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/></svg><span class="home-tool-copy"><strong>Percentage Calculator</strong><span>Quick answers without the mental math.</span></span><span class="home-tool-arrow" aria-hidden="true">→</span></button>
+      <button type="button" class="home-tool-card home-tool-teal" data-open-tool="funnel-tab"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 4h18l-7 8v7l-4 2v-9Z"/></svg><span class="home-tool-copy"><strong>Funnel &amp; Adoption</strong><span>Turn user counts into clear conversion insights.</span></span><span class="home-tool-arrow" aria-hidden="true">→</span></button>
      </div>
     </section>
    </div>
@@ -459,6 +461,41 @@ Jun,42500,3.8%</textarea>
     </section>
    </div>
    <div id="percentage-panel" role="tabpanel" aria-labelledby="percentage-tab" tabindex="0" hidden></div>
+   <div id="funnel-panel" role="tabpanel" aria-labelledby="funnel-tab" tabindex="0" hidden>
+    <section class="panel utility-panel" aria-labelledby="funnel-heading">
+     <h2 id="funnel-heading">Funnel &amp; adoption calculator</h2>
+     <p class="note">Bring counts from Pendo, Adobe Analytics, or Excel. Calculate funnel conversion or compare feature adoption, then copy a factual recap and export a slide-ready visual. All data stays in this browser.</p>
+     <form id="funnel-form" novalidate>
+      <label class="builder-label">Analysis<select id="funnel-mode"><option value="funnel">Sequential funnel</option><option value="adoption">Adoption comparison</option></select></label>
+      <div id="funnel-steps-fields">
+       <label class="builder-label">Paste step names and user counts<textarea id="funnel-steps" rows="7" maxlength="20000" aria-describedby="funnel-help" placeholder="Step&#9;Users&#10;Visited the page&#9;12000&#10;Opened the feature&#9;4800&#10;Completed the action&#9;1920"></textarea></label>
+       <p id="funnel-help" class="note">Paste 2–8 ordered steps in two columns (tabs or CSV). A Step / Users header is optional; whole counts may include commas. Each step must be no larger than the previous one. Use the same audience, counting unit, and reporting window.</p>
+      </div>
+      <div id="funnel-adoption-fields" hidden>
+       <p class="note">Compare users who used a feature against eligible users in each period. Use matching eligibility definitions and comparable reporting windows.</p>
+       <div class="utility-grid">
+        <fieldset class="funnel-period"><legend>Period A</legend><label class="builder-label">Period A label<input id="funnel-labelA" type="text" maxlength="80" value="Previous period"/></label><label class="builder-label">Eligible users — A<input id="funnel-eligibleA" type="text" inputmode="numeric" autocomplete="off"/></label><label class="builder-label">Users who used the feature — A<input id="funnel-adoptedA" type="text" inputmode="numeric" autocomplete="off"/></label></fieldset>
+        <fieldset class="funnel-period"><legend>Period B</legend><label class="builder-label">Period B label<input id="funnel-labelB" type="text" maxlength="80" value="Current period"/></label><label class="builder-label">Eligible users — B<input id="funnel-eligibleB" type="text" inputmode="numeric" autocomplete="off"/></label><label class="builder-label">Users who used the feature — B<input id="funnel-adoptedB" type="text" inputmode="numeric" autocomplete="off"/></label></fieldset>
+       </div>
+      </div>
+      <label class="builder-label">Presentation title (optional)<input id="funnel-title" type="text" maxlength="80"/></label>
+      <div class="dedupe-actions"><button id="funnel-calculate" type="submit" class="primary">Calculate funnel</button><button id="funnel-example" type="button" class="recap-secondary">Load example</button><button id="funnel-clear" type="button" class="recap-secondary">Clear / reset</button></div>
+     </form>
+     <p id="funnel-status" class="note" role="status"></p>
+     <div id="funnel-result" hidden>
+      <div id="funnel-metrics" class="funnel-metrics"></div>
+      <h3>Results</h3><div id="funnel-table" class="dedupe-table" role="region" aria-label="Funnel or adoption results" tabindex="0"></div>
+      <p class="note">N/A means a rate cannot be calculated from a zero denominator, or there is no previous step. Percentage-point change and relative growth measure different things.</p>
+      <h3>Presentation visual</h3>
+      <details><summary>Visual colors</summary><div id="funnel-colors" class="table-colors"></div></details>
+      <div id="funnel-chart" class="funnel-chart" role="region" aria-label="Presentation visual preview" tabindex="0"></div>
+      <div class="dedupe-actions"><button id="funnel-image" type="button" class="recap-secondary">Copy visual image</button><button id="funnel-png" type="button" class="recap-secondary">Download PNG</button><button id="funnel-svg" type="button" class="recap-secondary">Download SVG</button><button id="funnel-pptx" type="button" class="recap-secondary">Export PowerPoint</button></div>
+      <p class="note">PowerPoint exports use editable text and bar shapes. Values do not recalculate inside PowerPoint. Image-copy support depends on your browser; PNG download is available as a fallback.</p>
+      <label class="builder-label">Factual recap<textarea id="funnel-recap" rows="5" readonly></textarea></label><button id="funnel-copy" type="button" class="primary">Copy recap</button>
+     </div>
+     <p class="note">This tool calculates from supplied totals. It cannot verify individual user journeys, explain why users dropped off, or establish statistical significance. Confirm sequential funnel counts and eligibility in your analytics platform before presenting the results.</p>
+    </section>
+   </div>
    <footer>
     SIMPLE WORX
     <span>
@@ -496,5 +533,7 @@ Jun,42500,3.8%</textarea>
   <script src="slide-table.js"></script>
   <script src="utm.js"></script>
   <script src="percentages.js"></script>
+  <script src="funnel-core.js"></script>
+  <script src="funnel.js"></script>
  </body>
 </html>
