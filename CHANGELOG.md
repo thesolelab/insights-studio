@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Consistent page dimensions
+- Share Home’s width, gutters, header sizing, and navigation across all tools.
+- Keep a viewport minimum height with natural scrolling for longer tools.
+- Open tabs/cards at the top without extra scrolling or clearing inputs.
+
+
 ## Unreleased — Integrated mockup backdrop
 - Match the approved ribbon composition with a page-wide home-only scene,
   blending violet/teal ribbons into the top-right glow.

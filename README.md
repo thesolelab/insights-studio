@@ -31,6 +31,9 @@ while switching tabs; Arrow keys, Home, and End navigate the tabs.
 The site opens on Home with a motivational message, the local date, and seven tool
 cards. Select a card to open its workspace, or use the top tabs. Home is a launchpad;
 all tools remain mounted, so going Home and back retains current inputs and drafts.
+Home and every tool share the same page width/gutters, header/logo, and navigation
+geometry. Switching tabs starts at the top without changing those dimensions.
+Short pages fill the viewport; longer tools grow and scroll naturally.
 
 A curated collection of 31 original messages rotates by the device's local calendar
 date. The message stays the same throughout that day and across reloads, updates

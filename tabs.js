@@ -9,7 +9,7 @@
       document.getElementById(item.getAttribute('aria-controls')).hidden = !selected;
     }
     document.body.classList.toggle('home-active', tab.id === 'home-tab');
-    if (tab.id === 'home-tab') window.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }
   window.AnalysisTabs = {
     activate(id, { focusPanel = false } = {}) {
@@ -19,7 +19,6 @@
       if (focusPanel) {
         const panel = document.getElementById(tab.getAttribute('aria-controls'));
         panel.focus({ preventScroll: true });
-        panel.scrollIntoView({ block: 'start', behavior: 'instant' });
       }
     },
   };
