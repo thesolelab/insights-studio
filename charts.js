@@ -489,7 +489,7 @@
     document.body.appendChild(anchor); anchor.click(); anchor.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
-  function filename(c, extension) { return (c.title.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').slice(0, 70) || 'queue-works-chart') + '.' + extension; }
+  function filename(c, extension) { return (c.title.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').slice(0, 70) || 'simple-worx-chart') + '.' + extension; }
   $('svg').addEventListener('click', () => {
     if (current) save(new Blob([serializedChart()], { type: 'image/svg+xml;charset=utf-8' }), filename(current, 'svg'));
   });
@@ -639,7 +639,7 @@
     try {
       await window.ToolLibraries.load('powerpoint');
       const pptx = new window.PptxGenJS();
-      pptx.layout = 'LAYOUT_WIDE'; pptx.author = 'Queue Works'; pptx.subject = 'Editable chart and source data'; pptx.title = snapshot.title;
+      pptx.layout = 'LAYOUT_WIDE'; pptx.author = 'Simple Worx'; pptx.subject = 'Editable chart and source data'; pptx.title = snapshot.title;
       addNativeChart(pptx, pptx.addSlide(), snapshot);
       if (['bubble', 'percent-area'].includes(snapshot.mode) || snapshot.definition.radial) {
         const zip = await window.JSZip.loadAsync(await pptx.write({ outputType: 'blob' }));
