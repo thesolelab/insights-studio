@@ -1,6 +1,8 @@
 :root {
   color-scheme: dark;
   --bg: #0f172a;
+  --home-bg: #081329;
+  --home-nav-active: #7c3aed;
   --surface: #172238;
   --surface-inset: #101b30;
   --border: #2b3954;

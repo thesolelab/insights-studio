@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — Integrated mockup backdrop
+- Match the approved ribbon composition with a page-wide home-only scene,
+  blending violet/teal ribbons into the top-right glow.
+- Align headline wrapping, compact header/navigation, hero spacing, and card scale
+  with the reference while retaining live text, daily messages, and tool behavior.
+
+
 ## Unreleased — Homepage visual refinement
 - Replace the flat, clipped ribbon with luminous violet/teal artwork.
 - Allocate separate responsive space for text and the full image.

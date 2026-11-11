@@ -16,7 +16,8 @@
   <link href="tools.css" rel="stylesheet"/>
   <link href="simple-worx.css" rel="stylesheet"/>
  </head>
- <body>
+ <body class="home-active">
+  <div class="home-atmosphere" aria-hidden="true"><img src="assets/home-atmosphere.webp" width="1585" height="992" alt="" decoding="async" fetchpriority="high"/></div>
   <main class="shell">
    <header class="top">
     <div>
@@ -32,12 +33,12 @@
    <div class="workspace-tabs" role="tablist" aria-label="Tools">
     <button id="home-tab" type="button" role="tab" aria-selected="true" aria-controls="home-panel">Home</button>
     <button id="studio-tab" type="button" role="tab" aria-selected="false" aria-controls="studio-panel" tabindex="-1">Chart Creator</button>
-    <button id="analyzer-tab" type="button" role="tab" aria-selected="false" aria-controls="analyzer-panel" tabindex="-1">A/B Test Analyzer</button>
-    <button id="dedupe-tab" type="button" role="tab" aria-selected="false" aria-controls="dedupe-panel" tabindex="-1">Excel De-duper</button>
-    <button id="notes-tab" type="button" role="tab" aria-selected="false" aria-controls="notes-panel" tabindex="-1">Meeting Recap Builder</button>
-    <button id="table-tab" type="button" role="tab" aria-selected="false" aria-controls="table-panel" tabindex="-1">Slide Table Builder</button>
+    <button id="analyzer-tab" type="button" role="tab" aria-selected="false" aria-controls="analyzer-panel" tabindex="-1">A/B Tests</button>
+    <button id="dedupe-tab" type="button" role="tab" aria-selected="false" aria-controls="dedupe-panel" tabindex="-1">Excel &amp; Lists</button>
+    <button id="notes-tab" type="button" role="tab" aria-selected="false" aria-controls="notes-panel" tabindex="-1">Meeting Recap</button>
+    <button id="table-tab" type="button" role="tab" aria-selected="false" aria-controls="table-panel" tabindex="-1">Slide Tables</button>
     <button id="utm-tab" type="button" role="tab" aria-selected="false" aria-controls="utm-panel" tabindex="-1">UTM Builder</button>
-    <button id="percentage-tab" type="button" role="tab" aria-selected="false" aria-controls="percentage-panel" tabindex="-1">Percentage Calculator</button>
+    <button id="percentage-tab" type="button" role="tab" aria-selected="false" aria-controls="percentage-panel" tabindex="-1">Percentages</button>
    </div>
    <div id="home-panel" class="home-panel" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
     <section class="home-hero" aria-labelledby="home-message">
@@ -46,7 +47,6 @@
      <h2 id="home-message">Make room for the work that matters.</h2>
      <p id="home-detail">One useful step is enough to build momentum.</p>
      </div>
-     <img class="home-ribbon" src="assets/home-ribbon.webp" width="1774" height="887" alt="" aria-hidden="true" decoding="async" fetchpriority="high"/>
     </section>
     <section class="home-tools" aria-labelledby="home-tools-heading">
      <h2 id="home-tools-heading">What are you working on?</h2>

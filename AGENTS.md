@@ -188,8 +188,9 @@ visibility refresh. Messages must remain stable through the day and reloads,
 without AI, external requests, or persistence. Keep decor noninteractive and honor
 reduced motion and forced colors. Home adds navigation, not an eighth utility.
 
-Use the local luminous ribbon asset assets/home-ribbon.webp at its natural aspect
-ratio with contain sizing. Keep the full artwork in bounds: no negative offsets,
-cover cropping, or overflow clipping in the hero. Give text/art separate space on
-desktop and stack them on mobile. Navigation must wrap so all labels remain
-visible; account for wrapped sticky navigation when focusing tool panels.
+Use assets/home-atmosphere.webp as one continuous, home-only backdrop, matching
+the approved mockup: a broad violet ribbon crossing teal that opens into the
+top-right glow. Keep the scene page-wide behind live HTML; do not revert to a
+small floating image or boxed two-column illustration. Maintain readable text
+and responsive positioning; hide decoration in forced colors. Navigation must
+wrap so labels stay visible, with appropriate sticky-header focus offsets.
