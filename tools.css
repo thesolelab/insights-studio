@@ -108,3 +108,5 @@
 .table-preview svg {display:block;width:100%;height:auto;min-width:650px}
 .utility-panel :focus-visible {outline:2px solid var(--accent);outline-offset:3px}
 @media(max-width:640px){.utility-panel{padding:18px}.utility-grid{grid-template-columns:minmax(0,1fr)}}
+
+.table-preview {max-height:600px}

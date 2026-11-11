@@ -175,3 +175,7 @@ owns editing, formatting, and SVG/PNG/clipboard/editable PowerPoint exports. Kee
 PowerPoint exports as individual text boxes and shapes, not native tables. Match
 preview/export colors and geometry. Block oversized/narrow layouts and stale
 exports; never silently truncate data or overwrite it when formatting changes.
+
+Oversized slide tables must remain visible in a scrollable preview with nearby
+fit feedback. Fit to slide may reduce font/padding only, within readable bounds;
+never truncate rows or enable exports for overflowing layouts.
