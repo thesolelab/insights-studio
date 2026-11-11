@@ -13,8 +13,8 @@ test('entry-point assets exist and resolve under a renamed repository subpath', 
     assert.ok(!asset.startsWith('/'), asset + ' must be relative');
     assert.ok(fs.statSync(path.join(root, asset)).isFile(), asset);
     assert.equal(
-      new URL(asset, 'https://example.test/queue-works/').pathname,
-      '/queue-works/' + asset
+      new URL(asset, 'https://example.test/simple-worx/').pathname,
+      '/simple-worx/' + asset
     );
   }
   assert.ok(html.indexOf('src="libraries.js"') < html.indexOf('src="charts.js"'));

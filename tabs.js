@@ -8,11 +8,23 @@
       item.tabIndex = selected ? 0 : -1;
       document.getElementById(item.getAttribute('aria-controls')).hidden = !selected;
     }
+    if (tab.id === 'home-tab') window.scrollTo({ top: 0, behavior: 'instant' });
   }
-  window.AnalysisTabs = { activate(id) { const tab = tabs.find(item => item.id === id); if (tab) activate(tab); } };
+  window.AnalysisTabs = {
+    activate(id, { focusPanel = false } = {}) {
+      const tab = tabs.find((item) => item.id === id);
+      if (!tab) return;
+      activate(tab);
+      if (focusPanel) {
+        const panel = document.getElementById(tab.getAttribute('aria-controls'));
+        panel.focus({ preventScroll: true });
+        panel.scrollIntoView({ block: 'start', behavior: 'instant' });
+      }
+    },
+  };
   tabs.forEach((tab, index) => {
     tab.addEventListener('click', () => activate(tab));
-    tab.addEventListener('keydown', event => {
+    tab.addEventListener('keydown', (event) => {
       let next;
       if (event.key === 'ArrowRight') next = tabs[(index + 1) % tabs.length];
       if (event.key === 'ArrowLeft') next = tabs[(index + tabs.length - 1) % tabs.length];

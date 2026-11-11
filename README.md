@@ -1,11 +1,11 @@
 # Simple Worx
 
 A browser-based toolkit for everyday work. The product is Simple Worx; the
-repository and hosting path remain `queue-works`.
+repository and hosting path are `simple-worx`.
 
-Repository: https://github.com/thesolelab/queue-works
+Repository: https://github.com/thesolelab/simple-worx
 
-Live site: https://thesolelab.github.io/queue-works/
+Live site: https://thesolelab.github.io/simple-worx/
 
 Seven focused tools in one tabbed interface:
 
@@ -26,6 +26,18 @@ and a wide responsive layout. Chart-series colors remain independently customiza
 The previous dashboards, project management, broad utility categories, other calculators,
 visual tools, and multi-slide deck builder are removed. Inputs remain mounted
 while switching tabs; Arrow keys, Home, and End navigate the tabs.
+
+## Home and your daily spark
+The site opens on Home with a motivational message, the local date, and seven tool
+cards. Select a card to open its workspace, or use the top tabs. Home is a launchpad;
+all tools remain mounted, so going Home and back retains current inputs and drafts.
+
+A curated collection of 31 original messages rotates by the device's local calendar
+date. The message stays the same throughout that day and across reloads, updates
+at local midnight, and refreshes when returning to the page after sleep or a time
+zone change. It does not need AI, an account, cookies, or a quote service. The device
+clock determines the date. Cards, tabs, and focus states support keyboard access;
+reduced-motion and forced-colors preferences are respected.
 
 ## Excel de-duper
 1. Drag and drop XLSX, XLS, or CSV into the upload area, or choose **browse files**
@@ -239,7 +251,7 @@ your experiment counts to run your own analysis. Sample data is not saved.
 ## Deploy on GitHub Pages
 Publish the repository root on GitHub Pages (Settings → Pages → main / root).
 Keep `index.html`, `styles.css`, `tools.css`, `simple-worx.css`, `favicon.svg`,
-`colors.js`, `app.js`, `tabs.js`,
+`colors.js`, `app.js`, `tabs.js`, `home-core.js`, `home.js`,
 `chart-data.js`, `chart-modes.js`, `charts.js`, `dedupe-core.js`, `deduper.js`,
 `notes-core.js`, `notes.js`, `file-uploads.js`, `libraries.js`, and `percentages.js`
 together with `productivity-core.js`, `list-comparison.js`, `table-core.js`,
@@ -265,7 +277,7 @@ a connection. User data is never sent to the library/font providers.
 ## Developer checks
 GitHub Actions runs JavaScript syntax checks and Node tests on pushes and pull
 requests, without installing application dependencies. Tests also verify local
-assets resolve beneath `/queue-works/` and shared library loading/retry behavior.
+assets resolve beneath a repository subpath and shared library loading/retry behavior.
 
 Run `node --test tests/*.test.cjs` for chart parsing/scales/families, colors, A/B
 samples, selected-column dedupe, note organization, percentage calculations, list comparison, UTM links, and table layout.

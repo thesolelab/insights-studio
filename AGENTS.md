@@ -146,7 +146,7 @@ Alt/Option+Shift+A (Action item), scoped to editable note fields. In reviewed
 items, shortcuts move sections without rewriting text. Clear undo is session-only
 and expires when new source work begins.
 
-The current repository is thesolelab/queue-works and Pages path is /queue-works/.
+The current repository is thesolelab/simple-worx and Pages path is /simple-worx/.
 Keep local asset URLs relative so deployments work under a repository subpath.
 libraries.js owns shared lazy Excel/PowerPoint loading and integrity hashes;
 reuse it rather than adding per-tool script loaders.
@@ -179,3 +179,11 @@ exports; never silently truncate data or overwrite it when formatting changes.
 Oversized slide tables must remain visible in a scrollable preview with nearby
 fit feedback. Fit to slide may reduce font/padding only, within readable bounds;
 never truncate rows or enable exports for overflowing layouts.
+
+Home is the default accessible panel, with seven launch cards for the seven tools.
+Keep workspaces mounted and preserve their inputs when returning Home. Cards must
+activate the matching tab and transfer focus to the workspace. home-core.js owns
+the curated local-date daily message selection; home.js owns rendering and midnight/
+visibility refresh. Messages must remain stable through the day and reloads,
+without AI, external requests, or persistence. Keep decor noninteractive and honor
+reduced motion and forced colors. Home adds navigation, not an eighth utility.
