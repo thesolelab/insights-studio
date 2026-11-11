@@ -194,3 +194,9 @@ top-right glow. Keep the scene page-wide behind live HTML; do not revert to a
 small floating image or boxed two-column illustration. Maintain readable text
 and responsive positioning; hide decoration in forced colors. Navigation must
 wrap so labels stay visible, with appropriate sticky-header focus offsets.
+
+Keep shell geometry shared across Home and every tool: identical width/gutters,
+header/logo/badge sizes, and navigation spacing at each breakpoint. Do not scope
+those dimensions to home-active. Start tab/card navigation at the top while
+retaining keyboard focus and tool inputs. Use viewport minimum height rather
+than fixed tool heights, so long forms/charts still scroll without clipping.
