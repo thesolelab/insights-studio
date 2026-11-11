@@ -8,6 +8,7 @@
       item.tabIndex = selected ? 0 : -1;
       document.getElementById(item.getAttribute('aria-controls')).hidden = !selected;
     }
+    document.body.classList.toggle('home-active', tab.id === 'home-tab');
     if (tab.id === 'home-tab') window.scrollTo({ top: 0, behavior: 'instant' });
   }
   window.AnalysisTabs = {

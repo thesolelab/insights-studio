@@ -37,9 +37,12 @@ date. The message stays the same throughout that day and across reloads, updates
 at local midnight, and refreshes when returning to the page after sleep or a time
 zone change. It does not need AI, an account, cookies, or a quote service. The device
 clock determines the date. Cards, tabs, and focus states support keyboard access;
-reduced-motion and forced-colors preferences are respected. The luminous ribbon
-uses a local, losslessly compressed WebP asset in `assets/home-ribbon.webp`, shown
-in full with no cropped edges. Navigation wraps on smaller screens rather than
+reduced-motion and forced-colors preferences are respected. The hero uses a single
+local, losslessly compressed scene in
+`assets/home-atmosphere.webp`: broad ribbons flow into its top-right teal glow,
+behind live text and controls rather than inside a standalone illustration box.
+The artwork is decorative and visible only on Home. Navigation wraps on smaller
+screens rather than
 hiding labels beyond a horizontal scroll area.
 
 ## Excel de-duper
@@ -254,7 +257,7 @@ your experiment counts to run your own analysis. Sample data is not saved.
 ## Deploy on GitHub Pages
 Publish the repository root on GitHub Pages (Settings → Pages → main / root).
 Keep `index.html`, `styles.css`, `tools.css`, `simple-worx.css`, `favicon.svg`,
-`colors.js`, `app.js`, `tabs.js`, `home-core.js`, `home.js`, `assets/home-ribbon.webp`,
+`colors.js`, `app.js`, `tabs.js`, `home-core.js`, `home.js`, `assets/home-atmosphere.webp`,
 `chart-data.js`, `chart-modes.js`, `charts.js`, `dedupe-core.js`, `deduper.js`,
 `notes-core.js`, `notes.js`, `file-uploads.js`, `libraries.js`, and `percentages.js`
 together with `productivity-core.js`, `list-comparison.js`, `table-core.js`,
