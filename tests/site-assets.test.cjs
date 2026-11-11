@@ -5,7 +5,7 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 test('entry-point assets exist and resolve under a renamed repository subpath', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-  const assets = [...html.matchAll(/<(?:script|link)\b[^>]*(?:src|href)="([^"]+)"/g)]
+  const assets = [...html.matchAll(/<(?:script|link|img)\b[^>]*(?:src|href)="([^"]+)"/g)]
     .map((m) => m[1])
     .filter((url) => !/^https?:/.test(url));
   assert.ok(assets.length > 10);
