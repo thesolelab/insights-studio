@@ -99,9 +99,11 @@ table. It is a formatted visual, without spreadsheet formulas or table-specific
 editing commands. Arial is used for portable preview/export typography.
 
 Limits: headers + 1–30 data rows, 1–10 columns, 500 characters per cell, and 100,000
-pasted characters. A table must fit one slide; oversized or overly narrow layouts
-receive an error rather than clipped exports. Reduce font/padding, widen a column,
-shorten text, or split the source into smaller tables. Image preview and PowerPoint
+pasted characters. A table must fit one slide; oversized tables remain visible
+in the preview, with exports disabled and an explanation beside it.
+**Fit to slide** tries smaller fonts/padding (down to 10 pt / 4 pt) without changing
+cell data. If it cannot fit, split the table, shorten text, or adjust column widths.
+Invalid or overly narrow settings show a message in the preview rather than an empty box. Image preview and PowerPoint
 share wrapping, geometry, colors, and explicit text. Actual font rendering can vary
 between browsers and desktop PowerPoint.
 

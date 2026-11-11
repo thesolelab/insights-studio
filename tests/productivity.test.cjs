@@ -99,7 +99,11 @@ test('table layout wraps content, uses proportional column widths and refuses sl
 
 test('the complete UTM output is lowercase, including URL components and encoded values', () => {
   const link = utmLink('HTTPS://EXAMPLE.COM/Launch?Ref=PARTNER&UTM_SOURCE=OLD#Details', {
-    source: 'NEWSLETTER', medium: 'EMAIL', campaign: 'SPRING LAUNCH', term: 'ÉTÉ', content: 'HERO',
+    source: 'NEWSLETTER',
+    medium: 'EMAIL',
+    campaign: 'SPRING LAUNCH',
+    term: 'ÉTÉ',
+    content: 'HERO',
   });
   assert.equal(link, link.toLowerCase());
   const url = new URL(link);
@@ -109,4 +113,16 @@ test('the complete UTM output is lowercase, including URL components and encoded
   assert.deepEqual(url.searchParams.getAll('utm_source'), ['newsletter']);
   assert.equal(url.searchParams.get('utm_campaign'), 'spring launch');
   assert.equal(url.searchParams.get('utm_term'), 'été');
+});
+
+test('overflow preview retains every row while default export layout still rejects it', () => {
+  const rows = [['Header'], ...Array.from({ length: 30 }, (_, i) => ['Row ' + i])];
+  const options = { font: 16, padding: 8, widths: [1] };
+  const measure = (text, size) => text.length * size * 0.5;
+  assert.throws(() => T.layout(rows, options, measure), /too tall/);
+  const preview = T.layout(rows, { ...options, allowOverflow: true }, measure);
+  assert.equal(preview.fits, false);
+  assert.equal(preview.data.length, 31);
+  assert.equal(preview.cells.length, 31);
+  assert.deepEqual(preview.data, rows);
 });

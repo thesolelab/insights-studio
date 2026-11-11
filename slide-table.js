@@ -35,6 +35,7 @@
     current = null;
     buttons(false);
     $('preview').replaceChildren();
+    $('preview-status').textContent = '';
   }
   function status(text) {
     $('status').textContent = text;
@@ -48,10 +49,14 @@
     try {
       const canvas = document.createElement('canvas'),
         ctx = canvas.getContext('2d');
-      const model = window.SlideTable.layout(rows, options(), (text, size, bold) => {
-        ctx.font = (bold ? 'bold ' : '') + size + 'px Arial';
-        return ctx.measureText(text).width;
-      });
+      const model = window.SlideTable.layout(
+        rows,
+        { ...options(), allowOverflow: true },
+        (text, size, bold) => {
+          ctx.font = (bold ? 'bold ' : '') + size + 'px Arial';
+          return ctx.measureText(text).width;
+        }
+      );
       const svg = svgEl('svg', {
         xmlns: NS,
         viewBox: `0 0 ${model.width} ${model.height}`,
@@ -116,21 +121,57 @@
         y += model.heights[r];
       });
       $('preview').append(svg);
-      current = {
-        ...model,
-        palette: { ...palette },
-        align: $('align').value,
-        banded: $('banded').checked,
-        borders: $('borders').checked,
-      };
-      buttons(true);
+      current = model.fits
+        ? {
+            ...model,
+            palette: { ...palette },
+            align: $('align').value,
+            banded: $('banded').checked,
+            borders: $('borders').checked,
+          }
+        : null;
+      buttons(model.fits);
+      $('preview-status').textContent = model.fits
+        ? 'This table fits one slide.'
+        : 'The full table is shown below, but it is too tall for one slide. Select Fit to slide, reduce font/padding, or use fewer rows. Exports stay disabled until it fits.';
       status(
-        `${rows.length - 1} data rows · ${rows[0].length} columns · Ready to copy or export. PowerPoint uses editable text boxes and shapes.`
+        model.fits
+          ? `${rows.length - 1} data rows · ${rows[0].length} columns · Ready to copy or export. PowerPoint uses editable text boxes and shapes.`
+          : 'Table exceeds one slide. Review the preview and fit controls below.'
       );
     } catch (error) {
       status(error.message);
+      $('preview-status').textContent = error.message;
+      $('preview').append(el('p', { class: 'note' }, error.message));
     }
   }
+  $('fit').addEventListener('click', () => {
+    if (!rows) return;
+    const ctx = document.createElement('canvas').getContext('2d');
+    const measure = (text, size, bold) => {
+      ctx.font = (bold ? 'bold ' : '') + size + 'px Arial';
+      return ctx.measureText(text).width;
+    };
+    for (let font = Math.max(10, Math.min(28, Math.floor(Number($('font').value) || 16))); font >= 10; font--) {
+      for (
+        let padding = Math.max(4, Math.min(20, Math.floor(Number($('padding').value) || 8)));
+        padding >= 4;
+        padding--
+      ) {
+        try {
+          window.SlideTable.layout(rows, { font, padding, widths }, measure);
+          $('font').value = font;
+          $('padding').value = padding;
+          draw();
+          return;
+        } catch {
+          /* Try a smaller readable layout without altering data. */
+        }
+      }
+    }
+    $('preview-status').textContent =
+      'This table cannot fit at the minimum 10 pt font and 4 pt padding. Use fewer rows, shorten text, or adjust column widths. Your data is unchanged.';
+  });
   function grid() {
     const table = el('table'),
       body = el('tbody');

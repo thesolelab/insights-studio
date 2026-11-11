@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Visible oversized table preview
+- Keep oversized tables visible and explain slide-fit issues beside the preview.
+- Add Fit to slide to find smaller readable font/padding settings.
+- Preserve all data and block exports until the table fits.
+
+
 ## Unreleased — Simple Worx rebrand
 - Rename the product to Simple Worx, with an SW monogram and updated favicon.
 - Update page metadata, footer, export filenames, and PowerPoint author metadata.

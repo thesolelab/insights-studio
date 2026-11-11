@@ -75,12 +75,14 @@
         (row) => Math.max(...row.map((lines) => lines.length)) * size * 1.25 + 2 * pad
       ),
       height = heights.reduce((a, b) => a + b, 0);
-    if (height > 6.3 * 72 * scale)
+    const fits = height <= 6.3 * 72 * scale;
+    if (!fits && !options.allowOverflow)
       throw new Error(
         'This table is too tall for one slide. Reduce the font/padding, shorten cells, or use fewer rows.'
       );
     return {
       data,
+      fits,
       cells,
       widths,
       heights,
