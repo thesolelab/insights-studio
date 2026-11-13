@@ -29,8 +29,8 @@ The previous dashboards, project management, broad utility categories, other cal
 visual tools, and multi-slide deck builder are removed. Inputs remain mounted
 while switching tabs; Arrow keys, Home, and End navigate the tabs.
 
-## Home and your daily spark
-The site opens on Home with a motivational message, the local date, and eight tool
+## Home and daily motivation
+The site opens on Home with a motivational message and eight tool
 cards. Select a card to open its workspace, or use the top tabs. Home is a launchpad;
 all tools remain mounted, so going Home and back retains current inputs and drafts.
 Home and every tool share the same page width/gutters, header/logo, and navigation

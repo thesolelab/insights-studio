@@ -5,13 +5,6 @@
     clearTimeout(timer);
     const now = new Date(),
       message = window.DailySpark.forDate(now);
-    const date = document.getElementById('home-date');
-    date.textContent = new Intl.DateTimeFormat(undefined, {
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric',
-    }).format(now);
-    date.dateTime = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     const split = message.headline.lastIndexOf(' '),
       emphasis = document.createElement('span');
     emphasis.className = 'home-emphasis';

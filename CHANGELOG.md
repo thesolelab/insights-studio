@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — Simplified motivational hero
+- Remove the visible date and Your daily spark label above the daily message.
+- Keep local-date rotation and midnight/return refresh intact.
+
+
 ## Unreleased — Spreadsheet quote handling
 - Accept literal quotes in spreadsheet text and direct grid-range pastes.
 - Preserve standard escaped quotes and multiline cells.

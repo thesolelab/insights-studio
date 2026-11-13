@@ -215,3 +215,6 @@ quotes in the source box and grid paste while retaining proper wrapped TSV cells
 with tabs/newlines. Offer explicit spreadsheet/CSV selection, keep strict CSV
 validation, and invalidate exports after changing the source format. The optional
 ChartData delimiter override must not change existing chart/funnel defaults.
+
+Keep the homepage motivational headline/detail without a date or “Your daily spark”
+label. Continue rotating messages by local date and refreshing at midnight/return.
