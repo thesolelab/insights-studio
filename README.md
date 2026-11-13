@@ -141,6 +141,10 @@ Limits: 50,000 lines and 1 million characters per list.
 
 ## Slide-ready table builder
 Paste a full Excel/Sheets range (tabs) or CSV including headers, then **Build table**.
+**Paste format** defaults to Auto. Spreadsheet / tab-separated accepts literal
+quotes in ordinary cell text while still reading properly wrapped multiline cells
+and escaped quotes. Use that mode for one-column text containing commas. CSV mode
+keeps strict quote validation and requires quotes inside quoted fields to be doubled.
 Edit the resulting cells or paste a tab-separated range into any cell. Ranges
 start at the selected cell and can expand the table within the row/column limits.
 Format font size, padding, alignment, relative column

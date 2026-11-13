@@ -191,7 +191,7 @@
           event.preventDefault();
           try {
             if (text.length > 100000) throw new Error('Paste up to 100,000 characters.');
-            const block = window.ChartData.splitDelimited(text);
+            const block = window.SlideTable.parse(text, 'tsv');
             if (
               r + block.length > 31 ||
               c + Math.max(...block.map((row) => row.length)) > 10
@@ -256,7 +256,7 @@
       if ($('source').value.length > 100000)
         throw new Error('Paste up to 100,000 characters.');
       rows = window.SlideTable.normalize(
-        window.ChartData.splitDelimited($('source').value)
+        window.SlideTable.parse($('source').value, $('format').value)
       );
       widths = rows[0].map(() => 1);
       grid();
@@ -268,12 +268,14 @@
       status(error.message);
     }
   });
-  $('source').addEventListener('input', () => {
+  function sourceChanged() {
     stale();
     rows = null;
     $('workspace').hidden = true;
     status('Source changed. Build the table again.');
-  });
+  }
+  $('source').addEventListener('input', sourceChanged);
+  $('format').addEventListener('change', sourceChanged);
   $('settings').addEventListener('input', draw);
   for (const [key, name] of Object.entries({
     header: 'Header background',
