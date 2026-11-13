@@ -209,3 +209,9 @@ independent eligible populations per period. Never infer causes, user journeys,
 statistical significance, or owners from aggregate counts. Keep all processing
 local, inputs mounted, and stale results/exports invalidated after source changes.
 Match visual/export colors and geometry; PowerPoint shapes do not recalculate.
+
+Slide Table Builder parsing belongs in table-core.js. Support literal spreadsheet
+quotes in the source box and grid paste while retaining proper wrapped TSV cells
+with tabs/newlines. Offer explicit spreadsheet/CSV selection, keep strict CSV
+validation, and invalidate exports after changing the source format. The optional
+ChartData delimiter override must not change existing chart/funnel defaults.

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — Spreadsheet quote handling
+- Accept literal quotes in spreadsheet text and direct grid-range pastes.
+- Preserve standard escaped quotes and multiline cells.
+- Add Auto / Spreadsheet / strict CSV selection with actionable CSV errors
+  and stale-export protection after format changes.
+
+
 ## Unreleased — Funnel & Adoption
 - Add the eighth homepage card and a dedicated funnel/adoption workspace.
 - Calculate sequential conversion/drop-off and adoption point/relative changes.

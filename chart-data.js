@@ -3,7 +3,7 @@
   const MAX_ROWS = 200;
   const MAX_SERIES = 6;
 
-  function splitDelimited(text) {
+  function splitDelimited(text, options = {}) {
     text = String(text).replace(/^\uFEFF/, '');
     if (!text.trim()) throw new Error('Paste a table or choose a data file first.');
     let inHeaderQuotes = false, hasTab = false;
@@ -17,7 +17,8 @@
         if (char === '\n' || char === '\r') break;
       }
     }
-    const delimiter = hasTab ? '\t' : ',';
+    const delimiter = options.delimiter ?? (hasTab ? '\t' : ',');
+    if (![',', '\t'].includes(delimiter)) throw new Error('Choose comma or tab separation.');
     const rows = [];
     let row = [], cell = '', quoted = false, closed = false;
     for (let i = 0; i < text.length; i++) {
